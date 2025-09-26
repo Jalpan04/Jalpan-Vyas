@@ -240,12 +240,19 @@
                 }
                 return `<div class="tab flex items-center px-4 py-2 rounded-t-lg cursor-pointer ${tab.id === activeTabId ? 'active' : ''}" data-tab-id="${tab.id}"><span class="mr-2 text-base">${icon}</span><span class="text-sm text-white truncate max-w-[120px]">${title}</span><button class="close-tab ml-3 text-gray-400 hover:bg-white/20 rounded-full p-0.5" data-tab-id-to-close="${tab.id}"><svg class="w-3.5 h-3.5 pointer-events-none" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button></div>`;
             }).join('');
+
             document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active'));
+
             const activeTab = getActiveTab();
             if (activeTab) {
-                const pageElementId = activeTab.subPageId ? `page-project-${activeTab.subPageId}` : `page-${activeTab.pageId}`;
+                // FIX: Use a unique ID for project pages combining tabId and subPageId
+                const pageElementId = activeTab.subPageId
+                    ? `page-project-${activeTab.id}-${activeTab.subPageId}`
+                    : `page-${activeTab.pageId}`;
+
                 const pageElement = document.getElementById(pageElementId);
                 if (pageElement) pageElement.classList.add('active');
+
                 let url = pages[activeTab.pageId]?.url || '';
                 if (activeTab.subPageId) url = `portfolio://projects/${activeTab.subPageId}`;
                 addressInput.value = url;
@@ -255,12 +262,15 @@
             updateNavButtonsState();
         };
 
-        const createProjectDetailPage = (projectId) => {
+        const createProjectDetailPage = (projectId, tabId) => {
             const project = projectData.find(p => p.id === projectId);
             if (!project) return;
             const newPage = document.createElement('div');
-            newPage.id = `page-project-${projectId}`;
+
+            // FIX: Assign a unique ID using both tabId and projectId
+            newPage.id = `page-project-${tabId}-${projectId}`;
             newPage.className = 'content-page';
+
             newPage.innerHTML = `<div class="max-w-5xl mx-auto p-8"><button class="back-to-projects text-blue-400 hover:underline mb-8">&larr; Back to all projects</button><h1 class="text-5xl font-bold mb-2">${project.name}</h1><p class="text-xl text-gray-400 mb-6">${project.tagline}</p><div class="grid grid-cols-1 md:grid-cols-5 gap-8"><div class="md:col-span-3"><img src="${project.image}" alt="${project.name}" class="rounded-lg shadow-lg w-full"></div><div class="md:col-span-2"><h3 class="text-2xl font-semibold mb-3">About this project</h3><p class="text-gray-300 leading-relaxed mb-6">${project.description}</p><h3 class="text-2xl font-semibold mb-3">Tech Stack</h3><div class="flex flex-wrap gap-2 mb-8">${project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div><div class="flex flex-col sm:flex-row gap-4"><a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-blue-600 hover:bg-blue-700 font-bold py-3 px-4 rounded-lg transition-colors">Live Demo</a><a href="${project.sourceUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-gray-700 hover:bg-gray-600 font-bold py-3 px-4 rounded-lg transition-colors">View Source</a></div></div></div></div>`;
             contentArea.appendChild(newPage);
             newPage.querySelector('.back-to-projects').addEventListener('click', () => navigateTo('projects'));
@@ -269,12 +279,21 @@
         const navigateTo = (pageId, fromHistory = false, subPageId = null) => {
             const activeTab = getActiveTab();
             if (!activeTab) return;
-            if (pageId === 'project' && subPageId && !document.getElementById(`page-project-${subPageId}`)) createProjectDetailPage(subPageId);
+
+            // FIX: Check for the unique project page ID before creating it
+            const projectPageId = `page-project-${activeTab.id}-${subPageId}`;
+            if (pageId === 'project' && subPageId && !document.getElementById(projectPageId)) {
+                createProjectDetailPage(subPageId, activeTab.id);
+            }
+
             activeTab.pageId = pageId;
             activeTab.subPageId = subPageId;
+
             if (!fromHistory) {
                 const historyEntry = subPageId ? `${pageId}:${subPageId}` : pageId;
-                if (activeTab.historyIndex < activeTab.history.length - 1) activeTab.history = activeTab.history.slice(0, activeTab.historyIndex + 1);
+                if (activeTab.historyIndex < activeTab.history.length - 1) {
+                    activeTab.history = activeTab.history.slice(0, activeTab.historyIndex + 1);
+                }
                 activeTab.history.push(historyEntry);
                 activeTab.historyIndex = activeTab.history.length - 1;
             }
@@ -285,7 +304,12 @@
             tabCounter++;
             const newTabId = `tab-${tabCounter}`;
             const historyEntry = options.subPageId ? `${pageId}:${options.subPageId}` : pageId;
-            if (pageId === 'project' && options.subPageId && !document.getElementById(`page-project-${options.subPageId}`)) createProjectDetailPage(options.subPageId);
+
+            // FIX: Create the dynamic project page with the new unique tab ID
+            if (pageId === 'project' && options.subPageId) {
+                createProjectDetailPage(options.subPageId, newTabId);
+            }
+
             tabs.push({ id: newTabId, pageId, subPageId: options.subPageId || null, history: [historyEntry], historyIndex: 0 });
             activeTabId = newTabId;
             render();
@@ -294,455 +318,20 @@
         const closeTab = (idToClose) => {
             const tabIndex = tabs.findIndex(tab => tab.id === idToClose);
             if (tabIndex === -1) return;
+
             const tabToClose = tabs[tabIndex];
-            if (tabToClose.pageId === 'project' && tabToClose.subPageId) document.getElementById(`page-project-${tabToClose.subPageId}`)?.remove();
+            // FIX: Remove the project page using its unique ID
+            if (tabToClose.pageId === 'project' && tabToClose.subPageId) {
+                document.getElementById(`page-project-${tabToClose.id}-${tabToClose.subPageId}`)?.remove();
+            }
+
             let newActiveId = null;
             if (activeTabId === idToClose) {
                 if (tabs.length > 1) newActiveId = tabs[tabIndex - 1]?.id || tabs[tabIndex + 1]?.id;
             }
+
             tabs.splice(tabIndex, 1);
-            if (activeTabId === idToClose) {
-                activeTabId = newActiveId;
-                if (tabs.length === 0) createNewTab('home');
-            }
-            render();
-        };
 
-        const setActiveTab = (tabId) => { activeTabId = tabId; render(); }
-
-        const showContextMenu = (event, action) => {
-            event.preventDefault();
-            contextAction = action;
-            contextMenu.style.top = `${event.clientY}px`;
-            contextMenu.style.left = `${event.clientX}px`;
-            contextMenu.classList.add('show');
-        };
-
-        const initContextMenu = () => {
-            document.addEventListener('click', () => contextMenu.classList.remove('show'));
-            contextMenuNewTabBtn.addEventListener('click', () => {
-                if (contextAction) {
-                    const { type, id } = contextAction;
-                    if (type === 'page') {
-                        const page = pages[id];
-                        if (page.external) window.open(page.url, '_blank');
-                        else createNewTab(id);
-                    } else if (type === 'projectDetail') {
-                        createNewTab('project', { subPageId: id });
-                    } else if (type === 'externalLink') {
-                        window.open(id, '_blank');
-                    }
-                }
-                contextMenu.classList.remove('show');
-            });
-        };
-
-        const initHomePage = () => {
-            const topRow = document.getElementById('home-shortcuts-top');
-            const bottomRow = document.getElementById('home-shortcuts-bottom');
-
-            topRow.innerHTML = topRowPages.map(page => `<div class="shortcut glass-card p-6 rounded-2xl cursor-pointer" data-page-id="${page.id}"><div class="text-4xl mb-3">${page.icon}</div><div class="text-white font-medium">${page.title}</div></div>`).join('');
-            bottomRow.innerHTML = bottomRowPages.map(page => `<div class="shortcut glass-card p-6 rounded-2xl cursor-pointer" data-page-id="${page.id}"><div class="text-4xl mb-3">${page.icon}</div><div class="text-white font-medium">${page.title}</div></div>`).join('');
-
-            homeShortcutsContainer.addEventListener('click', (e) => {
-                const shortcut = e.target.closest('[data-page-id]');
-                if (!shortcut) return;
-                const pageId = shortcut.dataset.pageId;
-                const page = pages[pageId];
-                if (page.external) window.open(page.url, '_blank');
-                else navigateTo(pageId);
-            });
-            homeShortcutsContainer.addEventListener('contextmenu', e => {
-                const shortcut = e.target.closest('[data-page-id]');
-                if(shortcut) showContextMenu(e, {type: 'page', id: shortcut.dataset.pageId});
-            });
-        };
-
-        const initSkillsPage = () => {
-            const container = document.getElementById('skills-container');
-            let content = `<h1 class="text-5xl font-bold mb-10 text-center">Skills & Technologies</h1>`;
-            for(const category in skillsData) {
-                content += `<h2 class="text-3xl font-semibold text-blue-400 mt-8 mb-4">${category}</h2>`;
-                content += `<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">`;
-                content += skillsData[category].map(skill => `
-                    <div class="skill-card flex flex-col items-center justify-center p-4 rounded-lg">
-                        <img src="https://cdn.simpleicons.org/${skill.logo}/d1d5db" alt="${skill.name}" class="w-12 h-12">
-                        <span class="mt-2 text-sm text-gray-300">${skill.name}</span>
-                    </div>
-                `).join('');
-                content += `</div>`;
-            }
-            container.innerHTML = content;
-        };
-
-        const initProjectsPage = () => {
-            const projectsGrid = document.getElementById('projects-grid');
-            projectsGrid.innerHTML = projectData.map(project => `<div class="glass-card rounded-2xl overflow-hidden group cursor-pointer" data-project-id="${project.id}"><div class="w-full h-48 bg-gray-900 overflow-hidden"><img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div><div class="p-4 bg-white/5"><h3 class="text-lg font-semibold">${project.name}</h3><p class="text-sm text-gray-400">${project.tagline}</p></div></div>`).join('');
-            projectsGrid.addEventListener('click', e => {
-                const card = e.target.closest('[data-project-id]');
-                if (card) navigateTo('project', false, card.dataset.projectId);
-            });
-            projectsGrid.addEventListener('contextmenu', e => {
-                const card = e.target.closest('[data-project-id]');
-                if(card) showContextMenu(e, {type: 'projectDetail', id: card.dataset.projectId});
-            });
-        };
-
-        const initDeployedPage = () => {
-            const deployedGrid = document.getElementById('deployed-grid');
-            deployedGrid.innerHTML = projectData.map(project => `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="block glass-card rounded-2xl overflow-hidden group"><div class="w-full h-48 bg-gray-900 overflow-hidden"><img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></div><div class="p-4 bg-white/5"><h3 class="text-lg font-semibold">${project.name}</h3><p class="text-sm text-gray-400">${project.tagline}</p></div></a>`).join('');
-            deployedGrid.addEventListener('contextmenu', e => {
-                const card = e.target.closest('a');
-                if(card) showContextMenu(e, {type: 'externalLink', id: card.href});
-            });
-        }
-
-        const init = () => {
-            initHomePage();
-            initProjectsPage();
-            initDeployedPage();
-            initSkillsPage();
-            initContextMenu();
-
-            tabsContainer.addEventListener('click', (e) => {
-                const closeButton = e.target.closest('.close-tab');
-                if (closeButton) { e.stopPropagation(); closeTab(closeButton.dataset.tabIdToClose); return; }
-                const tabElement = e.target.closest('.tab');
-                if (tabElement) setActiveTab(tabElement.dataset.tabId);
-            });
-
-            btnBack.addEventListener('click', () => {
-                const tab = getActiveTab();
-                if (tab && tab.historyIndex > 0) {
-                    tab.historyIndex--;
-                    const [pageId, subPageId] = tab.history[tab.historyIndex].split(':');
-                    navigateTo(pageId, true, subPageId);
-                }
-            });
-
-            btnNext.addEventListener('click', () => {
-                const tab = getActiveTab();
-                if (tab && tab.historyIndex < tab.history.length - 1) {
-                    tab.historyIndex++;
-                    const [pageId, subPageId] = tab.history[tab.historyIndex].split(':');
-                    navigateTo(pageId, true, subPageId);
-                }
-            });
-
-            btnHome.addEventListener('click', () => navigateTo('home'));
-            btnNewTab.addEventListener('click', () => createNewTab('home'));
-
-            createNewTab('home');
-        };
-
-        init();
-    });
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { font-family: 'Inter', sans-serif; }
-        body {
-            background: linear-gradient(135deg, #080a12 0%, #0c0606 100%);
-            min-height: 100vh;
-        }
-        .browser-frame {
-            background: rgba(30, 30, 35, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .tab {
-            transition: all 0.2s ease;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .tab:not(.active):hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-1px); }
-        .tab.active { background: rgba(255, 255, 255, 0.15); }
-        .address-bar-container {
-            background: rgba(10, 10, 15, 0.5);
-            backdrop-filter: blur(5px);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        .shortcut:hover { transform: scale(1.05); }
-        .floating { animation: float 6s ease-in-out infinite; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .content-page { display: none; }
-        .content-page.active { display: block; animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tabs-container::-webkit-scrollbar { display: none; }
-        .nav-btn { transition: color 0.2s ease; }
-        .nav-btn.disabled { color: #4b5563; cursor: not-allowed; }
-
-        .tech-tag {
-            display: inline-block; padding: .25em .75em; font-size: 12px;
-            font-weight: 500; line-height: 18px; white-space: nowrap;
-            background-color: #388bfd1a; color: #58a6ff; border-radius: 2em;
-        }
-
-        .skill-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease-in-out;
-        }
-        .skill-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        .skill-card img {
-            filter: grayscale(100%) brightness(150%);
-            transition: filter 0.2s ease-in-out;
-        }
-        .skill-card:hover img {
-            filter: grayscale(0%) brightness(100%);
-        }
-
-        #context-menu {
-            position: fixed; z-index: 10000; background-color: #1f2937;
-            border: 1px solid #4b5563; border-radius: 6px; padding: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none;
-        }
-        #context-menu.show { display: block; }
-        #context-menu button {
-            display: block; width: 100%; text-align: left;
-            padding: 8px 16px; font-size: 14px; color: #d1d5db;
-            background: none; border: none; cursor: pointer; white-space: nowrap;
-        }
-        #context-menu button:hover { background-color: #3b82f6; color: white; border-radius: 4px; }
-    </style>
-</head>
-<body class="gradient-bg flex items-center justify-center p-4">
-
-<div class="browser-frame w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-
-    <div class="address-bar-container pt-2 select-none">
-        <div class="flex items-end">
-            <div class="tabs-container flex items-end px-2 space-x-1 overflow-x-auto"></div>
-            <button id="btn-new-tab" class="p-2 mb-1 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            </button>
-        </div>
-        <div class="flex items-center p-2 space-x-2">
-            <div class="flex space-x-1 text-gray-400">
-                <svg id="btn-back" class="w-5 h-5 nav-btn cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                <svg id="btn-next" class="w-5 h-5 nav-btn cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                <svg id="btn-home" class="w-5 h-5 nav-btn cursor-pointer ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-            </div>
-            <input id="address-input" type="text" class="flex-1 bg-white/5 text-white px-4 py-1.5 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-400/50" readonly>
-            <a id="btn-download-cv" href="./Jalpan_Vyas_CV.pdf" download="Jalpan_Vyas_CV.pdf" class="ml-2 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors" title="Download CV">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            </a>
-        </div>
-    </div>
-
-    <div class="content-area flex-1 overflow-y-auto text-white">
-        <div id="page-home" class="content-page p-8 active">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-7xl md:text-9xl font-light mb-4 floating">Jalpan Vyas</h1>
-                <p class="text-xl md:text-2xl text-gray-300 mb-12">Software Developer & Simulation Enthusiast</p>
-                <div id="home-shortcuts-container" class="max-w-4xl mx-auto">
-                    <div id="home-shortcuts-top" class="grid grid-cols-2 sm:grid-cols-4 gap-6"></div>
-                    <div id="home-shortcuts-bottom" class="grid grid-cols-2 gap-6 mt-6 max-w-sm mx-auto"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-projects" class="content-page"><div class="max-w-6xl mx-auto p-8"><h1 class="text-5xl font-bold mb-10">Projects</h1><div id="projects-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div></div></div>
-        <div id="page-deployed" class="content-page"><div class="max-w-6xl mx-auto p-8"><h1 class="text-5xl font-bold mb-10">Live Demos</h1><p class="text-gray-400 -mt-8 mb-10">Click any project to open the live version in a new tab.</p><div id="deployed-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div></div></div>
-
-        <div id="page-about" class="content-page">
-            <div class="max-w-4xl mx-auto p-8">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <img src="https://avatars.githubusercontent.com/u/72879689?v=4" alt="Jalpan Vyas" class="w-48 h-48 rounded-full shadow-lg border-4 border-gray-700">
-                    <div>
-                        <h1 class="text-5xl font-bold">About Me</h1>
-                        <p class="text-xl text-gray-300 mt-4 leading-relaxed">Hello! I'm Jalpan, a passionate software developer specializing in Python and machine learning. I have a love for creating interactive simulations and data-driven web applications that bring complex ideas to life. I thrive on turning challenging problems into elegant, efficient code and I'm always eager to learn new technologies.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-skills" class="content-page">
-            <div id="skills-container" class="max-w-4xl mx-auto p-8">
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="context-menu"><button id="context-menu-new-tab">Open in new tab</button></div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- DATA ---
-        const projectData = [
-            { id: "pixel-predict", name: "PixelPredict", tagline: "Handwritten digit recognition on the web.", description: "PixelPredict is a web application that recognizes handwritten digits drawn on an interactive canvas. It's powered by a custom-built two-layer neural network trained from scratch on the MNIST dataset, achieving ~97% accuracy. The front-end provides real-time predictions and a bar chart to visualize the model's confidence scores.", image: "https://raw.githubusercontent.com/Jalpan04/PixelPredict/main/demo.png", liveUrl: "https://number-id.onrender.com/", sourceUrl: "https://github.com/Jalpan04/PixelPredict", tech: ["Python", "Flask", "NumPy", "JavaScript", "HTML/CSS"] },
-            { id: "vinylogue", name: "Vinylogue", tagline: "Your personal Spotify story, visualized.", description: "Vinylogue connects to your Spotify account to create a personalized and shareable infographic of your listening habits. It analyzes your top artists and tracks over different time periods and presents the data in a beautiful, retro-inspired design.", image: "https://d33wubrfki0l68.cloudfront.net/6632431f9e204300085a8c9b/screenshot_2024-05-01-11-20-00-0000.png", liveUrl: "https://vinylogue-project.vercel.app/", sourceUrl: "https://github.com/Jalpan04/vinylogue", tech: ["Next.js", "React", "TypeScript", "Spotify API", "TailwindCSS"] },
-            { id: "particle-life", name: "Particle Life Simulator", tagline: "A simulation of complex emergent behavior.", description: "A mesmerizing particle life simulation where simple rules of attraction and repulsion between different colored particles lead to complex, life-like emergent behaviors. You can interact with the simulation by creating new particles and observing the patterns evolve.", image: "https://i.ytimg.com/vi/p4Yir-2igS8/maxresdefault.jpg", liveUrl: "https://jalpan04.github.io/Particle-Life-Simulator/", sourceUrl: "https://github.com/Jalpan04/Particle-Life-Simulator", tech: ["JavaScript", "HTML Canvas", "p5.js"] },
-            { id: "jax-compiler", name: "JAX Compiler", tagline: "A custom compiler for a C-like language.", description: "An educational project building a compiler from the ground up for 'JAX', a custom, simplified C-like programming language. The compiler performs lexical analysis, parsing, and code generation, outputting assembly code.", image: "https://user-images.githubusercontent.com/72879689/229346654-e883856b-3652-4753-8344-9642a49b828a.png", liveUrl: "https://jax-compiler.onrender.com/", sourceUrl: "https://github.com/Jalpan04/JAX-Compiler", tech: ["Python", "Compiler Design", "Assembly"] }
-        ];
-
-        const topRowPages = [
-            { id: 'about', title: 'About Me', url: 'portfolio://about', icon: '👤' },
-            { id: 'skills', title: 'Skills', url: 'portfolio://skills', icon: '🛠️' },
-            { id: 'projects', title: 'Projects', url: 'portfolio://projects', icon: '🚀' },
-            { id: 'deployed', title: 'Live Demos', url: 'portfolio://deployed', icon: '🌐' }
-        ];
-        const bottomRowPages = [
-            { id: 'linkedin', title: 'LinkedIn', url: 'https://www.linkedin.com/in/jalpan-vyas/', icon: '🔗', external: true },
-            { id: 'github', title: 'GitHub', url: 'https://github.com/Jalpan04', icon: '🐙', external: true }
-        ];
-        const pages = {
-            home: { id: 'home', title: 'New Tab', url: 'portfolio://home', icon: '🏠' },
-            ...Object.fromEntries(topRowPages.map(p => [p.id, p])),
-            ...Object.fromEntries(bottomRowPages.map(p => [p.id, p]))
-        };
-
-        const skillsData = {
-            'Languages': [
-                { name: 'Python', logo: 'python' }, { name: 'JavaScript', logo: 'javascript' },
-                { name: 'TypeScript', logo: 'typescript' }, { name: 'HTML5', logo: 'html5' },
-                { name: 'CSS3', logo: 'css3' }, { name: 'SQL', logo: 'postgresql' }
-            ],
-            'Frameworks & Libraries': [
-                { name: 'React', logo: 'react' }, { name: 'Next.js', logo: 'nextdotjs' },
-                { name: 'Flask', logo: 'flask' }, { name: 'Django', logo: 'django' },
-                { name: 'NumPy', logo: 'numpy' }, { name: 'Pandas', logo: 'pandas' },
-                { name: 'TensorFlow', logo: 'tensorflow' }, { name: 'PyTorch', logo: 'pytorch' }
-            ],
-            'Tools & Platforms': [
-                { name: 'Git', logo: 'git' }, { name: 'GitHub', logo: 'github' },
-                { name: 'Docker', logo: 'docker' }, { name: 'Vercel', logo: 'vercel' },
-                { name: 'PostgreSQL', logo: 'postgresql' }
-            ]
-        };
-
-        // --- DOM Elements ---
-        const contentArea = document.querySelector('.content-area');
-        const tabsContainer = document.querySelector('.tabs-container');
-        const addressInput = document.getElementById('address-input');
-        const homeShortcutsContainer = document.getElementById('home-shortcuts-container');
-        const btnBack = document.getElementById('btn-back');
-        const btnNext = document.getElementById('btn-next');
-        const btnHome = document.getElementById('btn-home');
-        const btnNewTab = document.getElementById('btn-new-tab');
-        const contextMenu = document.getElementById('context-menu');
-        const contextMenuNewTabBtn = document.getElementById('context-menu-new-tab');
-
-        // --- State ---
-        let tabs = [];
-        let activeTabId = null;
-        let tabCounter = 0;
-        let contextAction = null;
-
-        const getActiveTab = () => tabs.find(t => t.id === activeTabId);
-
-        const updateNavButtonsState = () => {
-            const activeTab = getActiveTab();
-            if (!activeTab) {
-                btnBack.classList.add('disabled');
-                btnNext.classList.add('disabled');
-                return;
-            }
-            btnBack.classList.toggle('disabled', activeTab.historyIndex <= 0);
-            btnNext.classList.toggle('disabled', activeTab.historyIndex >= activeTab.history.length - 1);
-        };
-
-        const render = () => {
-            tabsContainer.innerHTML = tabs.map(tab => {
-                const pageInfo = pages[tab.pageId] || {};
-                let title = pageInfo.title;
-                let icon = pageInfo.icon;
-                if (tab.pageId === 'project') {
-                    const project = projectData.find(p => p.id === tab.subPageId);
-                    title = project ? project.name : 'Project';
-                    icon = '📦';
-                }
-                return `<div class="tab flex items-center px-4 py-2 rounded-t-lg cursor-pointer ${tab.id === activeTabId ? 'active' : ''}" data-tab-id="${tab.id}"><span class="mr-2 text-base">${icon}</span><span class="text-sm text-white truncate max-w-[120px]">${title}</span><button class="close-tab ml-3 text-gray-400 hover:bg-white/20 rounded-full p-0.5" data-tab-id-to-close="${tab.id}"><svg class="w-3.5 h-3.5 pointer-events-none" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button></div>`;
-            }).join('');
-            document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active'));
-            const activeTab = getActiveTab();
-            if (activeTab) {
-                const pageElementId = activeTab.subPageId ? `page-project-${activeTab.subPageId}` : `page-${activeTab.pageId}`;
-                const pageElement = document.getElementById(pageElementId);
-                if (pageElement) pageElement.classList.add('active');
-                let url = pages[activeTab.pageId]?.url || '';
-                if (activeTab.subPageId) url = `portfolio://projects/${activeTab.subPageId}`;
-                addressInput.value = url;
-            } else {
-                addressInput.value = '';
-            }
-            updateNavButtonsState();
-        };
-
-        const createProjectDetailPage = (projectId) => {
-            const project = projectData.find(p => p.id === projectId);
-            if (!project) return;
-            const newPage = document.createElement('div');
-            newPage.id = `page-project-${projectId}`;
-            newPage.className = 'content-page';
-            newPage.innerHTML = `<div class="max-w-5xl mx-auto p-8"><button class="back-to-projects text-blue-400 hover:underline mb-8">&larr; Back to all projects</button><h1 class="text-5xl font-bold mb-2">${project.name}</h1><p class="text-xl text-gray-400 mb-6">${project.tagline}</p><div class="grid grid-cols-1 md:grid-cols-5 gap-8"><div class="md:col-span-3"><img src="${project.image}" alt="${project.name}" class="rounded-lg shadow-lg w-full"></div><div class="md:col-span-2"><h3 class="text-2xl font-semibold mb-3">About this project</h3><p class="text-gray-300 leading-relaxed mb-6">${project.description}</p><h3 class="text-2xl font-semibold mb-3">Tech Stack</h3><div class="flex flex-wrap gap-2 mb-8">${project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div><div class="flex flex-col sm:flex-row gap-4"><a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-blue-600 hover:bg-blue-700 font-bold py-3 px-4 rounded-lg transition-colors">Live Demo</a><a href="${project.sourceUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-gray-700 hover:bg-gray-600 font-bold py-3 px-4 rounded-lg transition-colors">View Source</a></div></div></div></div>`;
-            contentArea.appendChild(newPage);
-            newPage.querySelector('.back-to-projects').addEventListener('click', () => navigateTo('projects'));
-        };
-
-        const navigateTo = (pageId, fromHistory = false, subPageId = null) => {
-            const activeTab = getActiveTab();
-            if (!activeTab) return;
-            if (pageId === 'project' && subPageId && !document.getElementById(`page-project-${subPageId}`)) createProjectDetailPage(subPageId);
-            activeTab.pageId = pageId;
-            activeTab.subPageId = subPageId;
-            if (!fromHistory) {
-                const historyEntry = subPageId ? `${pageId}:${subPageId}` : pageId;
-                if (activeTab.historyIndex < activeTab.history.length - 1) activeTab.history = activeTab.history.slice(0, activeTab.historyIndex + 1);
-                activeTab.history.push(historyEntry);
-                activeTab.historyIndex = activeTab.history.length - 1;
-            }
-            render();
-        };
-
-        const createNewTab = (pageId, options = {}) => {
-            tabCounter++;
-            const newTabId = `tab-${tabCounter}`;
-            const historyEntry = options.subPageId ? `${pageId}:${options.subPageId}` : pageId;
-            if (pageId === 'project' && options.subPageId && !document.getElementById(`page-project-${options.subPageId}`)) createProjectDetailPage(options.subPageId);
-            tabs.push({ id: newTabId, pageId, subPageId: options.subPageId || null, history: [historyEntry], historyIndex: 0 });
-            activeTabId = newTabId;
-            render();
-        };
-
-        const closeTab = (idToClose) => {
-            const tabIndex = tabs.findIndex(tab => tab.id === idToClose);
-            if (tabIndex === -1) return;
-            const tabToClose = tabs[tabIndex];
-            if (tabToClose.pageId === 'project' && tabToClose.subPageId) document.getElementById(`page-project-${tabToClose.subPageId}`)?.remove();
-            let newActiveId = null;
-            if (activeTabId === idToClose) {
-                if (tabs.length > 1) newActiveId = tabs[tabIndex - 1]?.id || tabs[tabIndex + 1]?.id;
-            }
-            tabs.splice(tabIndex, 1);
             if (activeTabId === idToClose) {
                 activeTabId = newActiveId;
                 if (tabs.length === 0) createNewTab('home');
