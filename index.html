@@ -83,8 +83,19 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-        .content-page { display: none; }
-        .content-page.active { display: block; animation: fadeIn 0.5s ease-in; }
+
+        /* --- FIX: Corrected page visibility rules --- */
+        .content-page {
+            display: none !important; /* Force hide inactive pages */
+        }
+        .content-page.active {
+            display: block !important; /* Default display for active pages */
+            animation: fadeIn 0.5s ease-in;
+        }
+        #page-404.content-page.active {
+            display: flex !important; /* Ensure 404 page uses flex for centering when active */
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -96,7 +107,7 @@
         .tech-tag {
             display: inline-block; padding: .35em .9em; font-size: 0.8rem;
             font-weight: 500; line-height: 1.2; white-space: nowrap;
-            background-color: rgba(34, 211, 238, 0.2); /* Use accent cyan */
+            background-color: rgba(34, 211, 238, 0.2);
             color: var(--accent-cyan);
             border-radius: 9999px;
             margin-right: 0.5rem;
@@ -225,7 +236,7 @@
         <div id="page-404" class="content-page flex flex-col items-center justify-center p-8 text-center min-h-[calc(90vh-120px)]">
             <h1 class="text-7xl font-bold text-red-500 mb-4">404</h1>
             <p class="text-3xl text-gray-300 mb-8">Page Not Available</p>
-            <p class="text-lg text-gray-400">The URL you entered could not be found. Please check the address or return to the <a href="#" class="text-cyan-400 hover:underline" onclick="event.preventDefault(); navigateTo('home');">home page</a>.</p>
+            <p class="text-lg text-gray-400">The URL you entered could not be found. Please check the address or return to the <a href="#" id="link-404-home" class="text-cyan-400 hover:underline">home page</a>.</p>
         </div>
     </div>
 </div>
@@ -623,6 +634,11 @@
             btnNewTab.addEventListener('click', () => createNewTab('home'));
 
             addressInput.addEventListener('keydown', handleAddressInput);
+
+            document.getElementById('link-404-home').addEventListener('click', (e) => {
+                e.preventDefault();
+                navigateTo('home');
+            });
 
             createNewTab('home');
         };
