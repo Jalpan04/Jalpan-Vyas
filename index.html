@@ -15,8 +15,8 @@
             --card-border: rgba(255, 255, 255, 0.15);
             --text-light: #e0e7ff;
             --text-dark: #9ca3af;
-            --accent-cyan: #22d3ee;      /* Changed from blue to cyan */
-            --accent-cyan-hover: #06b6d4; /* Changed from blue to cyan */
+            --accent-cyan: #22d3ee;
+            --accent-cyan-hover: #06b6d4;
             --tab-inactive-bg: rgba(255, 255, 255, 0.05);
             --tab-inactive-hover-bg: rgba(255, 255, 255, 0.1);
             --tab-active-bg: rgba(255, 255, 255, 0.15);
@@ -117,13 +117,12 @@
             transform: translateY(-2px);
         }
         .skill-card img {
-            /* Removed filter to show colors by default */
             transition: transform 0.2s ease-in-out;
             width: 3rem;
             height: 3rem;
         }
         .skill-card:hover img {
-            transform: scale(1.1); /* Add a subtle scale effect on hover */
+            transform: scale(1.1);
         }
 
         #context-menu {
@@ -142,7 +141,7 @@
 
         .btn-primary {
             background-color: var(--accent-cyan);
-            color: #080a12; /* Darker text on light cyan for better contrast */
+            color: #080a12;
             font-weight: 700;
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
@@ -162,13 +161,12 @@
         .btn-secondary:hover {
             background-color: #374151;
         }
-        /* Custom colors for shortcut icons */
-        .text-about { color: #f59e0b; } /* Amber */
-        .text-skills { color: #84cc16; } /* Lime */
-        .text-projects { color: #a855f7; } /* Purple */
-        .text-demos { color: #ec4899; } /* Pink */
-        .text-linkedin { color: #0ea5e9; } /* Sky */
-        .text-github { color: #e5e7eb; } /* Gray */
+        .text-about { color: #f59e0b; }
+        .text-skills { color: #84cc16; }
+        .text-projects { color: #a855f7; }
+        .text-demos { color: #ec4899; }
+        .text-linkedin { color: #0ea5e9; }
+        .text-github { color: #e5e7eb; }
     </style>
 </head>
 <body class="gradient-bg flex items-center justify-center p-4">
@@ -188,7 +186,7 @@
                 <i id="btn-next" class="fa-solid fa-arrow-right w-5 h-5 nav-btn cursor-pointer"></i>
                 <i id="btn-home" class="fa-solid fa-house w-5 h-5 nav-btn cursor-pointer ml-1"></i>
             </div>
-            <input id="address-input" type="text" class="flex-1 bg-white/5 text-white px-4 py-1.5 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-cyan-400/50" readonly>
+            <input id="address-input" type="text" class="flex-1 bg-white/5 text-white px-4 py-1.5 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-cyan-400/50">
             <a id="btn-download-cv" href="./Jalpan_Vyas_CV.pdf" download="Jalpan_Vyas_CV.pdf" class="ml-2 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors" title="Download CV">
                 <i class="fa-solid fa-download w-5 h-5"></i>
             </a>
@@ -222,6 +220,12 @@
         <div id="page-skills" class="content-page">
             <div id="skills-container" class="max-w-4xl mx-auto p-8">
             </div>
+        </div>
+
+        <div id="page-404" class="content-page flex flex-col items-center justify-center p-8 text-center min-h-[calc(90vh-120px)]">
+            <h1 class="text-7xl font-bold text-red-500 mb-4">404</h1>
+            <p class="text-3xl text-gray-300 mb-8">Page Not Available</p>
+            <p class="text-lg text-gray-400">The URL you entered could not be found. Please check the address or return to the <a href="#" class="text-cyan-400 hover:underline" onclick="event.preventDefault(); navigateTo('home');">home page</a>.</p>
         </div>
     </div>
 </div>
@@ -259,6 +263,7 @@
 
         const pages = {
             home: { id: 'home', title: 'New Tab', url: 'portfolio://home', faIcon: 'fa-solid fa-house' },
+            '404': { id: '404', title: 'Not Found', url: 'portfolio://404', faIcon: 'fa-solid fa-exclamation-triangle' },
             ...Object.fromEntries(allShortcutPages.map(p => [p.id, p]))
         };
 
@@ -317,11 +322,13 @@
                 const pageInfo = pages[tab.pageId] || {};
                 let title = pageInfo.title;
                 let iconClass = pageInfo.faIcon;
+
                 if (tab.pageId === 'project') {
                     const project = projectData.find(p => p.id === tab.subPageId);
                     title = project ? project.name : 'Project';
                     iconClass = 'fa-solid fa-box';
                 }
+
                 return `<div class="tab flex items-center px-4 py-2 rounded-t-lg cursor-pointer ${tab.id === activeTabId ? 'active' : ''}" data-tab-id="${tab.id}"><i class="${iconClass} mr-2 text-base"></i><span class="text-sm text-white truncate max-w-[120px]">${title}</span><button class="close-tab ml-3 text-gray-400 hover:bg-white/20 rounded-full p-0.5" data-tab-id-to-close="${tab.id}"><i class="fa-solid fa-xmark w-3.5 h-3.5 pointer-events-none"></i></button></div>`;
             }).join('');
 
@@ -335,7 +342,9 @@
                 const pageElement = document.getElementById(pageElementId);
                 if (pageElement) pageElement.classList.add('active');
                 let url = pages[activeTab.pageId]?.url || '';
-                if (activeTab.subPageId) url = `portfolio://projects/${activeTab.subPageId}`;
+                if (activeTab.pageId === 'project' && activeTab.subPageId) {
+                    url = `portfolio://projects/${activeTab.subPageId}`;
+                }
                 addressInput.value = url;
             } else {
                 addressInput.value = '';
@@ -377,6 +386,7 @@
         const navigateTo = (pageId, fromHistory = false, subPageId = null) => {
             const activeTab = getActiveTab();
             if (!activeTab) return;
+
             const projectPageId = `page-project-${activeTab.id}-${subPageId}`;
             if (pageId === 'project' && subPageId && !document.getElementById(projectPageId)) {
                 createProjectDetailPage(subPageId, activeTab.id);
@@ -413,19 +423,27 @@
             if (tabToClose.pageId === 'project' && tabToClose.subPageId) {
                 document.getElementById(`page-project-${tabToClose.id}-${tabToClose.subPageId}`)?.remove();
             }
+
             let newActiveId = null;
             if (activeTabId === idToClose) {
-                if (tabs.length > 1) newActiveId = tabs[tabIndex - 1]?.id || tabs[tabIndex + 1]?.id;
+                if (tabs.length > 1) {
+                    newActiveId = tabs[tabIndex - 1]?.id || tabs[tabIndex + 1]?.id;
+                }
             }
             tabs.splice(tabIndex, 1);
             if (activeTabId === idToClose) {
                 activeTabId = newActiveId;
-                if (tabs.length === 0) createNewTab('home');
+                if (tabs.length === 0) {
+                    createNewTab('home');
+                }
             }
             render();
         };
 
-        const setActiveTab = (tabId) => { activeTabId = tabId; render(); };
+        const setActiveTab = (tabId) => {
+            activeTabId = tabId;
+            render();
+        };
 
         const showContextMenu = (event, action) => {
             event.preventDefault();
@@ -448,6 +466,16 @@
                         createNewTab('project', { subPageId: id });
                     } else if (type === 'externalLink') {
                         window.open(id, '_blank');
+                    } else if (type === 'portfolioUrl') {
+                        const url = id;
+                        const parts = url.replace('portfolio://', '').split('/');
+                        const pageId = parts[0];
+                        const subPageId = parts[1] || null;
+                        if (pages[pageId] || (pageId === 'projects' && subPageId && projectData.some(p => p.id === subPageId))) {
+                            createNewTab(pageId, {subPageId});
+                        } else {
+                            createNewTab('404');
+                        }
                     }
                 }
                 contextMenu.classList.remove('show');
@@ -527,24 +555,60 @@
             });
         };
 
+        const handleAddressInput = (event) => {
+            if (event.key === 'Enter') {
+                const inputUrl = addressInput.value.trim();
+                if (inputUrl.startsWith('portfolio://')) {
+                    const path = inputUrl.replace('portfolio://', '');
+                    const parts = path.split('/');
+                    const pageId = parts[0];
+                    const subPageId = parts[1] || null;
+
+                    if (pages[pageId]) {
+                        if (pageId === 'projects' && subPageId) {
+                            if (projectData.some(p => p.id === subPageId)) {
+                                navigateTo('project', false, subPageId);
+                            } else {
+                                navigateTo('404');
+                            }
+                        } else {
+                            navigateTo(pageId);
+                        }
+                    } else if (pageId === 'projects' && !subPageId) {
+                        navigateTo('projects');
+                    }
+                    else {
+                        navigateTo('404');
+                    }
+                } else if (inputUrl.startsWith('http://') || inputUrl.startsWith('https://')) {
+                    window.open(inputUrl, '_blank');
+                } else {
+                    navigateTo('404');
+                }
+            }
+        };
+
+        // --- Initialisation ---
         const init = () => {
             initHomePage();
             initProjectsPage();
             initDeployedPage();
             initSkillsPage();
             initContextMenu();
+
             tabsContainer.addEventListener('click', (e) => {
                 const closeButton = e.target.closest('.close-tab');
                 if (closeButton) { e.stopPropagation(); closeTab(closeButton.dataset.tabIdToClose); return; }
                 const tabElement = e.target.closest('.tab');
                 if (tabElement) setActiveTab(tabElement.dataset.tabId);
             });
+
             btnBack.addEventListener('click', () => {
                 const tab = getActiveTab();
                 if (tab && tab.historyIndex > 0) {
                     tab.historyIndex--;
                     const [pageId, subPageId] = tab.history[tab.historyIndex].split(':');
-                    navigateTo(pageId, true, subPageId);
+                    navigateTo(pageId, true, subPageId === 'null' ? null : subPageId);
                 }
             });
             btnNext.addEventListener('click', () => {
@@ -552,11 +616,14 @@
                 if (tab && tab.historyIndex < tab.history.length - 1) {
                     tab.historyIndex++;
                     const [pageId, subPageId] = tab.history[tab.historyIndex].split(':');
-                    navigateTo(pageId, true, subPageId);
+                    navigateTo(pageId, true, subPageId === 'null' ? null : subPageId);
                 }
             });
             btnHome.addEventListener('click', () => navigateTo('home'));
             btnNewTab.addEventListener('click', () => createNewTab('home'));
+
+            addressInput.addEventListener('keydown', handleAddressInput);
+
             createNewTab('home');
         };
 
