@@ -268,20 +268,223 @@
     document.addEventListener('DOMContentLoaded', () => {
         // --- DATA ---
         const projectData = [
-            { id: "identity-app", name: "!dentity", tagline: "A modern Windows desktop app for organizing personal interests.", description: "A Windows Forms application built with C# and .NET for cataloging personal interests like books, movies, music, and travel plans. The project showcases clean object-oriented design, a responsive UI, and efficient in-memory data handling, demonstrating strong desktop development capabilities.", image: "https://raw.githubusercontent.com/Jalpan04/identity/main/screenshots/main.png", liveUrl: "https://github.com/Jalpan04/identity", sourceUrl: "https://github.com/Jalpan04/identity", tech: ["C#", "Windows Forms", ".NET Framework"] },
-            { id: "ai-snake", name: "AI Snake Game", tagline: "A self-learning agent mastering the classic Snake game.", description: "This project implements a Reinforcement Learning agent that learns to play Snake. It uses a Deep Q-Network (DQN) built with PyTorch to make decisions. The agent trains by interacting with a custom Pygame environment, utilizing experience replay to stabilize learning. Training progress, such as scores, is plotted in real-time.", image: "https://raw.githubusercontent.com/Jalpan04/ai_snake_training/main/graphs/rolling_average_score.png", liveUrl: "https://github.com/Jalpan04/ai_snake_training", sourceUrl: "https://github.com/Jalpan04/ai_snake_training", tech: ["Python", "PyTorch", "Pygame", "NumPy", "Matplotlib"] },
-            { id: "asteroids-ai", name: "Asteroids Game with Neural Network AI", tagline: "AI-powered Asteroids: Neural networks learn to navigate and destroy.", description: "A modern implementation of the classic Asteroids arcade game featuring AI agents trained using neural networks and genetic algorithms. Watch AI pilots evolve from novices to experts as they learn to navigate space, avoid hazards, and destroy asteroids with increasing efficiency, with real-time visualization of their decision-making.", image: "https://raw.githubusercontent.com/Jalpan04/Asteroid-game-ai/main/screenshots/random_cells.png", liveUrl: "https://www.youtube.com/watch?v=bp6xBBQXAF8", sourceUrl: "https://github.com/Jalpan04/Asteroid-game-ai", tech: ["Python", "Pygame", "NumPy", "Neural Networks", "Genetic Algorithms"] },
-            { id: "babel-hash-api", name: "Babel Hash API", tagline: "A computational exploration of Borges's infinite library.", description: "A deterministic API and web portal for exploring Jorge Luis Borges's 'The Library of Babel.' Instead of storing an infinite number of books, this project uses cryptographic hashes to compute the fixed, unique address of any text, allowing any book to be generated on demand from its address. It transforms the library from an impossible physical space into a navigable mathematical one.", image: "https://raw.githubusercontent.com/Jalpan04/BabelHashAPI/main/demo.png", liveUrl: "https://jalpan04.github.io/BabelHashAPI/", sourceUrl: "https://github.com/Jalpan04/BabelHashAPI", tech: ["Python", "FastAPI", "Pytest", "HTML/CSS", "JavaScript"] },
-            { id: "boid-simulation", name: "Boid Simulation", tagline: "An interactive simulation of flocking behavior.", description: "An interactive simulation of flocking behavior based on Craig Reynolds's Boids algorithm. This project demonstrates emergent behavior by applying simple alignment, cohesion, and separation rules to individual agents. Users can control a predator, adjust simulation parameters, and introduce environmental forces like wind.", image: "https://raw.githubusercontent.com/Jalpan04/boid-simulation/main/screenshots/debug_on.png", liveUrl: "https://jalpan04.github.io/boid-simulation/", sourceUrl: "https://github.com/Jalpan04/boid-simulation", tech: ["HTML5", "JavaScript", "TailwindCSS"] },
-            { id: "brat-text-generator", name: "Brat Text Generator", tagline: "Generate text in the 'Brat' album aesthetic.", description: "A simple web application that generates text in the iconic blurred green style of Charli XCX's 'Brat' album aesthetic. Users can enter text, see a real-time preview, toggle between themes, and save the generated image. Built with vanilla HTML, CSS, and JavaScript.", image: "https://raw.githubusercontent.com/Jalpan04/brat-text-generator/main/demo.png", liveUrl: "https://jalpan04.github.io/brat-text-generator/", sourceUrl: "https://github.com/Jalpan04/brat-text-generator", tech: ["HTML", "CSS", "JavaScript", "jQuery"] },
-            { id: "game-of-life", name: "Conway's Game of Life", tagline: "A classic cellular automata simulation in Python.", description: "A Python implementation of John Conway's Game of Life using Pygame. This interactive simulation allows users to toggle cell states, control the simulation with keyboard shortcuts, and dynamically zoom in/out of the grid to observe the complex, evolving patterns.", image: "https://raw.githubusercontent.com/Jalpan04/game_of_life/main/screenshots/randomized.png", liveUrl: "https://github.com/Jalpan04/game_of_life", sourceUrl: "https://github.com/Jalpan04/game_of_life", tech: ["Python", "Pygame", "NumPy"] },
-            { id: "fluid-dynamics-simulation", name: "Fluid Dynamics Simulation", tagline: "A real-time, interactive 2D fluid simulation.", description: "A real-time, interactive 2D fluid simulation visualizing complex dynamics using the Navier-Stokes equations. Built with Python and Pygame, users can click and drag to introduce forces and dye, toggle between density and velocity field visualizations, and customize physical properties like diffusion and viscosity.", image: "https://raw.githubusercontent.com/Jalpan04/Fluid_simulator/main/screenshots/density.png", liveUrl: "https://github.com/Jalpan04/Fluid_simulator", sourceUrl: "https://github.com/Jalpan04/Fluid_simulator", tech: ["Python", "Pygame", "NumPy"] },
-            { id: "jax-compiler", name: "JAX Compiler", tagline: "A custom compiler for a C-like language.", description: "An educational project building a compiler from the ground up for 'JAX', a custom, simplified C-like programming language. The compiler performs lexical analysis, parsing, and code generation, outputting assembly code.", image: "https://user-images.githubusercontent.com/72879689/229346654-e883856b-3652-4753-8344-9642a49b828a.png", liveUrl: "https://jax-compiler.onrender.com/", sourceUrl: "https://github.com/Jalpan04/JAX-Compiler", tech: ["Python", "Compiler Design", "Assembly"] },
-            { id: "particle-life", name: "Particle Life Simulator", tagline: "A simulation of complex emergent behavior.", description: "A mesmerizing particle life simulation where simple rules of attraction and repulsion between different colored particles lead to complex, life-like emergent behaviors. You can interact with the simulation by creating new particles and observing the patterns evolve.", image: "https://i.ytimg.com/vi/p4Yir-2igS8/maxresdefault.jpg", liveUrl: "https://jalpan04.github.io/Particle-Life-Simulator/", sourceUrl: "https://github.com/Jalpan04/Particle-Life-Simulator", tech: ["JavaScript", "HTML Canvas", "p5.js"] },
-            { id: "pixel-predict", name: "PixelPredict", tagline: "Handwritten digit recognition on the web.", description: "PixelPredict is a web application that recognizes handwritten digits drawn on an interactive canvas. It's powered by a custom-built two-layer neural network trained from scratch on the MNIST dataset, achieving ~97% accuracy. The front-end provides real-time predictions and a bar chart to visualize the model's confidence scores.", image: "https://raw.githubusercontent.com/Jalpan04/PixelPredict/main/demo.png", liveUrl: "https://number-id.onrender.com/", sourceUrl: "https://github.com/Jalpan04/PixelPredict", tech: ["Python", "Flask", "NumPy", "JavaScript", "HTML/CSS"] },
-            { id: "seedhe-maut-lyrics", name: "Seedhe Maut - Lyrics Database", tagline: "A comprehensive dataset of lyrics from the Indian hip-hop duo.", description: "This repository contains a database of lyrics from the Indian hip-hop duo Seedhe Mout. The lyrics were scraped from Genius using the lyricsgenius Python library and have been compiled into a structured dataset, available as a CSV file and individual text files.", image: "https://i.scdn.co/image/ab67616d0000b27341e755259a857053b1b36916", liveUrl: "https://github.com/Jalpan04/seedhe_maut_data", sourceUrl: "https://github.com/Jalpan04/seedhe_maut_data", tech: ["Python", "Jupyter Notebook", "lyricsgenius", "Pandas"] },
-            { id: "spotify-eda", name: "Spotify Streaming History Analysis", tagline: "An exploratory data analysis of personal listening habits.", description: "This project provides an in-depth exploratory data analysis (EDA) of personal Spotify streaming history. Using Python libraries like Pandas, Matplotlib, and Seaborn, it uncovers listening patterns, identifies top artists and tracks, and visualizes trends over time, including a calendar heatmap of daily listening minutes.", image: "https://raw.githubusercontent.com/Jalpan04/personal-spotify-EDA/main/graphs/calendar_heatmap.png", liveUrl: "https://github.com/Jalpan04/personal-spotify-EDA", sourceUrl: "https://github.com/Jalpan04/personal-spotify-EDA", tech: ["Python", "Pandas", "Matplotlib", "Seaborn", "Jupyter Notebook"] },
-            { id: "vinylogue", name: "Vinylogue", tagline: "Your personal Spotify story, visualized.", description: "Vinylogue connects to your Spotify account to create a personalized and shareable infographic of your listening habits. It analyzes your top artists and tracks over different time periods and presents the data in a beautiful, retro-inspired design.", image: "https://d33wubrfki0l68.cloudfront.net/6632431f9e204300085a8c9b/screenshot_2024-05-01-11-20-00-0000.png", liveUrl: "https://vinylogue-project.vercel.app/", sourceUrl: "https://github.com/Jalpan04/vinylogue", tech: ["Next.js", "React", "TypeScript", "Spotify API", "TailwindCSS"] }
+            {
+                "id": "ai-snake-training",
+                "name": "DQN Snake Agent",
+                "tagline": "An AI agent learning to play Snake using Deep Q-Learning (DQN).",
+                "description": "An AI agent that learns to play the classic Snake game using Deep Q-Learning (DQN) with PyTorch and Pygame. It includes a custom game environment, experience replay, and live performance tracking, with clear performance improvements shown over training time.",
+                "image": "https://private-user-images.githubusercontent.com/72879689/501432434-60f20def-d2d3-435d-baf4-f5c3551d608a.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA1MjIyNzcsIm5iZiI6MTc2MDUyMTk3NywicGF0aCI6Ii83Mjg3OTY4OS81MDE0MzI0MzQtNjBmMjBkZWYtZDJkMy00MzVkLWJhZjQtZjVjMzU1MWQ2MDhhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDE1VDA5NTI1N1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTY0NTAyYjdhYmE1ZjA2YjgyZTUwYzFhMGM1MzYxMzc2YTY2YmI4NmQ1OWExYzAyM2IyMjYxM2NiOGViYzZiODQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.OudxtsIw0gCEfMgfTfPCFMnVrSYbD3-6sr7wGfT6LNs",
+                "sourceUrl": "https://github.com/Jalpan04/ai_snake_training",
+                "tech": ["Jupyter Notebook", "Python", "Pytorch"]
+            },
+            {
+                "id": "Asteroid-game-ai",
+                "name": "Asteroids Genetic Agent",
+                "tagline": "Asteroids game with AI agents trained over generations using neural networks.",
+                "description": "Asteroids game with AI agents trained over generations using neural networks and a genetic algorithm. Built with Pygame.",
+                "image": "https://github.com/Jalpan04/Asteroid-game-ai/blob/main/screenshot.png?raw=true",
+                "liveUrl": "https://youtu.be/bp6xBBQXAF8",
+                "sourceUrl": "https://github.com/Jalpan04/Asteroid-game-ai",
+                "tech": ["Python", "Machine Learning"]
+            },
+            {
+                "id": "babel-hash-api",
+                "name": "BabelHashAPI",
+                "tagline": "A computational exploration of Borges's infinite library.",
+                "description": "A deterministic API and web portal for exploring a computational version of Jorge Luis Borges's \"The Library of Babel.\" It uses cryptographic hashes (SHA-256) to calculate a fixed address for any text, allowing any book to be generated on demand without storing a single one. Built with Python, FastAPI, and vanilla JavaScript.",
+                "image": null,
+                "liveUrl": "https://jalpan04.github.io/BabelHashAPI/",
+                "sourceUrl": "https://github.com/Jalpan04/BabelHashAPI",
+                "tech": ["HTML", "Python", "FastAPI", "JavaScript"]
+            },
+            {
+                "id": "blob-tracker",
+                "name": "blob-tracker",
+                "tagline": "Color-based object tracking in videos using Python and OpenCV.",
+                "description": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly interface lets you pick a video, a color to track, and visual effects, then it generates a new video with the tracking visualized. It uses motion detection and color masking in HSV space.",
+                "image": "https://private-user-images.githubusercontent.com/72879689/501518156-c795f3d8-c1ca-4d02-ab5a-0aa8be81ed36.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA1MzQ1MjEsIm5iZiI6MTc2MDUzNDIyMSwicGF0aCI6Ii83Mjg3OTY4OS81MDE1MTgxNTYtYzc5NWYzZDgtYzFjYS00ZDAyLWFiNWEtMGFhOGJlODFlZDM2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDE1VDEzMTcwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTRiMmYzZTFjNTQwYzA1YWEzNmNiYjFhZGYxODExODYyMDFlN2MyYzA2MmFmZTg3OGNjMWY0NTI3NDNkYTYyYTImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.N_0f9OMkkdKps7Svhik0y0jmxHaqyCC2mAVHEI6thnY",
+                "sourceUrl": "https://github.com/Jalpan04/blob-tracker",
+                "tech": ["Python", "OpenCV"]
+            },
+            {
+                "id": "boid-simulation",
+                "name": "boid-simulation",
+                "tagline": "An interactive simulation of flocking behavior.",
+                "description": "An interactive simulation of flocking behavior based on Craig Reynolds's \"Boids\" algorithm. This project demonstrates emergent behavior by applying simple alignment, cohesion, and separation rules. Users can control a predator, adjust simulation parameters, and introduce environmental forces like wind.",
+                "image": "https://github.com/Jalpan04/boid-simulation/raw/main/boid.png",
+                "liveUrl": "https://jalpan04.github.io/boid-simulation/",
+                "sourceUrl": "https://github.com/Jalpan04/boid-simulation",
+                "tech": ["HTML", "JavaScript", "Tailwind"]
+            },
+            {
+                "id": "brat-text-generator",
+                "name": "brat-text-generator",
+                "tagline": "Generate text in the 'Brat' album aesthetic.",
+                "description": "A simple web application that generates text in the style of Charli XCX's \"Brat\" album aesthetic. It features a generator for the iconic blurred 'Brat' style, theme toggling, and the ability to save the generated image.",
+                "image": "https://camo.githubusercontent.com/6cd0120cc4c5ac11d28b2c60f76033b52db98dac641de3b2644bb054b449d60c/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d79656c6c6f772e737667",
+                "liveUrl": "https://jalpan04.github.io/brat-text-generator/",
+                "sourceUrl": "https://github.com/Jalpan04/brat-text-generator",
+                "tech": ["HTML", "CSS", "JavaScript"]
+            },
+            {
+                "id": "Chatdevs",
+                "name": "Chatdevs",
+                "tagline": "A live chat application.",
+                "description": "A real-time chat application deployed on a live server.",
+                "image": null,
+                "liveUrl": "https://chatdevs.onrender.com/",
+                "sourceUrl": "https://github.com/Jalpan04/Chatdevs",
+                "tech": ["Web", "Node.js"]
+            },
+            {
+                "id": "Electron_stimulator",
+                "name": "Electron_stimulator",
+                "tagline": "A short video demo of an electron simulator.",
+                "description": "A short video showcasing a physics simulation of electron movement.",
+                "image": null,
+                "liveUrl": "https://youtube.com/shorts/0ULRdgJPBfI?si=J2aOHTEyCPsJPDuV",
+                "sourceUrl": "https://github.com/Jalpan04/Electron_stimulator",
+                "tech": ["Python", "Physics Simulation"]
+            },
+            {
+                "id": "fluid-simulator",
+                "name": "Fluid_simulator",
+                "tagline": "A real-time, interactive 2D fluid simulation.",
+                "description": "This project implements a real-time fluid simulation using Navier-Stokes equations. The simulation models fluid behavior, including density diffusion, advection, and velocity updates, creating realistic, interactive fluid dynamics. Built with Python and Pygame.",
+                "image": "https://github.com/Jalpan04/Fluid_simulator/raw/main/random.gif",
+                "sourceUrl": "https://github.com/Jalpan04/Fluid_simulator",
+                "tech": ["Python", "Pygame"]
+            },
+            {
+                "id": "game-of-life",
+                "name": "game_of_life",
+                "tagline": "A Python implementation of John Conway's Game of Life.",
+                "description": "A Python implementation of John Conway's Game of Life using `pygame`. This simulation of cellular automata follows simple rules to create complex, evolving patterns. It features an interactive grid, dynamic resizing (zoom), and simulation controls (start/pause/clear).",
+                "image": "https://github.com/Jalpan04/game_of_life/raw/main/static/Simulation%20Running.gif",
+                "sourceUrl": "https://github.com/Jalpan04/game_of_life",
+                "tech": ["Python", "Pygame"]
+            },
+            {
+                "id": "gujarati-author-attribution",
+                "name": "gujarati-author-attribution",
+                "tagline": "Authorship attribution in Gujarati literature using Neural Stylometry.",
+                "description": "An end-to-end machine learning project on authorship attribution for Gujarati literary texts. It conducts a comparative analysis between a traditional LSTM model and a modern, pre-trained Transformer model on a small, imbalanced, low-resource dataset, demonstrating the effectiveness of transfer learning.",
+                "image": null,
+                "liveUrl": "https://huggingface.co/spaces/jalpan04/gujarati-author-attribution",
+                "sourceUrl": "https://github.com/Jalpan04/gujarati-author-attribution",
+                "tech": ["Python"]
+            },
+            {
+                "id": "identity",
+                "name": "identity",
+                "tagline": "A modern Windows desktop app for organizing personal interests.",
+                "description": "!dentity is a Windows Forms application designed to help users catalog and manage their personal interests in an intuitive, user-friendly interface. Built with C# and .NET Framework 4.8, the app features tracking for books, movies, music, and travel plans, showcasing strong object-oriented design.",
+                "image": "https://github.com/Jalpan04/identity/raw/main/assets/dashboard.png",
+                "sourceUrl": "https://github.com/Jalpan04/identity",
+                "tech": ["C#", "Windows Forms", ".NET Framework"]
+            },
+            {
+                "id": "jax-web-compiler",
+                "name": "jax-web-compiler",
+                "tagline": "A JAX compiler accessible via a web interface.",
+                "description": "A web-based interface for interacting with a JAX compiler.",
+                "image": null,
+                "liveUrl": "https://jax-compiler.onrender.com",
+                "sourceUrl": "https://github.com/Jalpan04/jax-web-compiler",
+                "tech": ["Python", "JAX", "Web"]
+            },
+            {
+                "id": "jaximg",
+                "name": "JAXImg",
+                "tagline": "A Miniature DALL·E: An exploration into Text-to-Image Generation.",
+                "description": "A compact, educational implementation of a text-to-image generative model inspired by OpenAI’s DALL·E 1. It uses a two-stage architecture: a Discrete Variational Autoencoder (dVAE) and an Autoregressive Transformer to synthesize images from textual prompts like class labels, demonstrating how complex generative processes can be deconstructed.",
+                "image": "https://github.com/Jalpan04/JAXImg/raw/main/generated_examples/bird_example.png",
+                "sourceUrl": "https://github.com/Jalpan04/JAXImg",
+                "tech": ["Python"]
+            },
+            {
+                "id": "maze-solver-visualizer",
+                "name": "Maze-Solver-Visualizer",
+                "tagline": "Dynamic visualizer for pathfinding algorithms.",
+                "description": "Maze Pathfinder is a dynamic visualizer that brings maze-solving algorithms (DFS, BFS, A*, Dijkstra's) to life. Watch as they work their way through randomly generated mazes, finding the shortest path. Built with Python and Pygame for an engaging way to understand graph traversal.",
+                "image": "https://github.com/Jalpan04/Maze-Solver-Visualizer/raw/main/assets/solved.png",
+                "liveUrl": "https://youtube.com/shorts/-8rkpwiIggs?feature=share",
+                "sourceUrl": "https://github.com/Jalpan04/Maze-Solver-Visualizer",
+                "tech": ["Python", "Pygame"]
+            },
+            {
+                "id": "mnist-cvae-digit-generator",
+                "name": "Handwritten Digit Generator",
+                "tagline": "A Conditional Variational Autoencoder (CVAE) for generating handwritten digits on MNIST.",
+                "description": "A Conditional Variational Autoencoder (CVAE) for generating handwritten digits on MNIST. Generate any number in realistic handwritten style. It extends the standard VAE by conditioning both encoding and decoding on labels, allowing for controlled generation (e.g., specifying a digit 0-9) and style variation via latent space sampling.",
+                "image": "https://github.com/user-attachments/assets/340450ec-b189-460f-9f4a-7de43e641689",
+                "sourceUrl": "https://github.com/Jalpan04/mnist-cvae-digit-generator",
+                "tech": ["Jupyter Notebook"]
+            },
+            {
+                "id": "particle-life-simulator",
+                "name": "Particle-Life-Simulator",
+                "tagline": "A browser-based particle life simulator with emergent behavior.",
+                "description": "This is a simple, browser-based particle life simulator where you can observe emergent behavior from simple rules of attraction and repulsion between different groups of particles. It features customizable global settings (Particles, Groups, Radius) and an interactive rule engine.",
+                "image": null,
+                "liveUrl": "https://jalpan04.github.io/Particle-Life-Simulator/",
+                "sourceUrl": "https://github.com/Jalpan04/Particle-Life-Simulator",
+                "tech": ["HTML"]
+            },
+            {
+                "id": "personal-spotify-eda",
+                "name": "personal-spotify-EDA",
+                "tagline": "An in-depth exploratory data analysis of personal Spotify streaming history.",
+                "description": "This project provides an in-depth exploratory data analysis (EDA) of personal Spotify streaming history data. The analysis is conducted using Python with data manipulation and visualization libraries suchs as Pandas, Matplotlib, and Seaborn to uncover listening patterns and visualize trends over time.",
+                "image": null,
+                "sourceUrl": "https://github.com/Jalpan04/personal-spotify-EDA",
+                "tech": ["Jupyter Notebook", "Python"]
+            },
+            {
+                "id": "pixelpredict",
+                "name": "PixelPredict",
+                "tagline": "Handwritten digit recognition on the web.",
+                "description": "A web app for digit recognition using a custom two-layer feedforward neural network trained on the MNIST dataset. Users can draw digits on an interactive canvas, and the app provides predictions with confidence scores in real-time. Built with Flask and NumPy.",
+                "image": "https://github.com/Jalpan04/PixelPredict/raw/main/demo.png",
+                "sourceUrl": "https://github.com/Jalpan04/PixelPredict",
+                "tech": ["HTML", "Python", "Flask", "NumPy", "JavaScript"]
+            },
+            {
+                "id": "sand-simulation",
+                "name": "sand-simulation",
+                "tagline": "A 2D particle physics sandbox.",
+                "description": "A dynamic 2D particle simulation sandbox built with Python and Pygame. This project models the behavior of various elements (Sand, Water, Rock, Fire, Oil, Gas, Plant) and their interactions in a grid-based environment, demonstrating cellular automata and agent-based modeling principles.",
+                "image": "https://github.com/Jalpan04/sand-simulation/raw/main/example.png",
+                "sourceUrl": "https://github.com/Jalpan04/sand-simulation",
+                "tech": ["Python", "Pygame"]
+            },
+            {
+                "id": "seedhe-maut-data",
+                "name": "seedhe_maut_data",
+                "tagline": "A comprehensive database of lyrics from the Indian hip-hop duo Seedhe Maut.",
+                "description": "This repository contains a database of lyrics from the albums of Seedhe Maut. The lyrics were scraped from Genius using the `lyricsgenius` Python library and have been compiled into a structured dataset, available as a CSV file and individual text files.",
+                "image": null,
+                "sourceUrl": "https://github.com/Jalpan04/seedhe_maut_data",
+                "tech": ["Jupyter Notebook", "Python"]
+            },
+            {
+                "id": "sign-lang-translator",
+                "name": "Sign-Lang-Translator",
+                "tagline": "Real-Time ASL Alphabet Recognition.",
+                "description": "Sign-Interpreter is a real-time American Sign Language (ASL) alphabet recognition system designed to interpret hand gestures through webcam input. It utilizes Google's MediaPipe for robust hand keypoint detection and custom-trained neural networks for gesture classification, featuring an interactive tutorial mode.",
+                "image": "https://camo.githubusercontent.com/f302b6c77cda1785a1e3c0183e82b7070a9ab6a245f908ab8ecfe05570702a88/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f507974686f6e2d332e382b2d626c75652e737667",
+                "sourceUrl": "https://github.com/Jalpan04/Sign-Lang-Translator",
+                "tech": ["Python", "Tensorflow"]
+            },
+            {
+                "id": "vinylogue-project",
+                "name": "vinylogue-project",
+                "tagline": "A full-stack MERN application for rating and reviewing music albums.",
+                "description": "A full-stack MERN application for rating and reviewing music albums, inspired by Letterboxd. Features a bold, brutalist design, user authentication (JWT), dynamic album search via the Spotify API, and an interactive rating and liking system.",
+                "image": "https://github.com/Jalpan04/vinylogue-project/raw/main/vinylogue.png",
+                "sourceUrl": "https://github.com/Jalpan04/vinylogue-project",
+                "tech": ["JavaScript", "React", "Node", "MongoDB"]
+            }
         ];
 
         const allShortcutPages = [
@@ -390,6 +593,8 @@
             const newPage = document.createElement('div');
             newPage.id = `page-project-${tabId}-${projectId}`;
             newPage.className = 'content-page';
+            const liveUrlHtml = project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center btn-primary"><i class="fa-solid fa-up-right-from-square mr-2"></i> View Project</a>` : '';
+            const linkGapClass = project.liveUrl ? 'sm:flex-row' : '';
             newPage.innerHTML = `
                 <div class="max-w-5xl mx-auto p-8">
                     <button class="back-to-projects text-cyan-400 hover:underline mb-8 flex items-center gap-2">
@@ -404,8 +609,8 @@
                             <p class="text-gray-300 leading-relaxed mb-6">${project.description}</p>
                             <h3 class="text-2xl font-semibold mb-3">Tech Stack</h3>
                             <div class="flex flex-wrap gap-2 mb-8">${project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center btn-primary"><i class="fa-solid fa-up-right-from-square mr-2"></i> View Project</a>
+                            <div class="flex flex-col ${linkGapClass} gap-4">
+                                ${liveUrlHtml}
                                 <a href="${project.sourceUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center btn-secondary"><i class="fa-brands fa-github mr-2"></i> View Source</a>
                             </div>
                         </div>
@@ -571,7 +776,8 @@
 
         const initDeployedPage = () => {
             const deployedGrid = document.getElementById('deployed-grid');
-            deployedGrid.innerHTML = projectData.map(project => `
+            const liveProjects = projectData.filter(project => project.liveUrl);
+            deployedGrid.innerHTML = liveProjects.map(project => `
                 <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="block glass-card rounded-xl overflow-hidden group">
                     <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
                         <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
