@@ -64,17 +64,68 @@
             </div>
 
             <div id="page-about" class="content-page">
-                <div class="max-w-4xl mx-auto p-8">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <img src="https://avatars.githubusercontent.com/u/72879689?v=4" alt="Jalpan Vyas"
-                            class="w-48 h-48 rounded-full shadow-lg border-4 border-gray-700">
-                        <div>
-                            <h1 class="text-5xl font-bold">About Me</h1>
-                            <p class="text-xl text-gray-300 mt-4 leading-relaxed">Hello! I'm Jalpan, a passionate
-                                software developer specializing in Python and machine learning. I have a love for
-                                creating interactive simulations and data-driven web applications that bring complex
-                                ideas to life. I thrive on turning challenging problems into elegant, efficient code and
-                                I'm always eager to learn new technologies.</p>
+                <div class="max-w-5xl mx-auto p-8">
+                    <h1 class="text-5xl font-bold mb-8">About Me</h1>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Profile Card -->
+                        <div class="glass-card p-6 flex flex-col items-center text-center md:w-1/3 h-fit">
+                            <div class="relative w-48 h-48 mb-4 group">
+                                <img src="https://avatars.githubusercontent.com/u/72879689?v=4" alt="Jalpan Vyas"
+                                    class="w-full h-full rounded-full object-cover border-4 border-gray-700 shadow-xl transition-transform duration-500 group-hover:scale-105">
+                            </div>
+                            <h2 class="text-2xl font-bold text-white">Jalpan Vyas</h2>
+                            <p class="text-cyan-400 font-medium mb-4">Software Developer</p>
+
+                            <div class="flex items-center text-gray-400 text-sm mb-6">
+                                <i class="fa-solid fa-location-dot mr-2 text-red-400"></i>
+                                <span>Ahmedabad, India</span>
+                            </div>
+
+                            <div class="flex gap-4 w-full justify-center">
+                                <a href="https://github.com/Jalpan04" target="_blank"
+                                    class="p-2 text-gray-400 hover:text-white transition-colors">
+                                    <i class="fa-brands fa-github text-2xl"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/jalpan-vyas/" target="_blank"
+                                    class="p-2 text-gray-400 hover:text-blue-400 transition-colors">
+                                    <i class="fa-brands fa-linkedin text-2xl"></i>
+                                </a>
+                                <a href="mailto:jalpanvyas@gmail.com"
+                                    class="p-2 text-gray-400 hover:text-red-400 transition-colors">
+                                    <i class="fa-solid fa-envelope text-2xl"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Bio Card -->
+                        <div class="glass-card p-8 md:w-2/3 flex flex-col justify-center relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-yellow-500 to-red-500">
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-200 mb-4 flex items-center">
+                                <i class="fa-solid fa-terminal text-yellow-500 mr-3"></i>
+                                Developer Bio
+                            </h3>
+                            <p class="text-lg text-gray-300 leading-relaxed font-light mb-6">
+                                I am a software developer specializing in <span
+                                    class="text-cyan-400 font-medium">Python</span> and <span
+                                    class="text-cyan-400 font-medium">Machine Learning</span>, with a focus on building
+                                scalable systems and interactive simulations.
+                            </p>
+                            <p class="text-lg text-gray-300 leading-relaxed font-light">
+                                My work explores the intersection of traditional software architecture and modern AI,
+                                delivering robust solutions that bridge theoretical concepts with practical application.
+                            </p>
+
+                            <div class="mt-8 pt-6 border-t border-gray-700 flex flex-wrap gap-3">
+                                <span
+                                    class="px-3 py-1 rounded-full bg-white/5 text-sm text-gray-300 border border-white/10">AI
+                                    Agents</span>
+                                <span
+                                    class="px-3 py-1 rounded-full bg-white/5 text-sm text-gray-300 border border-white/10">Simulations</span>
+                                <span
+                                    class="px-3 py-1 rounded-full bg-white/5 text-sm text-gray-300 border border-white/10">Full
+                                    Stack</span>
+                            </div>
                         </div>
                     </div>
                 </div>
