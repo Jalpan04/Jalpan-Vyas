@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,872 +9,97 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-bg: #080a12;
-            --secondary-bg: #0c0606;
-            --card-bg: rgba(255, 255, 255, 0.08);
-            --card-border: rgba(255, 255, 255, 0.15);
-            --text-light: #e0e7ff;
-            --text-dark: #9ca3af;
-            --accent-cyan: #22d3ee;
-            --accent-cyan-hover: #06b6d4;
-            --tab-inactive-bg: rgba(255, 255, 255, 0.05);
-            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.1);
-            --tab-active-bg: rgba(255, 255, 255, 0.15);
-        }
-
-        * { font-family: 'Inter', sans-serif; }
-        body {
-            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-            min-height: 100vh;
-            color: var(--text-light);
-        }
-        .browser-frame {
-            background: rgba(30, 30, 35, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-        }
-        .tab {
-            transition: all 0.2s ease;
-            background: var(--tab-inactive-bg);
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
-            padding: 0.6rem 1rem;
-        }
-        .tab:not(.active):hover { background: var(--tab-inactive-hover-bg); transform: translateY(-1px); }
-        .tab.active { background: var(--tab-active-bg); }
-        .address-bar-container {
-            background: rgba(10, 10, 15, 0.5);
-            backdrop-filter: blur(5px);
-        }
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            border-radius: 1rem;
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        #projects-grid .glass-card, #deployed-grid .glass-card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        #projects-grid .glass-card > div:last-child, #deployed-grid .glass-card > div:last-child {
-            flex-grow: 1;
-        }
-        .shortcut {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 130px;
-            transition: transform 0.2s ease;
-        }
-        .shortcut:hover { transform: scale(1.03); }
-
-        .floating { animation: float 6s ease-in-out infinite; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* --- FIX: Corrected page visibility rules --- */
-        .content-page {
-            display: none !important; /* Force hide inactive pages */
-        }
-        .content-page.active {
-            display: block !important; /* Default display for active pages */
-            animation: fadeIn 0.5s ease-in;
-        }
-        #page-404.content-page.active {
-            display: flex !important; /* Ensure 404 page uses flex for centering when active */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tabs-container::-webkit-scrollbar { display: none; }
-        .nav-btn { transition: color 0.2s ease; }
-        .nav-btn.disabled { color: #4b5563; cursor: not-allowed; }
-
-        .tech-tag {
-            display: inline-block; padding: .35em .9em; font-size: 0.8rem;
-            font-weight: 500; line-height: 1.2; white-space: nowrap;
-            background-color: rgba(34, 211, 238, 0.2);
-            color: var(--accent-cyan);
-            border-radius: 9999px;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 1rem;
-            transition: all 0.2s ease-in-out;
-            min-height: 100px;
-        }
-        .skill-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        .skill-card img {
-            transition: transform 0.2s ease-in-out;
-            width: 3rem;
-            height: 3rem;
-        }
-        .skill-card:hover img {
-            transform: scale(1.1);
-        }
-
-        #context-menu {
-            position: fixed; z-index: 10000; background-color: #1f2937;
-            border: 1px solid #4b5563; border-radius: 0.5rem; padding: 0.4rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none;
-        }
-        #context-menu.show { display: block; }
-        #context-menu button {
-            display: block; width: 100%; text-align: left;
-            padding: 0.5rem 1rem; font-size: 0.9rem;
-            color: var(--text-dark);
-            background: none; border: none; cursor: pointer; white-space: nowrap;
-        }
-        #context-menu button:hover { background-color: var(--accent-cyan); color: white; border-radius: 0.25rem; }
-
-        .btn-primary {
-            background-color: var(--accent-cyan);
-            color: #080a12;
-            font-weight: 700;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s ease;
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-cyan-hover);
-        }
-        .btn-secondary {
-            background-color: #4b5563;
-            color: white;
-            font-weight: 700;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #374151;
-        }
-        .text-about { color: #f59e0b; }
-        .text-skills { color: #84cc16; }
-        .text-projects { color: #a855f7; }
-        .text-demos { color: #ec4899; }
-        .text-linkedin { color: #0ea5e9; }
-        .text-github { color: #e5e7eb; }
-
-        /* Scrollbar styles for .content-area */
-        .content-area::-webkit-scrollbar {
-            width: 8px; /* Width of the scrollbar */
-        }
-
-        .content-area::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05); /* Track background */
-            border-radius: 10px;
-        }
-
-        .content-area::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.2); /* Thumb color */
-            border-radius: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.05); /* Border around the thumb */
-        }
-
-        .content-area::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(255, 255, 255, 0.3); /* Thumb color on hover */
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="gradient-bg flex items-center justify-center p-4">
 
-<div class="browser-frame w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div class="browser-frame w-full max-w-7xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
 
-    <div class="address-bar-container pt-2 select-none">
-        <div class="flex items-end">
-            <div class="tabs-container flex items-end px-2 space-x-1 overflow-x-auto"></div>
-            <button id="btn-new-tab" class="p-2 mb-1 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors flex-shrink-0">
-                <i class="fa-solid fa-plus w-4 h-4"></i>
-            </button>
-        </div>
-        <div class="flex items-center p-2 space-x-2">
-            <div class="flex space-x-1 text-gray-400">
-                <i id="btn-back" class="fa-solid fa-arrow-left w-5 h-5 nav-btn cursor-pointer"></i>
-                <i id="btn-next" class="fa-solid fa-arrow-right w-5 h-5 nav-btn cursor-pointer"></i>
-                <i id="btn-home" class="fa-solid fa-house w-5 h-5 nav-btn cursor-pointer ml-1"></i>
+        <div class="address-bar-container pt-2 select-none">
+            <div class="flex items-end">
+                <div class="tabs-container flex items-end px-2 space-x-1 overflow-x-auto"></div>
+                <button id="btn-new-tab"
+                    class="p-2 mb-1 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors flex-shrink-0">
+                    <i class="fa-solid fa-plus w-4 h-4"></i>
+                </button>
             </div>
-            <input id="address-input" type="text" class="flex-1 bg-white/5 text-white px-4 py-1.5 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-cyan-400/50">
-            <a id="btn-download-cv" href="./Jalpan_Vyas_CV.pdf" download="Jalpan_Vyas_CV.pdf" class="ml-2 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors" title="Download CV">
-                <i class="fa-solid fa-download w-5 h-5"></i>
-            </a>
-        </div>
-    </div>
-
-    <div class="content-area flex-1 overflow-y-auto text-white">
-        <div id="page-home" class="content-page p-8 active">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-7xl md:text-8xl font-light mb-4 floating">Jalpan Vyas</h1>
-                <p class="text-xl md:text-2xl text-gray-300 mb-12">Software Developer & Simulation Enthusiast</p>
-                <div id="home-shortcuts-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto"></div>
+            <div class="flex items-center p-2 space-x-2">
+                <div class="flex space-x-1 text-gray-400">
+                    <i id="btn-back" class="fa-solid fa-arrow-left w-5 h-5 nav-btn cursor-pointer"></i>
+                    <i id="btn-next" class="fa-solid fa-arrow-right w-5 h-5 nav-btn cursor-pointer"></i>
+                    <i id="btn-home" class="fa-solid fa-house w-5 h-5 nav-btn cursor-pointer ml-1"></i>
+                </div>
+                <input id="address-input" type="text"
+                    class="flex-1 bg-white/5 text-white px-4 py-1.5 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-cyan-400/50">
+                <a id="btn-download-cv" href="./Jalpan_Vyas_CV.pdf" download="Jalpan_Vyas_CV.pdf"
+                    class="ml-2 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                    title="Download CV">
+                    <i class="fa-solid fa-download w-5 h-5"></i>
+                </a>
             </div>
         </div>
 
-        <div id="page-projects" class="content-page"><div class="max-w-6xl mx-auto p-8"><h1 class="text-5xl font-bold mb-10">Projects</h1><div id="projects-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div></div></div>
-        <div id="page-deployed" class="content-page"><div class="max-w-6xl mx-auto p-8"><h1 class="text-5xl font-bold mb-10">Live Demos</h1><p class="text-gray-400 -mt-8 mb-10">Click any project to open the live version in a new tab.</p><div id="deployed-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div></div></div>
+        <div class="content-area flex-1 overflow-y-auto text-white">
+            <div id="page-home" class="content-page p-8 active">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h1 class="text-7xl md:text-8xl font-light mb-4 floating">Jalpan Vyas</h1>
+                    <p class="text-xl md:text-2xl text-gray-300 mb-12">Software Developer & Simulation Enthusiast</p>
+                    <div id="home-shortcuts-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-3xl mx-auto"></div>
+                </div>
+            </div>
 
-        <div id="page-about" class="content-page">
-            <div class="max-w-4xl mx-auto p-8">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <img src="https://avatars.githubusercontent.com/u/72879689?v=4" alt="Jalpan Vyas" class="w-48 h-48 rounded-full shadow-lg border-4 border-gray-700">
-                    <div>
-                        <h1 class="text-5xl font-bold">About Me</h1>
-                        <p class="text-xl text-gray-300 mt-4 leading-relaxed">Hello! I'm Jalpan, a passionate software developer specializing in Python and machine learning. I have a love for creating interactive simulations and data-driven web applications that bring complex ideas to life. I thrive on turning challenging problems into elegant, efficient code and I'm always eager to learn new technologies.</p>
+            <div id="page-projects" class="content-page">
+                <div class="max-w-6xl mx-auto p-8">
+                    <h1 class="text-5xl font-bold mb-10">Projects</h1>
+                    <div id="projects-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                </div>
+            </div>
+            <div id="page-deployed" class="content-page">
+                <div class="max-w-6xl mx-auto p-8">
+                    <h1 class="text-5xl font-bold mb-10">Live Demos</h1>
+                    <p class="text-gray-400 -mt-8 mb-10">Click any project to open the live version in a new tab.</p>
+                    <div id="deployed-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                </div>
+            </div>
+
+            <div id="page-about" class="content-page">
+                <div class="max-w-4xl mx-auto p-8">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <img src="https://avatars.githubusercontent.com/u/72879689?v=4" alt="Jalpan Vyas"
+                            class="w-48 h-48 rounded-full shadow-lg border-4 border-gray-700">
+                        <div>
+                            <h1 class="text-5xl font-bold">About Me</h1>
+                            <p class="text-xl text-gray-300 mt-4 leading-relaxed">Hello! I'm Jalpan, a passionate
+                                software developer specializing in Python and machine learning. I have a love for
+                                creating interactive simulations and data-driven web applications that bring complex
+                                ideas to life. I thrive on turning challenging problems into elegant, efficient code and
+                                I'm always eager to learn new technologies.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="page-skills" class="content-page">
-            <div id="skills-container" class="max-w-4xl mx-auto p-8">
+            <div id="page-skills" class="content-page">
+                <div id="skills-container" class="max-w-4xl mx-auto p-8">
+                </div>
+            </div>
+
+            <div id="page-404"
+                class="content-page flex flex-col items-center justify-center p-8 text-center min-h-[calc(90vh-120px)]">
+                <h1 class="text-7xl font-bold text-red-500 mb-4">404</h1>
+                <p class="text-3xl text-gray-300 mb-8">Page Not Available</p>
+                <p class="text-lg text-gray-400">The URL you entered could not be found. Please check the address or
+                    return to the <a href="#" id="link-404-home" class="text-cyan-400 hover:underline">home page</a>.
+                </p>
             </div>
         </div>
-
-        <div id="page-404" class="content-page flex flex-col items-center justify-center p-8 text-center min-h-[calc(90vh-120px)]">
-            <h1 class="text-7xl font-bold text-red-500 mb-4">404</h1>
-            <p class="text-3xl text-gray-300 mb-8">Page Not Available</p>
-            <p class="text-lg text-gray-400">The URL you entered could not be found. Please check the address or return to the <a href="#" id="link-404-home" class="text-cyan-400 hover:underline">home page</a>.</p>
-        </div>
     </div>
-</div>
 
-<div id="context-menu"><button id="context-menu-new-tab">Open in new tab</button></div>
+    <div id="context-menu"><button id="context-menu-new-tab">Open in new tab</button></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- DATA ---
-        const projectData = [
-            {
-                "id": "ai-snake-training",
-                "name": "DQN Snake Agent",
-                "tagline": "An AI agent learning to play Snake using Deep Q-Learning (DQN).",
-                "description": "An AI agent that learns to play the classic Snake game using Deep Q-Learning (DQN) with PyTorch and Pygame. It includes a custom game environment, experience replay, and live performance tracking, with clear performance improvements shown over training time.",
-                "image": "https://private-user-images.githubusercontent.com/72879689/501432434-60f20def-d2d3-435d-baf4-f5c3551d608a.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA1MjIyNzcsIm5iZiI6MTc2MDUyMTk3NywicGF0aCI6Ii83Mjg3OTY4OS81MDE0MzI0MzQtNjBmMjBkZWYtZDJkMy00MzVkLWJhZjQtZjVjMzU1MWQ2MDhhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDE1VDA5NTI1N1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTY0NTAyYjdhYmE1ZjA2YjgyZTUwYzFhMGM1MzYxMzc2YTY2YmI4NmQ1OWExYzAyM2IyMjYxM2NiOGViYzZiODQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.OudxtsIw0gCEfMgfTfPCFMnVrSYbD3-6sr7wGfT6LNs",
-                "sourceUrl": "https://github.com/Jalpan04/ai_snake_training",
-                "tech": ["Jupyter Notebook", "Python", "Pytorch"]
-            },
-            {
-                "id": "Asteroid-game-ai",
-                "name": "Asteroids Genetic Agent",
-                "tagline": "Asteroids game with AI agents trained over generations using neural networks.",
-                "description": "Asteroids game with AI agents trained over generations using neural networks and a genetic algorithm. Built with Pygame.",
-                "image": "https://github.com/Jalpan04/Asteroid-game-ai/blob/main/screenshot.png?raw=true",
-                "liveUrl": "https://youtu.be/bp6xBBQXAF8",
-                "sourceUrl": "https://github.com/Jalpan04/Asteroid-game-ai",
-                "tech": ["Python", "Machine Learning"]
-            },
-            {
-                "id": "babel-hash-api",
-                "name": "BabelHashAPI",
-                "tagline": "A computational exploration of Borges's infinite library.",
-                "description": "A deterministic API and web portal for exploring a computational version of Jorge Luis Borges's \"The Library of Babel.\" It uses cryptographic hashes (SHA-256) to calculate a fixed address for any text, allowing any book to be generated on demand without storing a single one. Built with Python, FastAPI, and vanilla JavaScript.",
-                "image": "https://github.com/user-attachments/assets/4b93544a-5078-46f5-9956-162aa6b8d88f",
-                "liveUrl": "https://jalpan04.github.io/BabelHashAPI/",
-                "sourceUrl": "https://github.com/Jalpan04/BabelHashAPI",
-                "tech": ["HTML", "Python", "FastAPI", "JavaScript"]
-            },
-            {
-                "id": "blob-tracker",
-                "name": "blob-tracker",
-                "tagline": "Color-based object tracking in videos using Python and OpenCV.",
-                "description": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly interface lets you pick a video, a color to track, and visual effects, then it generates a new video with the tracking visualized. It uses motion detection and color masking in HSV space.",
-                "image": "https://private-user-images.githubusercontent.com/72879689/501518156-c795f3d8-c1ca-4d02-ab5a-0aa8be81ed36.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA5MzY1NzAsIm5iZiI6MTc2MDkzNjI3MCwicGF0aCI6Ii83Mjg3OTY4OS81MDE1MTgxNTYtYzc5NWYzZDgtYzFjYS00ZDAyLWFiNWEtMGFhOGJlODFlZDM2LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDIwVDA0NTc1MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWViNjI4ZTQzY2FiOTM4NTNlNmJlMzU3NGI5Njk4NGQ0N2I0MDNlMjM4OGIyYmZjYzYxMzY1MmI5ZDY1ODRiZjgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.r1Nlpfb3ti_LURQ5nBKsOLk2xJCDqWONYlIbO_s6t4Y",
-                "sourceUrl": "https://github.com/Jalpan04/blob-tracker",
-                "tech": ["Python", "OpenCV"]
-            },
-            {
-                "id": "boid-simulation",
-                "name": "boid-simulation",
-                "tagline": "An interactive simulation of flocking behavior.",
-                "description": "An interactive simulation of flocking behavior based on Craig Reynolds's \"Boids\" algorithm. This project demonstrates emergent behavior by applying simple alignment, cohesion, and separation rules. Users can control a predator, adjust simulation parameters, and introduce environmental forces like wind.",
-                "image": "https://github.com/Jalpan04/boid-simulation/raw/main/boid.png",
-                "liveUrl": "https://jalpan04.github.io/boid-simulation/",
-                "sourceUrl": "https://github.com/Jalpan04/boid-simulation",
-                "tech": ["HTML", "JavaScript", "Tailwind"]
-            },
-            {
-                "id": "brat-text-generator",
-                "name": "brat-text-generator",
-                "tagline": "Generate text in the 'Brat' album aesthetic.",
-                "description": "A simple web application that generates text in the style of Charli XCX's \"Brat\" album aesthetic. It features a generator for the iconic blurred 'Brat' style, theme toggling, and the ability to save the generated image.",
-                "image": "https://github.com/user-attachments/assets/cbd66b4a-1464-4c64-8322-5e0535f79987",
-                "liveUrl": "https://jalpan04.github.io/brat-text-generator/",
-                "sourceUrl": "https://github.com/Jalpan04/brat-text-generator",
-                "tech": ["HTML", "CSS", "JavaScript"]
-            },
-            {
-                "id": "Chatdevs",
-                "name": "Chatdevs",
-                "tagline": "A live chat application.",
-                "description": "A real-time chat application deployed on a live server.",
-                "image": "https://github.com/user-attachments/assets/ea8a0706-6eb0-4bdb-a3a0-0d9855081c55",
-                "liveUrl": "https://chatdevs.onrender.com/",
-                "sourceUrl": "https://github.com/Jalpan04/Chatdevs",
-                "tech": ["Web", "Node.js"]
-            },
-            {
-                "id": "Electron_stimulator",
-                "name": "Electron_stimulator",
-                "tagline": "A short video demo of an electron simulator.",
-                "description": "A short video showcasing a physics simulation of electron movement.",
-                "image": null,
-                "liveUrl": "https://youtube.com/shorts/0ULRdgJPBfI?si=J2aOHTEyCPsJPDuV",
-                "sourceUrl": "https://github.com/Jalpan04/Electron_stimulator",
-                "tech": ["Python", "Physics Simulation"]
-            },
-            {
-                "id": "fluid-simulator",
-                "name": "Fluid_simulator",
-                "tagline": "A real-time, interactive 2D fluid simulation.",
-                "description": "This project implements a real-time fluid simulation using Navier-Stokes equations. The simulation models fluid behavior, including density diffusion, advection, and velocity updates, creating realistic, interactive fluid dynamics. Built with Python and Pygame.",
-                "image": "https://github.com/Jalpan04/Fluid_simulator/raw/main/random.gif",
-                "sourceUrl": "https://github.com/Jalpan04/Fluid_simulator",
-                "tech": ["Python", "Pygame"]
-            },
-            {
-                "id": "game-of-life",
-                "name": "game_of_life",
-                "tagline": "A Python implementation of John Conway's Game of Life.",
-                "description": "A Python implementation of John Conway's Game of Life using `pygame`. This simulation of cellular automata follows simple rules to create complex, evolving patterns. It features an interactive grid, dynamic resizing (zoom), and simulation controls (start/pause/clear).",
-                "image": "https://github.com/Jalpan04/game_of_life/raw/main/static/Simulation%20Running.gif",
-                "sourceUrl": "https://github.com/Jalpan04/game_of_life",
-                "tech": ["Python", "Pygame"]
-            },
-            {
-                "id": "gujarati-author-attribution",
-                "name": "gujarati-author-attribution",
-                "tagline": "Authorship attribution in Gujarati literature using Neural Stylometry.",
-                "description": "An end-to-end machine learning project on authorship attribution for Gujarati literary texts. It conducts a comparative analysis between a traditional LSTM model and a modern, pre-trained Transformer model on a small, imbalanced, low-resource dataset, demonstrating the effectiveness of transfer learning.",
-                "image": null,
-                "liveUrl": "https://huggingface.co/spaces/jalpan04/gujarati-author-attribution",
-                "sourceUrl": "https://github.com/Jalpan04/gujarati-author-attribution",
-                "tech": ["Python"]
-            },
-            {
-                "id": "identity",
-                "name": "identity",
-                "tagline": "A modern Windows desktop app for organizing personal interests.",
-                "description": "!dentity is a Windows Forms application designed to help users catalog and manage their personal interests in an intuitive, user-friendly interface. Built with C# and .NET Framework 4.8, the app features tracking for books, movies, music, and travel plans, showcasing strong object-oriented design.",
-                "image": "https://github.com/Jalpan04/identity/raw/main/assets/dashboard.png",
-                "sourceUrl": "https://github.com/Jalpan04/identity",
-                "tech": ["C#", "Windows Forms", ".NET Framework"]
-            },
-            {
-                "id": "jax-web-compiler",
-                "name": "jax-web-compiler",
-                "tagline": "A JAX compiler accessible via a web interface.",
-                "description": "A web-based interface for interacting with a JAX compiler.",
-                "image": null,
-                "liveUrl": "https://jax-compiler.onrender.com",
-                "sourceUrl": "https://github.com/Jalpan04/jax-web-compiler",
-                "tech": ["Python", "JAX", "Web"]
-            },
-            {
-                "id": "jaximg",
-                "name": "JAXImg",
-                "tagline": "A Miniature DALL·E: An exploration into Text-to-Image Generation.",
-                "description": "A compact, educational implementation of a text-to-image generative model inspired by OpenAI’s DALL·E 1. It uses a two-stage architecture: a Discrete Variational Autoencoder (dVAE) and an Autoregressive Transformer to synthesize images from textual prompts like class labels, demonstrating how complex generative processes can be deconstructed.",
-                "image": "https://github.com/Jalpan04/JAXImg/raw/main/generated_examples/bird_example.png",
-                "sourceUrl": "https://github.com/Jalpan04/JAXImg",
-                "tech": ["Python"]
-            },
-            {
-                "id": "maze-solver-visualizer",
-                "name": "Maze-Solver-Visualizer",
-                "tagline": "Dynamic visualizer for pathfinding algorithms.",
-                "description": "Maze Pathfinder is a dynamic visualizer that brings maze-solving algorithms (DFS, BFS, A*, Dijkstra's) to life. Watch as they work their way through randomly generated mazes, finding the shortest path. Built with Python and Pygame for an engaging way to understand graph traversal.",
-                "image": "https://github.com/Jalpan04/Maze-Solver-Visualizer/raw/main/assets/solved.png",
-                "liveUrl": "https://youtube.com/shorts/-8rkpwiIggs?feature=share",
-                "sourceUrl": "https://github.com/Jalpan04/Maze-Solver-Visualizer",
-                "tech": ["Python", "Pygame"]
-            },
-            {
-                "id": "mnist-cvae-digit-generator",
-                "name": "Handwritten Digit Generator",
-                "tagline": "A Conditional Variational Autoencoder (CVAE) for generating handwritten digits on MNIST.",
-                "description": "A Conditional Variational Autoencoder (CVAE) for generating handwritten digits on MNIST. Generate any number in realistic handwritten style. It extends the standard VAE by conditioning both encoding and decoding on labels, allowing for controlled generation (e.g., specifying a digit 0-9) and style variation via latent space sampling.",
-                "image": "https://github.com/user-attachments/assets/340450ec-b189-460f-9f4a-7de43e641689",
-                "sourceUrl": "https://github.com/Jalpan04/mnist-cvae-digit-generator",
-                "tech": ["Jupyter Notebook"]
-            },
-            {
-                "id": "particle-life-simulator",
-                "name": "Particle-Life-Simulator",
-                "tagline": "A browser-based particle life simulator with emergent behavior.",
-                "description": "This is a simple, browser-based particle life simulator where you can observe emergent behavior from simple rules of attraction and repulsion between different groups of particles. It features customizable global settings (Particles, Groups, Radius) and an interactive rule engine.",
-                "image": null,
-                "liveUrl": "https://jalpan04.github.io/Particle-Life-Simulator/",
-                "sourceUrl": "https://github.com/Jalpan04/Particle-Life-Simulator",
-                "tech": ["HTML"]
-            },
-            {
-                "id": "personal-spotify-eda",
-                "name": "personal-spotify-EDA",
-                "tagline": "An in-depth exploratory data analysis of personal Spotify streaming history.",
-                "description": "This project provides an in-depth exploratory data analysis (EDA) of personal Spotify streaming history data. The analysis is conducted using Python with data manipulation and visualization libraries suchs as Pandas, Matplotlib, and Seaborn to uncover listening patterns and visualize trends over time.",
-                "image": null,
-                "sourceUrl": "https://github.com/Jalpan04/personal-spotify-EDA",
-                "tech": ["Jupyter Notebook", "Python"]
-            },
-            {
-                "id": "pixelpredict",
-                "name": "PixelPredict",
-                "tagline": "Handwritten digit recognition on the web.",
-                "description": "A web app for digit recognition using a custom two-layer feedforward neural network trained on the MNIST dataset. Users can draw digits on an interactive canvas, and the app provides predictions with confidence scores in real-time. Built with Flask and NumPy.",
-                "image": "https://github.com/Jalpan04/PixelPredict/raw/main/demo.png",
-                "sourceUrl": "https://github.com/Jalpan04/PixelPredict",
-                "tech": ["HTML", "Python", "Flask", "NumPy", "JavaScript"]
-            },
-            {
-                "id": "sand-simulation",
-                "name": "sand-simulation",
-                "tagline": "A 2D particle physics sandbox.",
-                "description": "A dynamic 2D particle simulation sandbox built with Python and Pygame. This project models the behavior of various elements (Sand, Water, Rock, Fire, Oil, Gas, Plant) and their interactions in a grid-based environment, demonstrating cellular automata and agent-based modeling principles.",
-                "image": "https://github.com/Jalpan04/sand-simulation/raw/main/example.png",
-                "sourceUrl": "https://github.com/Jalpan04/sand-simulation",
-                "tech": ["Python", "Pygame"]
-            },
-            {
-                "id": "seedhe-maut-data",
-                "name": "seedhe_maut_data",
-                "tagline": "A comprehensive database of lyrics from the Indian hip-hop duo Seedhe Maut.",
-                "description": "This repository contains a database of lyrics from the albums of Seedhe Maut. The lyrics were scraped from Genius using the `lyricsgenius` Python library and have been compiled into a structured dataset, available as a CSV file and individual text files.",
-                "image": null,
-                "sourceUrl": "https://github.com/Jalpan04/seedhe_maut_data",
-                "tech": ["Jupyter Notebook", "Python"]
-            },
-            {
-                "id": "sign-lang-translator",
-                "name": "Sign-Lang-Translator",
-                "tagline": "Real-Time ASL Alphabet Recognition.",
-                "description": "Sign-Interpreter is a real-time American Sign Language (ASL) alphabet recognition system designed to interpret hand gestures through webcam input. It utilizes Google's MediaPipe for robust hand keypoint detection and custom-trained neural networks for gesture classification, featuring an interactive tutorial mode.",
-                "image": "https://camo.githubusercontent.com/f302b6c77cda1785a1e3c0183e82b7070a9ab6a245f908ab8ecfe05570702a88/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f507974686f6e2d332e382b2d626c75652e737667",
-                "sourceUrl": "https://github.com/Jalpan04/Sign-Lang-Translator",
-                "tech": ["Python", "Tensorflow"]
-            },
-            {
-                "id": "vinylogue-project",
-                "name": "vinylogue-project",
-                "tagline": "A full-stack MERN application for rating and reviewing music albums.",
-                "description": "A full-stack MERN application for rating and reviewing music albums, inspired by Letterboxd. Features a bold, brutalist design, user authentication (JWT), dynamic album search via the Spotify API, and an interactive rating and liking system.",
-                "image": "https://github.com/Jalpan04/vinylogue-project/raw/main/vinylogue.png",
-                "sourceUrl": "https://github.com/Jalpan04/vinylogue-project",
-                "tech": ["JavaScript", "React", "Node", "MongoDB"]
-            }
-        ];
-
-        const allShortcutPages = [
-            { id: 'about', title: 'About Me', url: 'portfolio://about', faIcon: 'fa-solid fa-user', colorClass: 'text-about' },
-            { id: 'skills', title: 'Skills', url: 'portfolio://skills', faIcon: 'fa-solid fa-lightbulb', colorClass: 'text-skills' },
-            { id: 'projects', title: 'Projects', url: 'portfolio://projects', faIcon: 'fa-solid fa-flask', colorClass: 'text-projects' },
-            { id: 'deployed', title: 'Live Demos', url: 'portfolio://deployed', faIcon: 'fa-solid fa-globe', colorClass: 'text-demos' },
-            { id: 'linkedin', title: 'LinkedIn', url: 'https://www.linkedin.com/in/jalpan-vyas/', faIcon: 'fa-brands fa-linkedin', external: true, colorClass: 'text-linkedin' },
-            { id: 'github', title: 'GitHub', url: 'https://github.com/Jalpan04', faIcon: 'fa-brands fa-github', external: true, colorClass: 'text-github' }
-        ];
-
-        const pages = {
-            home: { id: 'home', title: 'New Tab', url: 'portfolio://home', faIcon: 'fa-solid fa-house' },
-            '404': { id: '404', title: 'Not Found', url: 'portfolio://404', faIcon: 'fa-solid fa-exclamation-triangle' },
-            ...Object.fromEntries(allShortcutPages.map(p => [p.id, p]))
-        };
-
-        const skillsData = {
-            'Languages': [
-                { name: 'Python', logo: 'python' }, { name: 'JavaScript', logo: 'javascript' },
-                { name: 'TypeScript', logo: 'typescript' }, { name: 'C#', logo: 'csharp' },
-                { name: 'HTML5', logo: 'html5' }, { name: 'CSS3', logo: 'css3' }, { name: 'SQL', logo: 'postgresql' }
-            ],
-            'Frameworks & Libraries': [
-                { name: 'React', logo: 'react' }, { name: 'Next.js', logo: 'nextdotjs' },
-                { name: 'Flask', logo: 'flask' }, { name: 'Django', logo: 'django' },
-                { name: '.NET', logo: 'dotnet' }, { name: 'TailwindCSS', logo: 'tailwindcss' },
-                { name: 'jQuery', logo: 'jquery' }, { name: 'NumPy', logo: 'numpy' },
-                { name: 'Pandas', logo: 'pandas' }, { name: 'TensorFlow', logo: 'tensorflow' },
-                { name: 'PyTorch', logo: 'pytorch' }
-            ],
-            'Tools & Platforms': [
-                { name: 'Git', logo: 'git' }, { name: 'GitHub', logo: 'github' },
-                { name: 'Docker', logo: 'docker' }, { name: 'Vercel', logo: 'vercel' },
-                { name: 'PostgreSQL', logo: 'postgresql' }
-            ]
-        };
-
-        const contentArea = document.querySelector('.content-area');
-        const tabsContainer = document.querySelector('.tabs-container');
-        const addressInput = document.getElementById('address-input');
-        const homeShortcutsGrid = document.getElementById('home-shortcuts-grid');
-        const btnBack = document.getElementById('btn-back');
-        const btnNext = document.getElementById('btn-next');
-        const btnHome = document.getElementById('btn-home');
-        const btnNewTab = document.getElementById('btn-new-tab');
-        const contextMenu = document.getElementById('context-menu');
-        const contextMenuNewTabBtn = document.getElementById('context-menu-new-tab');
-
-        let tabs = [];
-        let activeTabId = null;
-        let tabCounter = 0;
-        let contextAction = null;
-
-        const getActiveTab = () => tabs.find(t => t.id === activeTabId);
-
-        const updateNavButtonsState = () => {
-            const activeTab = getActiveTab();
-            if (!activeTab) {
-                btnBack.classList.add('disabled');
-                btnNext.classList.add('disabled');
-                return;
-            }
-            btnBack.classList.toggle('disabled', activeTab.historyIndex <= 0);
-            btnNext.classList.toggle('disabled', activeTab.historyIndex >= activeTab.history.length - 1);
-        };
-
-        const render = () => {
-            tabsContainer.innerHTML = tabs.map(tab => {
-                const pageInfo = pages[tab.pageId] || {};
-                let title = pageInfo.title;
-                let iconClass = pageInfo.faIcon;
-
-                if (tab.pageId === 'project') {
-                    const project = projectData.find(p => p.id === tab.subPageId);
-                    title = project ? project.name : 'Project';
-                    iconClass = 'fa-solid fa-box';
-                }
-
-                return `<div class="tab flex items-center px-4 py-2 rounded-t-lg cursor-pointer ${tab.id === activeTabId ? 'active' : ''}" data-tab-id="${tab.id}"><i class="${iconClass} mr-2 text-base"></i><span class="text-sm text-white truncate max-w-[120px]">${title}</span><button class="close-tab ml-3 text-gray-400 hover:bg-white/20 rounded-full p-0.5" data-tab-id-to-close="${tab.id}"><i class="fa-solid fa-xmark w-3.5 h-3.5 pointer-events-none"></i></button></div>`;
-            }).join('');
-
-            document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active'));
-
-            const activeTab = getActiveTab();
-            if (activeTab) {
-                const pageElementId = activeTab.subPageId
-                    ? `page-project-${activeTab.id}-${activeTab.subPageId}`
-                    : `page-${activeTab.pageId}`;
-                const pageElement = document.getElementById(pageElementId);
-                if (pageElement) pageElement.classList.add('active');
-                let url = pages[activeTab.pageId]?.url || '';
-                if (activeTab.pageId === 'project' && activeTab.subPageId) {
-                    url = `portfolio://projects/${activeTab.subPageId}`;
-                }
-                addressInput.value = url;
-            } else {
-                addressInput.value = '';
-            }
-            updateNavButtonsState();
-        };
-
-        const createProjectDetailPage = (projectId, tabId) => {
-            const project = projectData.find(p => p.id === projectId);
-            if (!project) return;
-            const newPage = document.createElement('div');
-            newPage.id = `page-project-${tabId}-${projectId}`;
-            newPage.className = 'content-page';
-            const liveUrlHtml = project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center btn-primary"><i class="fa-solid fa-up-right-from-square mr-2"></i> View Project</a>` : '';
-            const linkGapClass = project.liveUrl ? 'sm:flex-row' : '';
-            newPage.innerHTML = `
-                <div class="max-w-5xl mx-auto p-8">
-                    <button class="back-to-projects text-cyan-400 hover:underline mb-8 flex items-center gap-2">
-                        <i class="fa-solid fa-arrow-left"></i> Back to all projects
-                    </button>
-                    <h1 class="text-5xl font-bold mb-2">${project.name}</h1>
-                    <p class="text-xl text-gray-400 mb-6">${project.tagline}</p>
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-                        <div class="md:col-span-3"><img src="${project.image}" alt="${project.name}" class="rounded-lg shadow-lg w-full"></div>
-                        <div class="md:col-span-2">
-                            <h3 class="text-2xl font-semibold mb-3">About this project</h3>
-                            <p class="text-gray-300 leading-relaxed mb-6">${project.description}</p>
-                            <h3 class="text-2xl font-semibold mb-3">Tech Stack</h3>
-                            <div class="flex flex-wrap gap-2 mb-8">${project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
-                            <div class="flex flex-col ${linkGapClass} gap-4">
-                                ${liveUrlHtml}
-                                <a href="${project.sourceUrl}" target="_blank" rel="noopener noreferrer" class="w-full text-center btn-secondary"><i class="fa-brands fa-github mr-2"></i> View Source</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            contentArea.appendChild(newPage);
-            newPage.querySelector('.back-to-projects').addEventListener('click', () => navigateTo('projects'));
-        };
-
-        const navigateTo = (pageId, fromHistory = false, subPageId = null) => {
-            const activeTab = getActiveTab();
-            if (!activeTab) return;
-
-            const projectPageId = `page-project-${activeTab.id}-${subPageId}`;
-            if (pageId === 'project' && subPageId && !document.getElementById(projectPageId)) {
-                createProjectDetailPage(subPageId, activeTab.id);
-            }
-            activeTab.pageId = pageId;
-            activeTab.subPageId = subPageId;
-            if (!fromHistory) {
-                const historyEntry = subPageId ? `${pageId}:${subPageId}` : pageId;
-                if (activeTab.historyIndex < activeTab.history.length - 1) {
-                    activeTab.history = activeTab.history.slice(0, activeTab.historyIndex + 1);
-                }
-                activeTab.history.push(historyEntry);
-                activeTab.historyIndex = activeTab.history.length - 1;
-            }
-            render();
-        };
-
-        const createNewTab = (pageId, options = {}) => {
-            tabCounter++;
-            const newTabId = `tab-${tabCounter}`;
-            const historyEntry = options.subPageId ? `${pageId}:${options.subPageId}` : pageId;
-            if (pageId === 'project' && options.subPageId) {
-                createProjectDetailPage(options.subPageId, newTabId);
-            }
-            tabs.push({ id: newTabId, pageId, subPageId: options.subPageId || null, history: [historyEntry], historyIndex: 0 });
-            activeTabId = newTabId;
-            render();
-        };
-
-        const closeTab = (idToClose) => {
-            const tabIndex = tabs.findIndex(tab => tab.id === idToClose);
-            if (tabIndex === -1) return;
-            const tabToClose = tabs[tabIndex];
-            if (tabToClose.pageId === 'project' && tabToClose.subPageId) {
-                document.getElementById(`page-project-${tabToClose.id}-${tabToClose.subPageId}`)?.remove();
-            }
-
-            let newActiveId = null;
-            if (activeTabId === idToClose) {
-                if (tabs.length > 1) {
-                    newActiveId = tabs[tabIndex - 1]?.id || tabs[tabIndex + 1]?.id;
-                }
-            }
-            tabs.splice(tabIndex, 1);
-            if (activeTabId === idToClose) {
-                activeTabId = newActiveId;
-                if (tabs.length === 0) {
-                    createNewTab('home');
-                }
-            }
-            render();
-        };
-
-        const setActiveTab = (tabId) => {
-            activeTabId = tabId;
-            render();
-        };
-
-        const showContextMenu = (event, action) => {
-            event.preventDefault();
-            contextAction = action;
-            contextMenu.style.top = `${event.clientY}px`;
-            contextMenu.style.left = `${event.clientX}px`;
-            contextMenu.classList.add('show');
-        };
-
-        const initContextMenu = () => {
-            document.addEventListener('click', () => contextMenu.classList.remove('show'));
-            contextMenuNewTabBtn.addEventListener('click', () => {
-                if (contextAction) {
-                    const { type, id } = contextAction;
-                    if (type === 'page') {
-                        const page = pages[id];
-                        if (page.external) window.open(page.url, '_blank');
-                        else createNewTab(id);
-                    } else if (type === 'projectDetail') {
-                        createNewTab('project', { subPageId: id });
-                    } else if (type === 'externalLink') {
-                        window.open(id, '_blank');
-                    } else if (type === 'portfolioUrl') {
-                        const url = id;
-                        const parts = url.replace('portfolio://', '').split('/');
-                        const pageId = parts[0];
-                        const subPageId = parts[1] || null;
-                        if (pages[pageId] || (pageId === 'projects' && subPageId && projectData.some(p => p.id === subPageId))) {
-                            createNewTab(pageId, {subPageId});
-                        } else {
-                            createNewTab('404');
-                        }
-                    }
-                }
-                contextMenu.classList.remove('show');
-            });
-        };
-
-        const initHomePage = () => {
-            homeShortcutsGrid.innerHTML = allShortcutPages.map(page => `<div class="shortcut glass-card p-4 rounded-xl cursor-pointer" data-page-id="${page.id}"><i class="${page.faIcon} ${page.colorClass} text-4xl mb-3"></i><div class="text-white font-medium">${page.title}</div></div>`).join('');
-            homeShortcutsGrid.addEventListener('click', (e) => {
-                const shortcut = e.target.closest('[data-page-id]');
-                if (!shortcut) return;
-                const pageId = shortcut.dataset.pageId;
-                const page = pages[pageId];
-                if (page.external) window.open(page.url, '_blank');
-                else navigateTo(pageId);
-            });
-            homeShortcutsGrid.addEventListener('contextmenu', e => {
-                const shortcut = e.target.closest('[data-page-id]');
-                if(shortcut) showContextMenu(e, {type: 'page', id: shortcut.dataset.pageId});
-            });
-        };
-
-        const initSkillsPage = () => {
-            const container = document.getElementById('skills-container');
-            let content = `<h1 class="text-5xl font-bold mb-10 text-center">Skills & Technologies</h1>`;
-            for(const category in skillsData) {
-                content += `<h2 class="text-3xl font-semibold text-cyan-400 mt-8 mb-4">${category}</h2>`;
-                content += `<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">`;
-                content += skillsData[category].map(skill => `
-                    <div class="skill-card flex flex-col items-center justify-center p-4 rounded-lg">
-                        <img src="https://cdn.simpleicons.org/${skill.logo}" alt="${skill.name}">
-                        <span class="mt-2 text-sm text-gray-300">${skill.name}</span>
-                    </div>`).join('');
-                content += `</div>`;
-            }
-            container.innerHTML = content;
-        };
-
-        const initProjectsPage = () => {
-            projectData.sort((a, b) => a.name.localeCompare(b.name));
-            const projectsGrid = document.getElementById('projects-grid');
-            projectsGrid.innerHTML = projectData.map(project => `
-                <div class="glass-card rounded-xl overflow-hidden group cursor-pointer" data-project-id="${project.id}">
-                    <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
-                        <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4 bg-white/5 flex flex-col">
-                        <h3 class="text-lg font-semibold">${project.name}</h3>
-                        <p class="text-sm text-gray-400 mt-1 min-h-[2.5rem]">${project.tagline}</p>
-                    </div>
-                </div>`).join('');
-            projectsGrid.addEventListener('click', e => {
-                const card = e.target.closest('[data-project-id]');
-                if (card) navigateTo('project', false, card.dataset.projectId);
-            });
-            projectsGrid.addEventListener('contextmenu', e => {
-                const card = e.target.closest('[data-project-id]');
-                if(card) showContextMenu(e, {type: 'projectDetail', id: card.dataset.projectId});
-            });
-        };
-
-        const initDeployedPage = () => {
-            const deployedGrid = document.getElementById('deployed-grid');
-            const liveProjects = projectData.filter(project => project.liveUrl);
-            deployedGrid.innerHTML = liveProjects.map(project => `
-                <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="block glass-card rounded-xl overflow-hidden group">
-                    <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
-                        <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    </div>
-                    <div class="p-4 bg-white/5 flex flex-col">
-                        <h3 class="text-lg font-semibold">${project.name}</h3>
-                        <p class="text-sm text-gray-400 mt-1 min-h-[2.5rem]">${project.tagline}</p>
-                    </div>
-                </a>`).join('');
-            deployedGrid.addEventListener('contextmenu', e => {
-                const card = e.target.closest('a');
-                if(card) showContextMenu(e, {type: 'externalLink', id: card.href});
-            });
-        };
-
-        const handleAddressInput = (event) => {
-            if (event.key === 'Enter') {
-                const inputUrl = addressInput.value.trim();
-                if (inputUrl.startsWith('portfolio://')) {
-                    const path = inputUrl.replace('portfolio://', '');
-                    const parts = path.split('/');
-                    const pageId = parts[0];
-                    const subPageId = parts[1] || null;
-
-                    if (pages[pageId]) {
-                        if (pageId === 'projects' && subPageId) {
-                            if (projectData.some(p => p.id === subPageId)) {
-                                navigateTo('project', false, subPageId);
-                            } else {
-                                navigateTo('404');
-                            }
-                        } else {
-                            navigateTo(pageId);
-                        }
-                    } else if (pageId === 'projects' && !subPageId) {
-                        navigateTo('projects');
-                    }
-                    else {
-                        navigateTo('404');
-                    }
-                } else if (inputUrl.startsWith('http://') || inputUrl.startsWith('https://')) {
-                    window.open(inputUrl, '_blank');
-                } else {
-                    navigateTo('404');
-                }
-            }
-        };
-
-        // --- Initialisation ---
-        const init = () => {
-            initHomePage();
-            initProjectsPage();
-            initDeployedPage();
-            initSkillsPage();
-            initContextMenu();
-
-            tabsContainer.addEventListener('click', (e) => {
-                const closeButton = e.target.closest('.close-tab');
-                if (closeButton) { e.stopPropagation(); closeTab(closeButton.dataset.tabIdToClose); return; }
-                const tabElement = e.target.closest('.tab');
-                if (tabElement) setActiveTab(tabElement.dataset.tabId);
-            });
-
-            btnBack.addEventListener('click', () => {
-                const tab = getActiveTab();
-                if (tab && tab.historyIndex > 0) {
-                    tab.historyIndex--;
-                    const [pageId, subPageId] = tab.history[tab.historyIndex].split(':');
-                    navigateTo(pageId, true, subPageId === 'null' ? null : subPageId);
-                }
-            });
-            btnNext.addEventListener('click', () => {
-                const tab = getActiveTab();
-                if (tab && tab.historyIndex < tab.history.length - 1) {
-                    tab.historyIndex++;
-                    const [pageId, subPageId] = tab.history[tab.historyIndex].split(':');
-                    navigateTo(pageId, true, subPageId === 'null' ? null : subPageId);
-                }
-            });
-            btnHome.addEventListener('click', () => navigateTo('home'));
-            btnNewTab.addEventListener('click', () => createNewTab('home'));
-
-            addressInput.addEventListener('keydown', handleAddressInput);
-
-            document.getElementById('link-404-home').addEventListener('click', (e) => {
-                e.preventDefault();
-                navigateTo('home');
-            });
-
-            createNewTab('home');
-        };
-
-        init();
-    });
-</script>
-
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
 </body>
-</html>
 
+</html>
