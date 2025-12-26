@@ -43,6 +43,7 @@ const portfolioData = {
             "tagline": "Handwritten digit recognition on the web.",
             "description": "A web app for digit recognition using a custom two-layer feedforward neural network trained on the MNIST dataset. Users can draw digits on an interactive canvas, and the app provides predictions with confidence scores in real-time. Built with Flask and NumPy.",
             "image": "https://github.com/Jalpan04/PixelPredict/raw/main/demo.png",
+            "liveUrl": "https://number-id.onrender.com/",
             "sourceUrl": "https://github.com/Jalpan04/PixelPredict",
             "tech": [
                 "HTML",
