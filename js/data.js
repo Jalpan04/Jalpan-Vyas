@@ -96,6 +96,7 @@ const portfolioData = {
             "tagline": "A full-stack MERN application for rating and reviewing music albums.",
             "description": "A full-stack MERN application for rating and reviewing music albums, inspired by Letterboxd. Features a bold, brutalist design, user authentication (JWT), dynamic album search via the Spotify API, and an interactive rating and liking system.",
             "image": "assets/images/vinylogue-project.png",
+            "liveUrl": "https://vinylogue-project.vercel.app/",
             "sourceUrl": "https://github.com/Jalpan04/vinylogue-project",
             "tech": [
                 "JavaScript",
