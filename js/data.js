@@ -1,6 +1,69 @@
 const portfolioData = {
     "projectData": [
         {
+            "id": "sable-deck",
+            "name": "Sable Deck",
+            "tagline": "S.A.B.L.E. is a custom-built Python/Flask Micro-OS designed to turn an Android device (via Termux) i...",
+            "description": "S.A.B.L.E. is a custom-built Python/Flask Micro-OS designed to turn an Android device (via Termux) into a fully functional, air-gapped or remote-controlled Cyberdeck",
+            "image": "https://opengraph.githubassets.com/f0b1ee04c6dded1b321646c348023d8bd790471b62310761e02b8fd50b229939/Jalpan04/SABLE_DECK",
+            "tech": [
+                "Python",
+                "Shell"
+            ],
+            "liveUrl": "",
+            "sourceUrl": "https://github.com/Jalpan04/SABLE_DECK",
+            "featured": false
+        },
+        {
+            "id": "arckage",
+            "name": "Arckage",
+            "tagline": "My custom Linux Arch Rice.",
+            "description": "My custom Linux Arch Rice.",
+            "image": "https://opengraph.githubassets.com/d72b71ac33c0adc708f0bf5dd281e7c9e68ebb73e308c024b4d751ce62ceec2f/Jalpan04/Arckage",
+            "tech": [
+                "Shell",
+                "CSS",
+                "GLSL"
+            ],
+            "liveUrl": "",
+            "sourceUrl": "https://github.com/Jalpan04/Arckage",
+            "featured": false
+        },
+        {
+            "id": "pixelmess",
+            "name": "Pixelmess",
+            "tagline": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly inte...",
+            "description": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly interface lets you pick a video, a color to track, and visual effects, then it generates a new video showing the tracked objects and the distances between them.",
+            "image": "https://opengraph.githubassets.com/1/Jalpan04/Pixelmess",
+            "tech": [
+                "Python",
+                "Batchfile"
+            ],
+            "liveUrl": "",
+            "sourceUrl": "https://github.com/Jalpan04/Pixelmess",
+            "featured": false
+        },
+        {
+            "id": "Pixel-Diffusion-Model",
+            "name": "Pixel Diffusion Model",
+            "tagline": "Generate 16x16 pixel art sprites using AI.",
+            "description": "A conditional Denoising Diffusion Probabilistic Model (DDPM) for generating 16x16 pixel art sprites with class-based control and real-time visualization.",
+            "image": "https://opengraph.githubassets.com/1/Jalpan04/Pixel-Diffusion-Model",
+            "liveUrl": "https://huggingface.co/spaces/jalpan04/Pixel_Diffusion",
+            "sourceUrl": "https://github.com/Jalpan04/Pixel-Diffusion-Model",
+            "tech": ["Jupyter Notebook", "Deep Learning"]
+        },
+        {
+            "id": "aspisengine",
+            "name": "Aspis Engine",
+            "tagline": "The Lightweight Python Game Engine.",
+            "description": "A minimalist Python-based 2D game engine for rapid prototyping.",
+            "image": "https://opengraph.githubassets.com/1/Jalpan04/aspisengine",
+            "liveUrl": "https://jalpan04.github.io/aspisengine/",
+            "sourceUrl": "https://github.com/Jalpan04/aspisengine",
+            "tech": ["Python", "Pygame", "Pymunk"]
+        },
+        {
             "id": "neui",
             "name": "Neui",
             "tagline": "A modern, GPU-accelerated Python UI framework.",
@@ -407,7 +470,15 @@ const portfolioData = {
             },
             {
                 "name": "C#",
-                "logo": "dotnet"
+                "logo": "assets/images/csharp_custom.png"
+            },
+            {
+                "name": "C",
+                "logo": "https://upload.wikimedia.org/wikipedia/commons/1/18/C_Programming_Language.svg"
+            },
+            {
+                "name": "Shell",
+                "logo": "https://bashlogo.com/img/symbol/svg/full_colored_light.svg"
             },
             {
                 "name": "HTML5",
@@ -418,8 +489,8 @@ const portfolioData = {
                 "logo": "css"
             },
             {
-                "name": "SQL",
-                "logo": "postgresql"
+                "name": "R",
+                "logo": "r"
             }
         ],
         "Frameworks & Libraries": [
@@ -486,6 +557,18 @@ const portfolioData = {
             {
                 "name": "LangChain",
                 "logo": "langchain"
+            },
+            {
+                "name": "LangGraph",
+                "logo": "assets/images/langgraph_custom.png"
+            },
+            {
+                "name": "Pygame",
+                "logo": "assets/images/pygame_custom_v2.png"
+            },
+            {
+                "name": "Streamlit",
+                "logo": "streamlit"
             }
         ],
         "Tools & Platforms": [
@@ -516,6 +599,10 @@ const portfolioData = {
             {
                 "name": "Vercel",
                 "logo": "vercel"
+            },
+            {
+                "name": "n8n",
+                "logo": "n8n"
             }
         ]
     }

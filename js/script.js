@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 iconClass = 'fa-solid fa-box';
             }
 
-            return `<div class="tab flex items-center px-4 py-2 rounded-t-lg cursor-pointer ${tab.id === activeTabId ? 'active' : ''}" data-tab-id="${tab.id}"><i class="${iconClass} mr-2 text-base"></i><span class="text-sm text-white truncate max-w-[120px]">${title}</span><button class="close-tab ml-3 text-gray-400 hover:bg-white/20 rounded-full p-0.5" data-tab-id-to-close="${tab.id}"><i class="fa-solid fa-xmark w-3.5 h-3.5 pointer-events-none"></i></button></div>`;
+            return `<div class="tab flex items-center px-4 py-2 rounded-t-lg cursor-pointer ${tab.id === activeTabId ? 'active' : ''}" data-tab-id="${tab.id}" data-tooltip="Switch to ${title}"><i class="${iconClass} mr-2 text-base"></i><span class="text-sm text-white truncate max-w-[120px]">${title}</span><button class="close-tab ml-3 text-gray-400 hover:bg-white/20 hover:text-white rounded-full w-5 h-5 flex items-center justify-center transition-colors" data-tab-id-to-close="${tab.id}" data-tooltip="Close Tab"><i class="fa-solid fa-xmark text-xs pointer-events-none"></i></button></div>`;
         }).join('');
 
         document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active'));
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initHomePage = () => {
-        homeShortcutsGrid.innerHTML = allShortcutPages.map(page => `<div class="shortcut glass-card p-4 rounded-xl cursor-pointer" data-page-id="${page.id}"><i class="${page.faIcon} ${page.colorClass} text-4xl mb-3"></i><div class="text-white font-medium">${page.title}</div></div>`).join('');
+        homeShortcutsGrid.innerHTML = allShortcutPages.map(page => `<div class="shortcut glass-card p-4 rounded-xl cursor-pointer" data-page-id="${page.id}" data-tooltip="Open ${page.title}"><i class="${page.faIcon} ${page.colorClass} text-4xl mb-3"></i><div class="text-white font-medium">${page.title}</div></div>`).join('');
         homeShortcutsGrid.addEventListener('click', (e) => {
             const shortcut = e.target.closest('[data-page-id]');
             if (!shortcut) return;
@@ -224,8 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
             content += `<h2 class="text-3xl font-semibold text-cyan-400 mt-8 mb-4">${category}</h2>`;
             content += `<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">`;
             content += skillsData[category].map(skill => `
-                <div class="skill-card flex flex-col items-center justify-center p-4 rounded-lg hover:bg-white/5 transition-colors">
-                    <img src="https://cdn.simpleicons.org/${skill.logo}" alt="${skill.name}" class="w-12 h-12">
+                <div class="skill-card flex flex-col items-center justify-center p-4 rounded-lg bg-white/10 hover:bg-white/5 transition-colors">
+                    <img src="${(skill.logo.startsWith('http') || skill.logo.startsWith('assets')) ? skill.logo : `https://cdn.simpleicons.org/${skill.logo}`}" alt="${skill.name}" class="w-12 h-12">
                     <span class="mt-2 text-sm text-gray-300">${skill.name}</span>
                 </div>`).join('');
             content += `</div>`;
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // projectData is already ordered by the Admin Tool
         const projectsGrid = document.getElementById('projects-grid');
         projectsGrid.innerHTML = projectData.map(project => `
-            <div class="glass-card rounded-xl overflow-hidden group cursor-pointer" data-project-id="${project.id}">
+            <div class="glass-card rounded-xl overflow-hidden group cursor-pointer" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
                 <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
                     <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 </div>
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const deployedGrid = document.getElementById('deployed-grid');
         const liveProjects = projectData.filter(project => project.liveUrl);
         deployedGrid.innerHTML = liveProjects.map(project => `
-            <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="block glass-card rounded-xl overflow-hidden group">
+            <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="block glass-card rounded-xl overflow-hidden group" data-tooltip="Open Live Demo">
                 <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
                     <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 </div>
@@ -305,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pages = {
             home: { id: 'home', title: 'New Tab', url: 'portfolio://home', faIcon: 'fa-solid fa-house' },
+            about: { id: 'about', title: 'About Me', url: 'portfolio://about', faIcon: 'fa-solid fa-user' },
             '404': { id: '404', title: 'Not Found', url: 'portfolio://404', faIcon: 'fa-solid fa-exclamation-triangle' },
             ...Object.fromEntries(allShortcutPages.map(p => [p.id, p]))
         };
@@ -314,6 +315,63 @@ document.addEventListener('DOMContentLoaded', () => {
         initProjectsPage();
         initDeployedPage();
         initContextMenu();
+
+        // Tooltip Logic
+        const tooltip = document.getElementById('custom-tooltip');
+        let tooltipTimeout;
+
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                // Clear any existing timeout to avoid flickering
+                clearTimeout(tooltipTimeout);
+
+                tooltipTimeout = setTimeout(() => {
+                    const text = target.getAttribute('data-tooltip');
+                    if (!text) return;
+
+                    tooltip.textContent = text;
+                    
+                    // Position Logic
+                    const rect = target.getBoundingClientRect();
+                    const tooltipRect = tooltip.getBoundingClientRect(); // valid after content set? we need to show it effectively to measure or guess.
+                    // Actually, setting display block/opacity 0 first allows measurement.
+                    tooltip.style.opacity = '0';
+                    tooltip.style.display = 'block';
+                    
+                    // Calculate center position
+                    let left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2);
+                    let top = rect.bottom + 8; // Default below
+
+                    // Check bounds (simple check)
+                    if (left < 10) left = 10;
+                    if (left + tooltip.offsetWidth > window.innerWidth - 10) left = window.innerWidth - tooltip.offsetWidth - 10;
+                    if (top + tooltip.offsetHeight > window.innerHeight - 10) top = rect.top - tooltip.offsetHeight - 8; // Flip to top if too low
+
+                    tooltip.style.left = `${left}px`;
+                    tooltip.style.top = `${top}px`;
+                    
+                    // Show
+                    requestAnimationFrame(() => {
+                        tooltip.style.opacity = '1';
+                    });
+                }, 600); // 600ms delay ("wait for a bit")
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                clearTimeout(tooltipTimeout);
+                tooltip.style.opacity = '0';
+                // Hide after transition
+                setTimeout(() => {
+                    if (tooltip.style.opacity === '0') {
+                        tooltip.style.display = 'none';
+                    }
+                }, 200); 
+            }
+        });
 
         // Event Listeners
         btnNewTab.addEventListener('click', () => createNewTab('home'));
@@ -348,8 +406,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnHome.addEventListener('click', () => navigateTo('home'));
         addressInput.addEventListener('keydown', handleAddressInput);
 
-        // Start with one tab
-        createNewTab('home');
+        const btnExploreHome = document.getElementById('btn-explore-home');
+        if (btnExploreHome) {
+            btnExploreHome.addEventListener('click', () => navigateTo('home'));
+        }
+
+        // Start with About tab
+        createNewTab('about');
     } else {
         console.error('Error loading data: portfolioData is undefined. Make sure data.js is loaded.');
     }
