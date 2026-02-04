@@ -183,8 +183,10 @@
                         return res.json();
                     })
                     .then(data => {
+
                         projects.unshift(data.project);
                         renderList();
+                        enableSave();
                         inputUrl.value = '';
                         addMsg.classList.add('hidden');
                         setLoading(false);
@@ -204,11 +206,22 @@
                     body: JSON.stringify(projects)
                 })
                     .then(res => res.json())
-                    .then(() => {
-                        btnSave.textContent = 'Saved!';
-                        setTimeout(() => {
-                            disableSave();
-                        }, 2000);
+                    .then(data => {
+                        if (data.status === 'success') {
+                            btnSave.textContent = 'Saved!';
+                            // alert("Success: Projects saved successfully!");
+                            setTimeout(() => {
+                                disableSave();
+                            }, 2000);
+                        } else {
+                            btnSave.textContent = 'Save Failed';
+                            alert("Error saving projects: " + (data.message || "Unknown error"));
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        btnSave.textContent = 'Error';
+                        alert("Network error: " + err.message);
                     });
             });
 
@@ -254,7 +267,10 @@
 
                                 // Update local state
                                 const p = projects.find(p => p.id === id);
-                                if (p) p.image = data.newPath;
+                                if (p) {
+                                    p.image = data.newPath;
+                                    enableSave();
+                                }
                             }
                         });
                 }
