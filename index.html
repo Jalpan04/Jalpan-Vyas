@@ -338,6 +338,10 @@ body {
     /* Do not use translate or margin math that pushes the box rightwards */
     margin-top: 0.5rem;
     width: 12rem; /* Keep width consistent */
+    max-height: 20rem; /* Give it a safe max height */
+    overflow-y: auto; /* Allow scrolling if many languages */
+    scrollbar-width: thin;
+    scrollbar-color: #06b6d4 #1f1f1f; /* Firefox compatible thin colored scrollbar */
     max-width: 90vw; /* Safety constraint for very small screens */
     background-color: #1f1f1f;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -349,6 +353,22 @@ body {
     /* Prevent this element from causing the parent to scroll horizontally */
     transform-origin: top right;
 }
+
+/* Custom Scrollbar specifically for the dropdown menu */
+.sort-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+.sort-dropdown-menu::-webkit-scrollbar-track {
+    background: transparent; 
+}
+.sort-dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15); 
+    border-radius: 10px;
+}
+.sort-dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: #06b6d4; /* cyan-500 equivalent */
+}
+
 .sort-dropdown-menu.show {
     display: block;
     animation: fadeIn 0.15s ease-out;
@@ -463,40 +483,33 @@ body {
           <div class="max-w-6xl mx-auto p-4 md:p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
               <h1 class="text-4xl md:text-5xl font-bold">Projects</h1>
-              <div class="flex items-center gap-4">
-                  <!-- Technology Filter Dropdown -->
+              <div class="flex items-center gap-2 md:gap-4">
                   <div class="sort-container" id="project-filter-container">
                       <div class="sort-label" id="filter-control-button">
-                         Type <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
+                         Language <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
                       </div>
                       <div id="filter-dropdown-menu" class="sort-dropdown-menu">
-                          <div class="sort-item selected" data-tech="all">
-                              <div class="sort-item-icon"><div class="sort-dot"></div></div> All
-                          </div>
-                          <div class="sort-separator"></div>
-                          <!-- Tech options will be injected here via JS -->
-                          <div id="filter-options-container"></div>
+                          <!-- Populated dynamically by JS -->
                       </div>
                   </div>
-
-                  <!-- Sort Dropdown -->
                   <div class="sort-container" id="project-sort-container">
                       <div class="sort-label" id="sort-control-button">
                          <i class="fa-solid fa-arrow-down-up-across-line"></i> Sort <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
                       </div>
-                  <div id="sort-dropdown-menu" class="sort-dropdown-menu">
-                      <div class="sort-item selected" data-type="name">
-                          <div class="sort-item-icon"><div class="sort-dot"></div></div> Name
-                      </div>
-                      <div class="sort-item" data-type="date">
-                          <div class="sort-item-icon"><div class="sort-dot"></div></div> Date modified
-                      </div>
-                      <div class="sort-separator"></div>
-                      <div class="sort-item" data-order="asc">
-                          <div class="sort-item-icon"><div class="sort-dot"></div></div> Ascending
-                      </div>
-                      <div class="sort-item selected" data-order="desc">
-                          <div class="sort-item-icon"><div class="sort-dot"></div></div> Descending
+                      <div id="sort-dropdown-menu" class="sort-dropdown-menu">
+                          <div class="sort-item selected" data-type="name">
+                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Name
+                          </div>
+                          <div class="sort-item" data-type="date">
+                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Date modified
+                          </div>
+                          <div class="sort-separator"></div>
+                          <div class="sort-item" data-order="asc">
+                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Ascending
+                          </div>
+                          <div class="sort-item selected" data-order="desc">
+                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Descending
+                          </div>
                       </div>
                   </div>
               </div>
@@ -1645,7 +1658,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let currentSortType = 'name';
-    let currentSortOrder = 'asc'; // Changed default to ascending for Name as it makes more sense
+    let currentSortOrder = 'desc';
     let currentFilterTech = 'all';
 
     const renderProjectsGrid = () => {
@@ -1654,11 +1667,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add an originalIndex to preserve default sort order and use it as a proxy for "Date"
         let displayedProjects = projectData.map((project, index) => ({...project, originalIndex: index}));
 
-        // Filter projects by technology
+        // Filter by technology/language
         if (currentFilterTech !== 'all') {
-            displayedProjects = displayedProjects.filter(project => 
-                project.technologies.some(tech => tech.toLowerCase() === currentFilterTech.toLowerCase())
-            );
+             displayedProjects = displayedProjects.filter(p => p.tech && p.tech.includes(currentFilterTech));
         }
 
         displayedProjects.sort((a, b) => {
@@ -1698,45 +1709,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectsGrid = document.getElementById('projects-grid');
         const sortButton = document.getElementById('sort-control-button');
         const sortMenu = document.getElementById('sort-dropdown-menu');
-        
         const filterButton = document.getElementById('filter-control-button');
         const filterMenu = document.getElementById('filter-dropdown-menu');
-        const filterOptionsContainer = document.getElementById('filter-options-container');
 
-        // Extract unique technologies from all projects
-        const allTechnologies = [...new Set(projectData.flatMap(p => p.technologies))].sort();
-        
-        if (filterOptionsContainer) {
-            filterOptionsContainer.innerHTML = allTechnologies.map(tech => `
-                <div class="sort-item" data-tech="${tech}">
-                    <div class="sort-item-icon"><div class="sort-dot"></div></div> ${tech}
+        // Dynamically populate Filter Menu
+        if (filterMenu) {
+            const allTechs = new Set();
+            projectData.forEach(p => {
+                if (p.tech) p.tech.forEach(t => allTechs.add(t));
+            });
+            const sortedTechs = Array.from(allTechs).sort((a,b) => a.localeCompare(b));
+            let html = `
+                <div class="sort-item selected" data-tech="all">
+                    <div class="sort-item-icon"><div class="sort-dot"></div></div> All
                 </div>
-            `).join('');
+                <div class="sort-separator"></div>
+            `;
+            sortedTechs.forEach(tech => {
+                html += `
+                    <div class="sort-item" data-tech="${tech}">
+                       <div class="sort-item-icon"><div class="sort-dot"></div></div> ${tech}
+                    </div>
+                `;
+            });
+            filterMenu.innerHTML = html;
         }
 
-        if (sortButton && sortMenu && filterButton && filterMenu) {
-            sortButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sortMenu.classList.toggle('show');
-                filterMenu.classList.remove('show'); // Close other menu
-            });
-
-            filterButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                filterMenu.classList.toggle('show');
-                sortMenu.classList.remove('show'); // Close other menu
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
-                    sortMenu.classList.remove('show');
-                }
-                if (!filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
-                    filterMenu.classList.remove('show');
-                }
-            });
-
-            const updateSortUI = () => {
+        const updateSelectionUI = () => {
+            if (sortMenu) {
                 sortMenu.querySelectorAll('.sort-item').forEach(item => {
                     if (item.dataset.type) {
                         item.classList.toggle('selected', item.dataset.type === currentSortType);
@@ -1745,40 +1745,62 @@ document.addEventListener('DOMContentLoaded', () => {
                         item.classList.toggle('selected', item.dataset.order === currentSortOrder);
                     }
                 });
-            };
-
-            const updateFilterUI = () => {
+            }
+            if (filterMenu) {
                 filterMenu.querySelectorAll('.sort-item').forEach(item => {
                     if (item.dataset.tech) {
                         item.classList.toggle('selected', item.dataset.tech === currentFilterTech);
                     }
                 });
-            };
+            }
+        };
+
+        if (sortButton && sortMenu) {
+            sortButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (filterMenu) filterMenu.classList.remove('show');
+                sortMenu.classList.toggle('show');
+            });
 
             sortMenu.querySelectorAll('.sort-item').forEach(item => {
                 item.addEventListener('click', (e) => {
-                   e.stopPropagation();
+                   e.stopPropagation(); 
                    if (item.dataset.type) currentSortType = item.dataset.type;
                    if (item.dataset.order) currentSortOrder = item.dataset.order;
-                   updateSortUI();
+                   updateSelectionUI();
                    renderProjectsGrid();
                 });
+            });
+        }
+
+        if (filterButton && filterMenu) {
+            filterButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (sortMenu) sortMenu.classList.remove('show');
+                filterMenu.classList.toggle('show');
             });
 
             filterMenu.querySelectorAll('.sort-item').forEach(item => {
                 item.addEventListener('click', (e) => {
-                   e.stopPropagation();
+                   e.stopPropagation(); 
                    if (item.dataset.tech) currentFilterTech = item.dataset.tech;
-                   updateFilterUI();
+                   updateSelectionUI();
                    renderProjectsGrid();
-                   filterMenu.classList.remove('show'); // Auto-close filter on selection
+                   filterMenu.classList.remove('show'); // Auto-close filter to see results immediately
                 });
             });
-
-            updateSortUI();
-            updateFilterUI();
         }
 
+        document.addEventListener('click', (e) => {
+            if (sortButton && sortMenu && !sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
+                sortMenu.classList.remove('show');
+            }
+            if (filterButton && filterMenu && !filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
+                filterMenu.classList.remove('show');
+            }
+        });
+
+        updateSelectionUI();
         renderProjectsGrid();
 
         projectsGrid.addEventListener('click', e => {
