@@ -1714,11 +1714,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Dynamically populate Filter Menu
         if (filterMenu) {
-            const allTechs = new Set();
+            const techCounts = {};
             projectData.forEach(p => {
-                if (p.tech) p.tech.forEach(t => allTechs.add(t));
+                if (p.tech) {
+                    p.tech.forEach(t => {
+                        techCounts[t] = (techCounts[t] || 0) + 1;
+                    });
+                }
             });
-            const sortedTechs = Array.from(allTechs).sort((a,b) => a.localeCompare(b));
+            const sortedTechs = Object.keys(techCounts).sort((a, b) => {
+                // Secondary sort: alphabetize if counts are exactly the same
+                if (techCounts[b] !== techCounts[a]) {
+                    return techCounts[b] - techCounts[a]; // Sort by count descending
+                }
+                return a.localeCompare(b);
+            });
+
             let html = `
                 <div class="sort-item selected" data-tech="all">
                     <div class="sort-item-icon"><div class="sort-dot"></div></div> All
