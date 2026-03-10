@@ -334,10 +334,9 @@ body {
 .sort-dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    right: -1rem; /* Aligns nicely without causing horizontal overflow on mobile padding */
     margin-top: 0.5rem;
-    width: 12rem;
+    width: 11rem;
     background-color: #1f1f1f;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.5rem;
@@ -351,8 +350,8 @@ body {
     animation: fadeIn 0.15s ease-out;
 }
 @keyframes fadeIn {
-    from { opacity: 0; transform: translate(-50%, -5px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 .sort-item {
     display: flex;
