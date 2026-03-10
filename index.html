@@ -1665,7 +1665,7 @@ document.addEventListener('DOMContentLoaded', () => {
             content += `<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">`;
             content += skillsData[category].map(skill => `
                 <div class="skill-card flex flex-col items-center justify-center p-4 rounded-lg bg-white/10 hover:bg-white/5 transition-colors">
-                    <img src="${(skill.logo.startsWith('http') || skill.logo.startsWith('assets')) ? skill.logo : `https://cdn.simpleicons.org/${skill.logo}`}" alt="${skill.name}" class="w-12 h-12">
+                    <img src="${(skill.logo.startsWith('http') || skill.logo.startsWith('assets') || skill.logo.startsWith('data:')) ? skill.logo : `https://cdn.simpleicons.org/${skill.logo}`}" alt="${skill.name}" class="w-12 h-12">
                     <span class="mt-2 text-sm text-gray-300">${skill.name}</span>
                 </div>`).join('');
             content += `</div>`;
