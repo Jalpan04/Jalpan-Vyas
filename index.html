@@ -292,6 +292,21 @@ body {
 .content-area::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.3); /* Thumb color on hover */
 }
+
+/* Custom Text Truncation for consistent heights */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
     </style>
   </head>
 
@@ -361,7 +376,27 @@ body {
 
         <div id="page-projects" class="content-page">
           <div class="max-w-6xl mx-auto p-4 md:p-8">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 md:mb-10">Projects</h1>
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
+              <h1 class="text-4xl md:text-5xl font-bold">Projects</h1>
+              <!-- Filter and Sort Controls -->
+              <div class="flex flex-col xl:flex-row items-start xl:items-center gap-4 xl:gap-6 overflow-hidden">
+                 <!-- Filters -->
+                 <div class="flex items-center gap-3 w-full max-w-full xl:max-w-xl overflow-x-auto pb-2 xl:pb-0 scrollbar-hide">
+                    <span class="text-gray-400 text-sm font-medium flex-shrink-0"><i class="fa-solid fa-filter mr-1"></i>Tech:</span>
+                    <div id="tech-filters" class="flex gap-2 flex-nowrap">
+                        <!-- Tech pills will be injected here -->
+                    </div>
+                 </div>
+                 
+                 <!-- Sort Toggle -->
+                 <div class="flex items-center gap-2 flex-shrink-0 border-t xl:border-t-0 xl:border-l border-white/10 pt-3 xl:pt-0 xl:pl-6 w-full xl:w-auto">
+                    <span class="text-gray-400 text-sm font-medium"><i class="fa-solid fa-sort mr-1"></i>Sort:</span>
+                    <button id="btn-sort" class="glass-card hover:bg-white/10 px-4 py-1.5 border-white/5 rounded-full text-sm font-medium text-white transition-all flex items-center justify-center min-w-[140px]">
+                        Original Order
+                    </button>
+                 </div>
+              </div>
+            </div>
             <div
               id="projects-grid"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
@@ -1505,19 +1540,146 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = content;
     };
 
-    const initProjectsPage = () => {
-        // projectData is already ordered by the Admin Tool
+    let activeTechFilters = new Set();
+    let currentSortOption = 'default';
+
+    const extractTechnologies = () => {
+        const techs = new Set();
+        projectData.forEach(p => {
+            if (p.tech) {
+                p.tech.forEach(t => techs.add(t));
+            }
+        });
+        return Array.from(techs).sort();
+    };
+
+    const renderTechFilters = () => {
+        const filtersContainer = document.getElementById('tech-filters');
+        if (!filtersContainer) return;
+
+        const allTechs = extractTechnologies();
+
+        let html = `<button class="tech-filter-btn active glass-card px-3 py-1 rounded-full text-xs font-semibold transition-all !bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" data-tech="all">All</button>`;
+
+        html += allTechs.map(tech => `
+            <button class="tech-filter-btn glass-card px-3 py-1 rounded-full text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap" data-tech="${tech}">
+                ${tech}
+            </button>
+        `).join('');
+
+        filtersContainer.innerHTML = html;
+
+        // Add listeners
+        filtersContainer.querySelectorAll('.tech-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tech = e.target.dataset.tech;
+
+                if (tech === 'all') {
+                    activeTechFilters.clear();
+                    filtersContainer.querySelectorAll('.tech-filter-btn').forEach(b => {
+                        b.classList.remove('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                        b.classList.add('text-gray-300', 'border-white/5');
+                        if(b.dataset.tech === 'all') {
+                           b.classList.add('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                           b.classList.remove('text-gray-300', 'border-white/5');
+                        }
+                    });
+                } else {
+                    const allBtn = filtersContainer.querySelector('[data-tech="all"]');
+                    allBtn.classList.remove('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                    allBtn.classList.add('text-gray-300', 'border-white/5');
+
+                    if (activeTechFilters.has(tech)) {
+                        activeTechFilters.delete(tech);
+                        btn.classList.remove('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                        btn.classList.add('text-gray-300', 'border-white/5');
+                    } else {
+                        activeTechFilters.add(tech);
+                        btn.classList.add('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                        btn.classList.remove('text-gray-300', 'border-white/5');
+                    }
+
+                    if (activeTechFilters.size === 0) {
+                        allBtn.classList.add('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                        allBtn.classList.remove('text-gray-300', 'border-white/5');
+                    }
+                }
+
+                renderProjectsGrid();
+            });
+        });
+    };
+
+    const renderProjectsGrid = () => {
         const projectsGrid = document.getElementById('projects-grid');
-        projectsGrid.innerHTML = projectData.map(project => `
-            <div class="glass-card rounded-xl overflow-hidden group cursor-pointer" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
-                <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
+        
+        // Filter
+        let displayedProjects = projectData.filter(project => {
+            if (activeTechFilters.size === 0) return true;
+            if (!project.tech) return false;
+            return project.tech.some(t => activeTechFilters.has(t));
+        });
+
+        // Sort
+        if (currentSortOption === 'name-asc') {
+            displayedProjects.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (currentSortOption === 'name-desc') {
+            displayedProjects.sort((a, b) => b.name.localeCompare(a.name));
+        }
+
+        if (displayedProjects.length === 0) {
+            projectsGrid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">
+                <i class="fa-solid fa-folder-open text-4xl mb-4 opacity-50"></i>
+                <p>No projects matched the selected filters.</p>
+            </div>`;
+            return;
+        }
+
+        projectsGrid.innerHTML = displayedProjects.map(project => `
+            <div class="glass-card flex flex-col h-full rounded-xl overflow-hidden group cursor-pointer border border-white/5" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
+                <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
                     <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 </div>
-                <div class="p-4 bg-white/5 flex flex-col">
-                    <h3 class="text-lg font-semibold">${project.name}</h3>
-                    <p class="text-sm text-gray-400 mt-1 min-h-[2.5rem]">${project.tagline}</p>
+                <div class="p-4 bg-white/5 flex flex-col flex-grow">
+                    <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
+                    <p class="text-sm text-gray-400 mt-1 line-clamp-3" title="${project.tagline}">${project.tagline}</p>
+                    <div class="mt-4 flex flex-wrap gap-1 mt-auto pt-4 border-t border-white/5">
+                        ${(project.tech || []).slice(0, 3).map(t => `<span class="text-xs bg-white/10 text-gray-300 px-2 py-0.5 rounded-md">${t}</span>`).join('')}
+                        ${(project.tech || []).length > 3 ? `<span class="text-xs text-gray-500 pl-1">+${project.tech.length - 3}</span>` : ''}
+                    </div>
                 </div>
             </div>`).join('');
+    };
+
+    const initProjectsPage = () => {
+        const projectsGrid = document.getElementById('projects-grid');
+        const btnSort = document.getElementById('btn-sort');
+
+        if (btnSort) {
+            const sortLabels = {
+                'default': 'Original Order',
+                'name-asc': 'Name (A-Z) <i class="fa-solid fa-arrow-down-a-z ml-1 text-cyan-400"></i>',
+                'name-desc': 'Name (Z-A) <i class="fa-solid fa-arrow-up-z-a ml-1 text-cyan-400"></i>'
+            };
+            const sortCycle = ['default', 'name-asc', 'name-desc'];
+
+            btnSort.addEventListener('click', () => {
+                let currentIndex = sortCycle.indexOf(currentSortOption);
+                currentSortOption = sortCycle[(currentIndex + 1) % sortCycle.length];
+                btnSort.innerHTML = sortLabels[currentSortOption];
+                
+                if(currentSortOption !== 'default') {
+                    btnSort.classList.add('border-cyan-500/30', 'bg-cyan-500/10');
+                } else {
+                    btnSort.classList.remove('border-cyan-500/30', 'bg-cyan-500/10');
+                }
+                renderProjectsGrid();
+            });
+        }
+
+        renderTechFilters();
+        renderProjectsGrid();
+
         projectsGrid.addEventListener('click', e => {
             const card = e.target.closest('[data-project-id]');
             if (card) navigateTo('project', false, card.dataset.projectId);
@@ -1532,13 +1694,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const deployedGrid = document.getElementById('deployed-grid');
         const liveProjects = projectData.filter(project => project.liveUrl);
         deployedGrid.innerHTML = liveProjects.map(project => `
-            <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="block glass-card rounded-xl overflow-hidden group" data-tooltip="Open Live Demo">
-                <div class="w-full h-48 bg-gray-900 overflow-hidden flex items-center justify-center">
+            <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="glass-card flex flex-col h-full rounded-xl overflow-hidden group" data-tooltip="Open Live Demo">
+                <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center">
                     <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 </div>
-                <div class="p-4 bg-white/5 flex flex-col">
-                    <h3 class="text-lg font-semibold">${project.name}</h3>
-                    <p class="text-sm text-gray-400 mt-1 min-h-[2.5rem]">${project.tagline}</p>
+                <div class="p-4 bg-white/5 flex flex-col flex-grow">
+                    <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
+                    <p class="text-sm text-gray-400 mt-1 line-clamp-3" title="${project.tagline}">${project.tagline}</p>
                 </div>
             </a>`).join('');
         deployedGrid.addEventListener('contextmenu', e => {
