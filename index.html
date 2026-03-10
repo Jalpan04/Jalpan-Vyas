@@ -334,7 +334,8 @@ body {
 .sort-dropdown-menu {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     margin-top: 0.5rem;
     width: 12rem;
     background-color: #1f1f1f;
@@ -350,13 +351,13 @@ body {
     animation: fadeIn 0.15s ease-out;
 }
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translate(-50%, -5px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
 }
 .sort-item {
     display: flex;
     align-items: center;
-    padding: 0.4rem 1.5rem; /* Increased padding to push towards center */
+    padding: 0.375rem 0.75rem;
     font-size: 0.875rem;
     color: #e5e7eb;
     cursor: pointer;
@@ -367,7 +368,7 @@ body {
     color: #fff;
 }
 .sort-item-icon {
-    width: 1.5rem; /* Slightly wider icon area */
+    width: 1.25rem;
     display: flex;
     justify-content: center;
     align-items: center;
