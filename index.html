@@ -335,9 +335,10 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    transform: translateX(3rem); /* Slides it to the right just enough to center it under "Sort", without pushing past the viewport */
+    /* Do not use translate or margin math that pushes the box rightwards */
     margin-top: 0.5rem;
-    width: 11rem;
+    width: 12rem; /* Keep width consistent */
+    max-width: 90vw; /* Safety constraint for very small screens */
     background-color: #1f1f1f;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.5rem;
@@ -345,14 +346,16 @@ body {
     z-index: 50;
     padding: 0.25rem 0;
     display: none;
+    /* Prevent this element from causing the parent to scroll horizontally */
+    transform-origin: top right;
 }
 .sort-dropdown-menu.show {
     display: block;
     animation: fadeIn 0.15s ease-out;
 }
 @keyframes fadeIn {
-    from { opacity: 0; transform: translate(3rem, -5px); }
-    to { opacity: 1; transform: translate(3rem, 0); }
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 .sort-item {
     display: flex;
