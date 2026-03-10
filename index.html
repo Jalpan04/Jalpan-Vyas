@@ -463,10 +463,27 @@ body {
           <div class="max-w-6xl mx-auto p-4 md:p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
               <h1 class="text-4xl md:text-5xl font-bold">Projects</h1>
-              <div class="sort-container" id="project-sort-container">
-                  <div class="sort-label" id="sort-control-button">
-                     <i class="fa-solid fa-arrow-down-up-across-line"></i> Sort <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
+              <div class="flex items-center gap-4">
+                  <!-- Technology Filter Dropdown -->
+                  <div class="sort-container" id="project-filter-container">
+                      <div class="sort-label" id="filter-control-button">
+                         Type <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
+                      </div>
+                      <div id="filter-dropdown-menu" class="sort-dropdown-menu">
+                          <div class="sort-item selected" data-tech="all">
+                              <div class="sort-item-icon"><div class="sort-dot"></div></div> All
+                          </div>
+                          <div class="sort-separator"></div>
+                          <!-- Tech options will be injected here via JS -->
+                          <div id="filter-options-container"></div>
+                      </div>
                   </div>
+
+                  <!-- Sort Dropdown -->
+                  <div class="sort-container" id="project-sort-container">
+                      <div class="sort-label" id="sort-control-button">
+                         <i class="fa-solid fa-arrow-down-up-across-line"></i> Sort <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
+                      </div>
                   <div id="sort-dropdown-menu" class="sort-dropdown-menu">
                       <div class="sort-item selected" data-type="name">
                           <div class="sort-item-icon"><div class="sort-dot"></div></div> Name
@@ -1628,13 +1645,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let currentSortType = 'name';
-    let currentSortOrder = 'desc';
+    let currentSortOrder = 'asc'; // Changed default to ascending for Name as it makes more sense
+    let currentFilterTech = 'all';
 
     const renderProjectsGrid = () => {
         const projectsGrid = document.getElementById('projects-grid');
         
         // Add an originalIndex to preserve default sort order and use it as a proxy for "Date"
         let displayedProjects = projectData.map((project, index) => ({...project, originalIndex: index}));
+
+        // Filter projects by technology
+        if (currentFilterTech !== 'all') {
+            displayedProjects = displayedProjects.filter(project => 
+                project.technologies.some(tech => tech.toLowerCase() === currentFilterTech.toLowerCase())
+            );
+        }
 
         displayedProjects.sort((a, b) => {
              let comparison = 0;
@@ -1673,20 +1698,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectsGrid = document.getElementById('projects-grid');
         const sortButton = document.getElementById('sort-control-button');
         const sortMenu = document.getElementById('sort-dropdown-menu');
+        
+        const filterButton = document.getElementById('filter-control-button');
+        const filterMenu = document.getElementById('filter-dropdown-menu');
+        const filterOptionsContainer = document.getElementById('filter-options-container');
 
-        if (sortButton && sortMenu) {
+        // Extract unique technologies from all projects
+        const allTechnologies = [...new Set(projectData.flatMap(p => p.technologies))].sort();
+        
+        if (filterOptionsContainer) {
+            filterOptionsContainer.innerHTML = allTechnologies.map(tech => `
+                <div class="sort-item" data-tech="${tech}">
+                    <div class="sort-item-icon"><div class="sort-dot"></div></div> ${tech}
+                </div>
+            `).join('');
+        }
+
+        if (sortButton && sortMenu && filterButton && filterMenu) {
             sortButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 sortMenu.classList.toggle('show');
+                filterMenu.classList.remove('show'); // Close other menu
+            });
+
+            filterButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                filterMenu.classList.toggle('show');
+                sortMenu.classList.remove('show'); // Close other menu
             });
 
             document.addEventListener('click', (e) => {
                 if (!sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
                     sortMenu.classList.remove('show');
                 }
+                if (!filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
+                    filterMenu.classList.remove('show');
+                }
             });
 
-            const updateSelectionUI = () => {
+            const updateSortUI = () => {
                 sortMenu.querySelectorAll('.sort-item').forEach(item => {
                     if (item.dataset.type) {
                         item.classList.toggle('selected', item.dataset.type === currentSortType);
@@ -1697,18 +1747,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             };
 
+            const updateFilterUI = () => {
+                filterMenu.querySelectorAll('.sort-item').forEach(item => {
+                    if (item.dataset.tech) {
+                        item.classList.toggle('selected', item.dataset.tech === currentFilterTech);
+                    }
+                });
+            };
+
             sortMenu.querySelectorAll('.sort-item').forEach(item => {
                 item.addEventListener('click', (e) => {
-                   e.stopPropagation(); // Keep menu open if desired, but we will close it for standard behavior
+                   e.stopPropagation();
                    if (item.dataset.type) currentSortType = item.dataset.type;
                    if (item.dataset.order) currentSortOrder = item.dataset.order;
-                   updateSelectionUI();
+                   updateSortUI();
                    renderProjectsGrid();
-                   // Optional: close menu after selection
-                   // sortMenu.classList.remove('show');
                 });
             });
-            updateSelectionUI();
+
+            filterMenu.querySelectorAll('.sort-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                   e.stopPropagation();
+                   if (item.dataset.tech) currentFilterTech = item.dataset.tech;
+                   updateFilterUI();
+                   renderProjectsGrid();
+                   filterMenu.classList.remove('show'); // Auto-close filter on selection
+                });
+            });
+
+            updateSortUI();
+            updateFilterUI();
         }
 
         renderProjectsGrid();
