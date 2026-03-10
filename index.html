@@ -378,23 +378,40 @@ body {
           <div class="max-w-6xl mx-auto p-4 md:p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
               <h1 class="text-4xl md:text-5xl font-bold">Projects</h1>
-              <!-- Filter and Sort Controls -->
-              <div class="flex flex-col xl:flex-row items-start xl:items-center gap-4 xl:gap-6 overflow-hidden">
-                 <!-- Filters -->
-                 <div class="flex items-center gap-3 w-full max-w-full xl:max-w-xl overflow-x-auto pb-2 xl:pb-0 scrollbar-hide">
+
+              <!-- Unified Control Bar -->
+              <div class="glass-card p-3 md:p-4 rounded-xl flex flex-col xl:flex-row items-start xl:items-center gap-4 xl:gap-6 border-white/5">
+                 
+                 <!-- Tech Filters -->
+                 <div class="flex items-center gap-3 w-full max-w-full xl:max-w-2xl">
                     <span class="text-gray-400 text-sm font-medium flex-shrink-0"><i class="fa-solid fa-filter mr-1"></i>Tech:</span>
-                    <div id="tech-filters" class="flex gap-2 flex-nowrap">
-                        <!-- Tech pills will be injected here -->
+                    <div id="tech-filters" class="flex flex-wrap gap-2 w-full">
+                        <!-- Tech pills injected here -->
                     </div>
                  </div>
                  
-                 <!-- Sort Toggle -->
-                 <div class="flex items-center gap-2 flex-shrink-0 border-t xl:border-t-0 xl:border-l border-white/10 pt-3 xl:pt-0 xl:pl-6 w-full xl:w-auto">
+                 <!-- Custom Sort Dropdown -->
+                 <div class="flex items-center gap-3 flex-shrink-0 border-t xl:border-t-0 xl:border-l border-white/10 pt-3 xl:pt-0 xl:pl-6 w-full xl:w-auto relative">
                     <span class="text-gray-400 text-sm font-medium"><i class="fa-solid fa-sort mr-1"></i>Sort:</span>
-                    <button id="btn-sort" class="glass-card hover:bg-white/10 px-4 py-1.5 border-white/5 rounded-full text-sm font-medium text-white transition-all flex items-center justify-center min-w-[140px]">
-                        Original Order
+                    <button id="btn-sort-toggle" aria-expanded="false" class="glass-card hover:bg-white/10 bg-white/5 px-4 py-2 border-white/10 rounded-lg text-sm font-medium text-white transition-all flex items-center justify-between min-w-[180px] w-full xl:w-[180px]">
+                        <span id="sort-label-current">Date Added (Newest)</span>
+                        <i class="fa-solid fa-chevron-down text-gray-400 text-xs ml-2 transition-transform duration-200" id="sort-chevron"></i>
                     </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="sort-dropdown" class="absolute top-[calc(100%+0.5rem)] right-0 w-full xl:w-[200px] glass-card bg-[#1e1e23]/95 border-white/10 rounded-lg flex flex-col py-1 opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-[100] shadow-2xl">
+                        <button class="sort-option w-full text-left px-4 py-2 text-sm text-cyan-400 bg-white/5 hover:bg-white/10 flex items-center justify-between transition-colors" data-sort="default">
+                            Date Added (Newest) <i class="fa-solid fa-check text-xs"></i>
+                        </button>
+                        <button class="sort-option w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 flex items-center justify-between transition-colors" data-sort="name-asc">
+                            Name (A-Z) <i class="fa-solid fa-check text-xs opacity-0"></i>
+                        </button>
+                        <button class="sort-option w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 flex items-center justify-between transition-colors" data-sort="name-desc">
+                            Name (Z-A) <i class="fa-solid fa-check text-xs opacity-0"></i>
+                        </button>
+                    </div>
                  </div>
+
               </div>
             </div>
             <div
@@ -1559,10 +1576,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const allTechs = extractTechnologies();
 
-        let html = `<button class="tech-filter-btn active glass-card px-3 py-1 rounded-full text-xs font-semibold transition-all !bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" data-tech="all">All</button>`;
+        let html = `<button class="tech-filter-btn active px-3 py-1 rounded-full text-xs font-semibold transition-colors bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-sm" data-tech="all">All</button>`;
 
         html += allTechs.map(tech => `
-            <button class="tech-filter-btn glass-card px-3 py-1 rounded-full text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all border border-white/5 whitespace-nowrap" data-tech="${tech}">
+            <button class="tech-filter-btn px-3 py-1 rounded-full text-xs font-medium text-gray-400 hover:text-gray-200 hover:bg-white/10 bg-white/5 border border-white/10 transition-colors" data-tech="${tech}">
                 ${tech}
             </button>
         `).join('');
@@ -1577,31 +1594,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (tech === 'all') {
                     activeTechFilters.clear();
                     filtersContainer.querySelectorAll('.tech-filter-btn').forEach(b => {
-                        b.classList.remove('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                        b.classList.add('text-gray-300', 'border-white/5');
+                        b.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
+                        b.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
                         if(b.dataset.tech === 'all') {
-                           b.classList.add('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                           b.classList.remove('text-gray-300', 'border-white/5');
+                           b.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
+                           b.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
                         }
                     });
                 } else {
                     const allBtn = filtersContainer.querySelector('[data-tech="all"]');
-                    allBtn.classList.remove('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                    allBtn.classList.add('text-gray-300', 'border-white/5');
+                    allBtn.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
+                    allBtn.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
 
                     if (activeTechFilters.has(tech)) {
                         activeTechFilters.delete(tech);
-                        btn.classList.remove('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                        btn.classList.add('text-gray-300', 'border-white/5');
+                        btn.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
+                        btn.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
                     } else {
                         activeTechFilters.add(tech);
-                        btn.classList.add('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                        btn.classList.remove('text-gray-300', 'border-white/5');
+                        btn.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
+                        btn.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
                     }
 
                     if (activeTechFilters.size === 0) {
-                        allBtn.classList.add('active', '!bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                        allBtn.classList.remove('text-gray-300', 'border-white/5');
+                        allBtn.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
+                        allBtn.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
                     }
                 }
 
@@ -1638,7 +1655,7 @@ document.addEventListener('DOMContentLoaded', () => {
         projectsGrid.innerHTML = displayedProjects.map(project => `
             <div class="glass-card flex flex-col h-full rounded-xl overflow-hidden group cursor-pointer border border-white/5" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
                 <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
-                    <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover object-[center_20%] scale-110 group-hover:scale-125 transition-transform duration-300">
                 </div>
                 <div class="p-4 bg-white/5 flex flex-col flex-grow">
                     <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
@@ -1653,27 +1670,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initProjectsPage = () => {
         const projectsGrid = document.getElementById('projects-grid');
-        const btnSort = document.getElementById('btn-sort');
+        const btnSortToggle = document.getElementById('btn-sort-toggle');
+        const sortDropdown = document.getElementById('sort-dropdown');
+        const sortChevron = document.getElementById('sort-chevron');
+        const currentSortLabel = document.getElementById('sort-label-current');
+        const sortOptions = document.querySelectorAll('.sort-option');
 
-        if (btnSort) {
-            const sortLabels = {
-                'default': 'Original Order',
-                'name-asc': 'Name (A-Z) <i class="fa-solid fa-arrow-down-a-z ml-1 text-cyan-400"></i>',
-                'name-desc': 'Name (Z-A) <i class="fa-solid fa-arrow-up-z-a ml-1 text-cyan-400"></i>'
-            };
-            const sortCycle = ['default', 'name-asc', 'name-desc'];
+        if (btnSortToggle && sortDropdown) {
 
-            btnSort.addEventListener('click', () => {
-                let currentIndex = sortCycle.indexOf(currentSortOption);
-                currentSortOption = sortCycle[(currentIndex + 1) % sortCycle.length];
-                btnSort.innerHTML = sortLabels[currentSortOption];
+            // Toggle dropdown
+            btnSortToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isExpanded = btnSortToggle.getAttribute('aria-expanded') === 'true';
                 
-                if(currentSortOption !== 'default') {
-                    btnSort.classList.add('border-cyan-500/30', 'bg-cyan-500/10');
+                if (isExpanded) {
+                    closeSortDropdown();
                 } else {
-                    btnSort.classList.remove('border-cyan-500/30', 'bg-cyan-500/10');
+                    sortDropdown.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+                    sortDropdown.classList.add('opacity-100', 'translate-y-0');
+                    sortChevron.classList.add('rotate-180');
+                    btnSortToggle.setAttribute('aria-expanded', 'true');
                 }
-                renderProjectsGrid();
+            });
+
+            const closeSortDropdown = () => {
+                sortDropdown.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                sortDropdown.classList.remove('opacity-100', 'translate-y-0');
+                sortChevron.classList.remove('rotate-180');
+                btnSortToggle.setAttribute('aria-expanded', 'false');
+            };
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (btnSortToggle.getAttribute('aria-expanded') === 'true' && !btnSortToggle.contains(e.target) && !sortDropdown.contains(e.target)) {
+                    closeSortDropdown();
+                }
+            });
+
+            // Handle option selection
+            sortOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Update active styling
+                    sortOptions.forEach(opt => {
+                        opt.classList.remove('text-cyan-400', 'bg-white/5');
+                        opt.classList.add('text-gray-300', 'hover:bg-white/5');
+                        opt.querySelector('i').classList.add('opacity-0');
+                    });
+                    
+                    option.classList.add('text-cyan-400', 'bg-white/5');
+                    option.classList.remove('text-gray-300', 'hover:bg-white/5');
+                    option.querySelector('i').classList.remove('opacity-0');
+
+                    // Update label and state
+                    currentSortOption = option.dataset.sort;
+                    // Extract text node value, excluding the <i> tag
+                    currentSortLabel.textContent = Array.from(option.childNodes).find(n => n.nodeType === 3).textContent.trim();
+                    
+                    if (currentSortOption !== 'default') {
+                        btnSortToggle.classList.add('border-cyan-500/30', 'bg-cyan-500/10');
+                    } else {
+                        btnSortToggle.classList.remove('border-cyan-500/30', 'bg-cyan-500/10');
+                    }
+
+                    closeSortDropdown();
+                    renderProjectsGrid();
+                });
             });
         }
 
