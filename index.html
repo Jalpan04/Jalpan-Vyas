@@ -1675,7 +1675,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // SVG direct string injection
                     logoHtml = skill.logo; 
                 } else {
-                    const src = (skill.logo.startsWith('http') || skill.logo.startsWith('assets')) ? skill.logo : `https://cdn.simpleicons.org/${skill.logo}/white`;
+                    const src = (skill.logo.startsWith('http') || skill.logo.startsWith('assets')) ? skill.logo : `https://cdn.simpleicons.org/${skill.logo}`;
                     logoHtml = `<img src="${src}" alt="${skill.name}" class="w-12 h-12">`;
                 }
                 return `
