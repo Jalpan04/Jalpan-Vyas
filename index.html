@@ -378,40 +378,13 @@ body {
           <div class="max-w-6xl mx-auto p-4 md:p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
               <h1 class="text-4xl md:text-5xl font-bold">Projects</h1>
-
-              <!-- Unified Control Bar -->
-              <div class="glass-card p-3 md:p-4 rounded-xl flex flex-col xl:flex-row items-start xl:items-center gap-4 xl:gap-6 border-white/5">
-                 
-                 <!-- Tech Filters -->
-                 <div class="flex items-center gap-3 w-full max-w-full xl:max-w-2xl">
-                    <span class="text-gray-400 text-sm font-medium flex-shrink-0"><i class="fa-solid fa-filter mr-1"></i>Tech:</span>
-                    <div id="tech-filters" class="flex flex-wrap gap-2 w-full">
-                        <!-- Tech pills injected here -->
-                    </div>
-                 </div>
-                 
-                 <!-- Custom Sort Dropdown -->
-                 <div class="flex items-center gap-3 flex-shrink-0 border-t xl:border-t-0 xl:border-l border-white/10 pt-3 xl:pt-0 xl:pl-6 w-full xl:w-auto relative">
-                    <span class="text-gray-400 text-sm font-medium"><i class="fa-solid fa-sort mr-1"></i>Sort:</span>
-                    <button id="btn-sort-toggle" aria-expanded="false" class="glass-card hover:bg-white/10 bg-white/5 px-4 py-2 border-white/10 rounded-lg text-sm font-medium text-white transition-all flex items-center justify-between min-w-[180px] w-full xl:w-[180px]">
-                        <span id="sort-label-current">Date Added (Newest)</span>
-                        <i class="fa-solid fa-chevron-down text-gray-400 text-xs ml-2 transition-transform duration-200" id="sort-chevron"></i>
-                    </button>
-                    
-                    <!-- Dropdown Menu -->
-                    <div id="sort-dropdown" class="absolute top-[calc(100%+0.5rem)] right-0 w-full xl:w-[200px] glass-card bg-[#1e1e23]/95 border-white/10 rounded-lg flex flex-col py-1 opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-[100] shadow-2xl">
-                        <button class="sort-option w-full text-left px-4 py-2 text-sm text-cyan-400 bg-white/5 hover:bg-white/10 flex items-center justify-between transition-colors" data-sort="default">
-                            Date Added (Newest) <i class="fa-solid fa-check text-xs"></i>
-                        </button>
-                        <button class="sort-option w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 flex items-center justify-between transition-colors" data-sort="name-asc">
-                            Name (A-Z) <i class="fa-solid fa-check text-xs opacity-0"></i>
-                        </button>
-                        <button class="sort-option w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 flex items-center justify-between transition-colors" data-sort="name-desc">
-                            Name (Z-A) <i class="fa-solid fa-check text-xs opacity-0"></i>
-                        </button>
-                    </div>
-                 </div>
-
+              <div class="flex items-center gap-2">
+                <label for="project-sort" class="text-gray-400 text-sm font-medium">Sort by:</label>
+                <select id="project-sort" class="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all cursor-pointer">
+                  <option value="default" class="bg-gray-800">Original Order</option>
+                  <option value="name-asc" class="bg-gray-800">Name (A-Z)</option>
+                  <option value="name-desc" class="bg-gray-800">Name (Z-A)</option>
+                </select>
               </div>
             </div>
             <div
@@ -1557,189 +1530,40 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = content;
     };
 
-    let activeTechFilters = new Set();
-    let currentSortOption = 'default';
-
-    const extractTechnologies = () => {
-        const techs = new Set();
-        projectData.forEach(p => {
-            if (p.tech) {
-                p.tech.forEach(t => techs.add(t));
-            }
-        });
-        return Array.from(techs).sort();
-    };
-
-    const renderTechFilters = () => {
-        const filtersContainer = document.getElementById('tech-filters');
-        if (!filtersContainer) return;
-
-        const allTechs = extractTechnologies();
-
-        let html = `<button class="tech-filter-btn active px-3 py-1 rounded-full text-xs font-semibold transition-colors bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-sm" data-tech="all">All</button>`;
-
-        html += allTechs.map(tech => `
-            <button class="tech-filter-btn px-3 py-1 rounded-full text-xs font-medium text-gray-400 hover:text-gray-200 hover:bg-white/10 bg-white/5 border border-white/10 transition-colors" data-tech="${tech}">
-                ${tech}
-            </button>
-        `).join('');
-
-        filtersContainer.innerHTML = html;
-
-        // Add listeners
-        filtersContainer.querySelectorAll('.tech-filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const tech = e.target.dataset.tech;
-
-                if (tech === 'all') {
-                    activeTechFilters.clear();
-                    filtersContainer.querySelectorAll('.tech-filter-btn').forEach(b => {
-                        b.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
-                        b.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
-                        if(b.dataset.tech === 'all') {
-                           b.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
-                           b.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
-                        }
-                    });
-                } else {
-                    const allBtn = filtersContainer.querySelector('[data-tech="all"]');
-                    allBtn.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
-                    allBtn.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
-
-                    if (activeTechFilters.has(tech)) {
-                        activeTechFilters.delete(tech);
-                        btn.classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
-                        btn.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
-                    } else {
-                        activeTechFilters.add(tech);
-                        btn.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
-                        btn.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
-                    }
-
-                    if (activeTechFilters.size === 0) {
-                        allBtn.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/50', 'shadow-sm');
-                        allBtn.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-white/10', 'bg-white/5', 'border-white/10');
-                    }
-                }
-
-                renderProjectsGrid();
-            });
-        });
-    };
-
-    const renderProjectsGrid = () => {
+    const renderProjectsGrid = (sortOption = 'default') => {
         const projectsGrid = document.getElementById('projects-grid');
-        
-        // Filter
-        let displayedProjects = projectData.filter(project => {
-            if (activeTechFilters.size === 0) return true;
-            if (!project.tech) return false;
-            return project.tech.some(t => activeTechFilters.has(t));
-        });
+        let displayedProjects = [...projectData];
 
-        // Sort
-        if (currentSortOption === 'name-asc') {
+        if (sortOption === 'name-asc') {
             displayedProjects.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (currentSortOption === 'name-desc') {
+        } else if (sortOption === 'name-desc') {
             displayedProjects.sort((a, b) => b.name.localeCompare(a.name));
         }
 
-        if (displayedProjects.length === 0) {
-            projectsGrid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">
-                <i class="fa-solid fa-folder-open text-4xl mb-4 opacity-50"></i>
-                <p>No projects matched the selected filters.</p>
-            </div>`;
-            return;
-        }
-
         projectsGrid.innerHTML = displayedProjects.map(project => `
-            <div class="glass-card flex flex-col h-full rounded-xl overflow-hidden group cursor-pointer border border-white/5" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
-                <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center relative">
-                    <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover object-[center_20%] scale-110 group-hover:scale-125 transition-transform duration-300">
+            <div class="glass-card flex flex-col h-full rounded-xl overflow-hidden group cursor-pointer" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
+                <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                    <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 </div>
                 <div class="p-4 bg-white/5 flex flex-col flex-grow">
                     <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
                     <p class="text-sm text-gray-400 mt-1 line-clamp-3" title="${project.tagline}">${project.tagline}</p>
-                    <div class="mt-4 flex flex-wrap gap-1 mt-auto pt-4 border-t border-white/5">
-                        ${(project.tech || []).slice(0, 3).map(t => `<span class="text-xs bg-white/10 text-gray-300 px-2 py-0.5 rounded-md">${t}</span>`).join('')}
-                        ${(project.tech || []).length > 3 ? `<span class="text-xs text-gray-500 pl-1">+${project.tech.length - 3}</span>` : ''}
-                    </div>
                 </div>
             </div>`).join('');
     };
 
     const initProjectsPage = () => {
+        // Event listeners applied once
         const projectsGrid = document.getElementById('projects-grid');
-        const btnSortToggle = document.getElementById('btn-sort-toggle');
-        const sortDropdown = document.getElementById('sort-dropdown');
-        const sortChevron = document.getElementById('sort-chevron');
-        const currentSortLabel = document.getElementById('sort-label-current');
-        const sortOptions = document.querySelectorAll('.sort-option');
+        const sortSelect = document.getElementById('project-sort');
 
-        if (btnSortToggle && sortDropdown) {
-
-            // Toggle dropdown
-            btnSortToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isExpanded = btnSortToggle.getAttribute('aria-expanded') === 'true';
-                
-                if (isExpanded) {
-                    closeSortDropdown();
-                } else {
-                    sortDropdown.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-                    sortDropdown.classList.add('opacity-100', 'translate-y-0');
-                    sortChevron.classList.add('rotate-180');
-                    btnSortToggle.setAttribute('aria-expanded', 'true');
-                }
-            });
-
-            const closeSortDropdown = () => {
-                sortDropdown.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-                sortDropdown.classList.remove('opacity-100', 'translate-y-0');
-                sortChevron.classList.remove('rotate-180');
-                btnSortToggle.setAttribute('aria-expanded', 'false');
-            };
-
-            // Close when clicking outside
-            document.addEventListener('click', (e) => {
-                if (btnSortToggle.getAttribute('aria-expanded') === 'true' && !btnSortToggle.contains(e.target) && !sortDropdown.contains(e.target)) {
-                    closeSortDropdown();
-                }
-            });
-
-            // Handle option selection
-            sortOptions.forEach(option => {
-                option.addEventListener('click', () => {
-                    // Update active styling
-                    sortOptions.forEach(opt => {
-                        opt.classList.remove('text-cyan-400', 'bg-white/5');
-                        opt.classList.add('text-gray-300', 'hover:bg-white/5');
-                        opt.querySelector('i').classList.add('opacity-0');
-                    });
-                    
-                    option.classList.add('text-cyan-400', 'bg-white/5');
-                    option.classList.remove('text-gray-300', 'hover:bg-white/5');
-                    option.querySelector('i').classList.remove('opacity-0');
-
-                    // Update label and state
-                    currentSortOption = option.dataset.sort;
-                    // Extract text node value, excluding the <i> tag
-                    currentSortLabel.textContent = Array.from(option.childNodes).find(n => n.nodeType === 3).textContent.trim();
-                    
-                    if (currentSortOption !== 'default') {
-                        btnSortToggle.classList.add('border-cyan-500/30', 'bg-cyan-500/10');
-                    } else {
-                        btnSortToggle.classList.remove('border-cyan-500/30', 'bg-cyan-500/10');
-                    }
-
-                    closeSortDropdown();
-                    renderProjectsGrid();
-                });
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                renderProjectsGrid(e.target.value);
             });
         }
 
-        renderTechFilters();
-        renderProjectsGrid();
+        renderProjectsGrid('default');
 
         projectsGrid.addEventListener('click', e => {
             const card = e.target.closest('[data-project-id]');
