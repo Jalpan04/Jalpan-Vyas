@@ -628,75 +628,6 @@ body {
           <div id="skills-container" class="max-w-4xl mx-auto p-8"></div>
         </div>
 
-        <div id="page-links" class="content-page">
-          <div class="max-w-5xl mx-auto p-4 md:p-8">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 md:mb-10 text-center">Contact & Links</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              
-              <a href="https://github.com/Jalpan04" target="_blank" class="glass-card p-6 flex items-center group">
-                <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mr-6 group-hover:bg-white/20 transition-colors">
-                  <i class="fa-brands fa-github text-4xl text-gray-200"></i>
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">GitHub</h3>
-                  <p class="text-sm text-gray-400 mt-1">Check out my code repositories</p>
-                </div>
-              </a>
-
-              <a href="https://www.linkedin.com/in/jalpan-vyas/" target="_blank" class="glass-card p-6 flex items-center group">
-                <div class="w-16 h-16 rounded-full bg-[#0a66c2]/20 flex items-center justify-center mr-6 group-hover:bg-[#0a66c2]/40 transition-colors">
-                  <i class="fa-brands fa-linkedin text-4xl text-[#0a66c2]"></i>
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">LinkedIn</h3>
-                  <p class="text-sm text-gray-400 mt-1">Connect with my professional network</p>
-                </div>
-              </a>
-
-              <a href="https://www.kaggle.com/jalpan04" target="_blank" class="glass-card p-6 flex items-center group">
-                <div class="w-16 h-16 rounded-full bg-[#20BEFF]/20 flex items-center justify-center mr-6 group-hover:bg-[#20BEFF]/40 transition-colors">
-                  <i class="fa-brands fa-kaggle text-4xl text-[#20BEFF]"></i>
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Kaggle</h3>
-                  <p class="text-sm text-gray-400 mt-1">Explore my datasets and notebooks</p>
-                </div>
-              </a>
-
-              <a href="https://huggingface.co/jalpan04" target="_blank" class="glass-card p-6 flex items-center group">
-                <div class="w-16 h-16 rounded-full bg-[#FFD21E]/20 flex items-center justify-center mr-6 group-hover:bg-[#FFD21E]/40 transition-colors">
-                  <img src="https://cdn.simpleicons.org/huggingface/FFD21E" alt="Hugging Face" class="w-10 h-10" />
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Hugging Face</h3>
-                  <p class="text-sm text-gray-400 mt-1">Explore my AI models & spaces</p>
-                </div>
-              </a>
-
-              <a href="https://medium.com/@jalpan04" target="_blank" class="glass-card p-6 flex items-center group">
-                <div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mr-6 group-hover:bg-white/20 transition-colors">
-                  <i class="fa-brands fa-medium text-4xl text-white"></i>
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Medium</h3>
-                  <p class="text-sm text-gray-400 mt-1">Read my technical articles</p>
-                </div>
-              </a>
-
-              <a href="mailto:jalpan2104@gmail.com" class="glass-card p-6 flex items-center group">
-                <div class="w-16 h-16 rounded-full bg-red-400/20 flex items-center justify-center mr-6 group-hover:bg-red-400/40 transition-colors">
-                  <i class="fa-solid fa-envelope text-4xl text-red-400"></i>
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">Email</h3>
-                  <p class="text-sm text-gray-400 mt-1">jalpan2104@gmail.com</p>
-                </div>
-              </a>
-
-            </div>
-          </div>
-        </div>
-
         <div
           id="page-404"
           class="content-page flex flex-col items-center justify-center p-8 text-center min-h-[calc(90vh-120px)]"
@@ -1322,11 +1253,20 @@ const portfolioData = {
             "colorClass": "text-demos"
         },
         {
-            "id": "links",
-            "title": "Links",
-            "url": "portfolio://links",
-            "faIcon": "fa-solid fa-link",
-            "colorClass": "text-cyan-400"
+            "id": "linkedin",
+            "title": "LinkedIn",
+            "url": "https://www.linkedin.com/in/jalpan-vyas/",
+            "faIcon": "fa-brands fa-linkedin",
+            "external": true,
+            "colorClass": "text-linkedin"
+        },
+        {
+            "id": "github",
+            "title": "GitHub",
+            "url": "https://github.com/Jalpan04",
+            "faIcon": "fa-brands fa-github",
+            "external": true,
+            "colorClass": "text-github"
         }
     ],
     "skillsData": {
