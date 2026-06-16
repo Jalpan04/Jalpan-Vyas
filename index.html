@@ -274,6 +274,9 @@ body {
 .text-github {
   color: #e5e7eb;
 }
+.text-certs {
+  color: #fbbf24;
+}
 
 /* Scrollbar styles for .content-area */
 .content-area::-webkit-scrollbar {
@@ -485,37 +488,61 @@ body {
           <div class="max-w-6xl mx-auto p-4 md:p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
               <h1 class="text-4xl md:text-5xl font-bold">Projects</h1>
-              <div class="flex items-center gap-2 md:gap-4">
-                  <div class="sort-container" id="project-filter-container">
-                      <div class="sort-label" id="filter-control-button">
-                         Language <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
-                      </div>
-                      <div id="filter-dropdown-menu" class="sort-dropdown-menu">
-                          <!-- Populated dynamically by JS -->
-                      </div>
+              <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+                  <div class="relative w-full md:w-64">
+                      <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                      <input 
+                          type="text" 
+                          id="project-search-input" 
+                          placeholder="Search projects..." 
+                          class="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/50 transition-all placeholder-gray-500"
+                      />
                   </div>
-                  <div class="sort-container" id="project-sort-container">
-                      <div class="sort-label" id="sort-control-button">
-                         <i class="fa-solid fa-arrow-down-up-across-line"></i> Sort <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
+                  <div class="flex items-center gap-2 md:gap-4 self-end">
+                      <div class="sort-container" id="project-filter-container">
+                          <div class="sort-label" id="filter-control-button">
+                             Language <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
+                          </div>
+                          <div id="filter-dropdown-menu" class="sort-dropdown-menu">
+                              <!-- Populated dynamically by JS -->
+                          </div>
                       </div>
-                      <div id="sort-dropdown-menu" class="sort-dropdown-menu">
-                          <div class="sort-item selected" data-type="name">
-                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Name
+                      <div class="sort-container" id="project-sort-container">
+                          <div class="sort-label" id="sort-control-button">
+                             <i class="fa-solid fa-arrow-down-up-across-line"></i> Sort <i class="fa-solid fa-chevron-down text-xs ml-1 text-gray-400 translate-y-[1px]"></i>
                           </div>
-                          <div class="sort-item" data-type="date">
-                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Date modified
-                          </div>
-                          <div class="sort-separator"></div>
-                          <div class="sort-item" data-order="asc">
-                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Ascending
-                          </div>
-                          <div class="sort-item selected" data-order="desc">
-                              <div class="sort-item-icon"><div class="sort-dot"></div></div> Descending
+                          <div id="sort-dropdown-menu" class="sort-dropdown-menu">
+                              <div class="sort-item selected" data-type="name">
+                                  <div class="sort-item-icon"><div class="sort-dot"></div></div> Name
+                              </div>
+                              <div class="sort-item" data-type="date">
+                                  <div class="sort-item-icon"><div class="sort-dot"></div></div> Date modified
+                              </div>
+                              <div class="sort-separator"></div>
+                              <div class="sort-item" data-order="asc">
+                                  <div class="sort-item-icon"><div class="sort-dot"></div></div> Ascending
+                              </div>
+                              <div class="sort-item selected" data-order="desc">
+                                  <div class="sort-item-icon"><div class="sort-dot"></div></div> Descending
+                              </div>
                           </div>
                       </div>
                   </div>
               </div>
             </div>
+            
+            <div id="featured-projects-section" class="mb-10">
+              <h2 class="text-xl font-semibold mb-4 flex items-center gap-2 text-cyan-400">
+                <i class="fa-solid fa-star text-xs"></i> Featured Projects
+              </h2>
+              <div
+                id="featured-projects-grid"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+              ></div>
+              <div class="h-px bg-white/10 my-10"></div>
+            </div>
+
+            <h2 id="all-projects-heading" class="text-xl font-semibold mb-4 text-gray-300">All Projects</h2>
             <div
               id="projects-grid"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
@@ -628,6 +655,13 @@ body {
           <div id="skills-container" class="max-w-4xl mx-auto p-8"></div>
         </div>
 
+        <div id="page-certifications" class="content-page">
+          <div class="max-w-5xl mx-auto p-4 md:p-8">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 md:mb-8">Certifications</h1>
+            <div id="certifications-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+          </div>
+        </div>
+
         <div
           id="page-404"
           class="content-page flex flex-col items-center justify-center p-8 text-center min-h-[calc(90vh-120px)]"
@@ -727,7 +761,7 @@ const portfolioData = {
             "name": "Ojas AI",
             "tagline": "A local-first, fully autonomous AI developer agent powered by LangChain, LangGraph, Ollama, ChromaDB...",
             "description": "A local-first, fully autonomous AI developer agent powered by LangChain, LangGraph, Ollama, ChromaDB, and Docker - with zero cloud dependencies, RAG codebase indexing, and Docker sandbox code execution.",
-            "image": "https://opengraph.githubassets.com/1/Jalpan04/ojas",
+            "image": "assets/images/langgraph_custom.png",
             "tech": [
                 "Python",
                 "Ollama",
@@ -1176,7 +1210,7 @@ const portfolioData = {
             "name": "nurag",
             "tagline": "NURAG is a local-first RAG system powered by Python, FastAPI, LangChain, and LangGraph, utilizing Ollama for privacy-focused LLM inference and ChromaDB for semantic vector storage.",
             "description": "NURAG is a local-first RAG system powered by Python, FastAPI, LangChain, and LangGraph, utilizing Ollama for privacy-focused LLM inference and ChromaDB for semantic vector storage.",
-            "image": "https://opengraph.githubassets.com/1/Jalpan04/nurag",
+            "image": "assets/images/nurag_1770218285.png",
             "tech": [
                 "Python",
                 "JavaScript",
@@ -1581,6 +1615,13 @@ const portfolioData = {
             "url": "portfolio://deployed",
             "faIcon": "fa-solid fa-globe",
             "colorClass": "text-demos"
+        },
+        {
+            "id": "certifications",
+            "title": "Certifications",
+            "url": "portfolio://certifications",
+            "faIcon": "fa-solid fa-certificate",
+            "colorClass": "text-certs"
         },
         {
             "id": "linkedin",
@@ -2022,16 +2063,60 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSortType = 'name';
     let currentSortOrder = 'desc';
     let currentFilterTech = 'all';
+    let currentSearchQuery = '';
 
     const renderProjectsGrid = () => {
         const projectsGrid = document.getElementById('projects-grid');
-        
-        // Add an originalIndex to preserve default sort order and use it as a proxy for "Date"
+        const featuredGrid = document.getElementById('featured-projects-grid');
+        const featuredSection = document.getElementById('featured-projects-section');
+        const allProjectsHeading = document.getElementById('all-projects-heading');
+
+        const isFiltered = (currentFilterTech !== 'all' || currentSearchQuery !== '');
+
         let displayedProjects = projectData.map((project, index) => ({...project, originalIndex: index}));
+
+        // Render Featured Section (Mainbranch, Smash, NURAG)
+        if (featuredGrid && featuredSection) {
+            if (isFiltered) {
+                featuredSection.style.display = 'none';
+                if (allProjectsHeading) allProjectsHeading.style.display = 'none';
+            } else {
+                featuredSection.style.display = 'block';
+                if (allProjectsHeading) allProjectsHeading.style.display = 'block';
+                
+                const pinnedIds = ['mainbranch', 'smash', 'nurag'];
+                const featuredProjects = projectData.filter(p => pinnedIds.includes(p.id.toLowerCase()));
+                
+                featuredGrid.innerHTML = featuredProjects.map(project => `
+                    <div class="glass-card flex flex-col h-full rounded-xl overflow-hidden group cursor-pointer relative border border-cyan-500/20" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
+                        <div class="absolute top-3 right-3 bg-cyan-500/80 text-black text-xs font-bold px-2 py-0.5 rounded-full z-10 flex items-center gap-1 shadow-lg">
+                            <i class="fa-solid fa-star text-[10px]"></i> Featured
+                        </div>
+                        <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                            <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-4 bg-white/5 flex flex-col flex-grow">
+                            <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
+                            <p class="text-sm text-gray-400 mt-1 line-clamp-3" title="${project.tagline}">${project.tagline}</p>
+                        </div>
+                    </div>`).join('');
+            }
+        }
 
         // Filter by technology/language
         if (currentFilterTech !== 'all') {
              displayedProjects = displayedProjects.filter(p => p.tech && p.tech.includes(currentFilterTech));
+        }
+
+        // Filter by search query
+        if (currentSearchQuery) {
+            const query = currentSearchQuery.toLowerCase();
+            displayedProjects = displayedProjects.filter(p => 
+                (p.name && p.name.toLowerCase().includes(query)) ||
+                (p.tagline && p.tagline.toLowerCase().includes(query)) ||
+                (p.description && p.description.toLowerCase().includes(query)) ||
+                (p.tech && p.tech.some(t => t.toLowerCase().includes(query)))
+            );
         }
 
         displayedProjects.sort((a, b) => {
@@ -2039,14 +2124,8 @@ document.addEventListener('DOMContentLoaded', () => {
              if (currentSortType === 'name') {
                  comparison = a.name.localeCompare(b.name);
              } else if (currentSortType === 'date') {
-                 // natural order is newest first (descending). older is higher index.
-                 // So "ascending" date means oldest first (0, 1, 2) which is reverse of originalIndex
-                 // "descending" date means newest first (n, n-1) which is natural originalIndex
                  comparison = a.originalIndex - b.originalIndex; 
              }
-             
-             // If descending, invert the comparison unless it's date because date's natural 
-             // ascending (oldest first) is represented by higher indices.
              if (currentSortType === 'date') {
                  return currentSortOrder === 'desc' ? a.originalIndex - b.originalIndex : b.originalIndex - a.originalIndex;
              } else {
@@ -2058,135 +2137,155 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="glass-card flex flex-col h-full rounded-xl overflow-hidden group cursor-pointer" data-project-id="${project.id}" data-tooltip="View ${project.name} Details">
                 <div class="w-full h-48 bg-gray-900 overflow-hidden flex-shrink-0 flex items-center justify-center">
                     <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                </div>
-                <div class="p-4 bg-white/5 flex flex-col flex-grow">
-                    <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
-                    <p class="text-sm text-gray-400 mt-1 line-clamp-3" title="${project.tagline}">${project.tagline}</p>
-                </div>
-            </div>`).join('');
-    };
+                  </div>
+                  <div class="p-4 bg-white/5 flex flex-col flex-grow">
+                      <h3 class="text-lg font-semibold line-clamp-1" title="${project.name}">${project.name}</h3>
+                      <p class="text-sm text-gray-400 mt-1 line-clamp-3" title="${project.tagline}">${project.tagline}</p>
+                  </div>
+              </div>`).join('');
+      };
 
-    const initProjectsPage = () => {
-        // Event listeners applied once
-        const projectsGrid = document.getElementById('projects-grid');
-        const sortButton = document.getElementById('sort-control-button');
-        const sortMenu = document.getElementById('sort-dropdown-menu');
-        const filterButton = document.getElementById('filter-control-button');
-        const filterMenu = document.getElementById('filter-dropdown-menu');
+      const initProjectsPage = () => {
+          // Event listeners applied once
+          const projectsGrid = document.getElementById('projects-grid');
+          const sortButton = document.getElementById('sort-control-button');
+          const sortMenu = document.getElementById('sort-dropdown-menu');
+          const filterButton = document.getElementById('filter-control-button');
+          const filterMenu = document.getElementById('filter-dropdown-menu');
 
-        // Dynamically populate Filter Menu
-        if (filterMenu) {
-            const techCounts = {};
-            projectData.forEach(p => {
-                if (p.tech) {
-                    p.tech.forEach(t => {
-                        techCounts[t] = (techCounts[t] || 0) + 1;
-                    });
-                }
-            });
-            const sortedTechs = Object.keys(techCounts).sort((a, b) => {
-                // Secondary sort: alphabetize if counts are exactly the same
-                if (techCounts[b] !== techCounts[a]) {
-                    return techCounts[b] - techCounts[a]; // Sort by count descending
-                }
-                return a.localeCompare(b);
-            });
+          // Dynamically populate Filter Menu
+          if (filterMenu) {
+              const techCounts = {};
+              projectData.forEach(p => {
+                  if (p.tech) {
+                      p.tech.forEach(t => {
+                          techCounts[t] = (techCounts[t] || 0) + 1;
+                      });
+                  }
+              });
+              const sortedTechs = Object.keys(techCounts).sort((a, b) => {
+                  if (techCounts[b] !== techCounts[a]) {
+                      return techCounts[b] - techCounts[a]; // Sort by count descending
+                  }
+                  return a.localeCompare(b);
+              });
 
-            let html = `
-                <div class="sort-item selected" data-tech="all">
-                    <div class="sort-item-icon"><div class="sort-dot"></div></div> All
-                </div>
-                <div class="sort-separator"></div>
-            `;
-            sortedTechs.forEach(tech => {
-                html += `
-                    <div class="sort-item" data-tech="${tech}">
-                       <div class="sort-item-icon"><div class="sort-dot"></div></div> ${tech}
-                    </div>
-                `;
-            });
-            filterMenu.innerHTML = html;
-        }
+              let html = `
+                  <div class="sort-item selected" data-tech="all">
+                      <div class="sort-item-icon"><div class="sort-dot"></div></div> All
+                  </div>
+                  <div class="sort-separator"></div>
+              `;
+              sortedTechs.forEach(tech => {
+                  html += `
+                      <div class="sort-item" data-tech="${tech}">
+                         <div class="sort-item-icon"><div class="sort-dot"></div></div> ${tech}
+                      </div>
+                  `;
+              });
+              filterMenu.innerHTML = html;
+          }
 
-        const updateSelectionUI = () => {
-            if (sortMenu) {
-                sortMenu.querySelectorAll('.sort-item').forEach(item => {
-                    if (item.dataset.type) {
-                        item.classList.toggle('selected', item.dataset.type === currentSortType);
-                    }
-                    if (item.dataset.order) {
-                        item.classList.toggle('selected', item.dataset.order === currentSortOrder);
-                    }
-                });
-            }
-            if (filterMenu) {
-                filterMenu.querySelectorAll('.sort-item').forEach(item => {
-                    if (item.dataset.tech) {
-                        item.classList.toggle('selected', item.dataset.tech === currentFilterTech);
-                    }
-                });
-            }
-        };
+          const updateSelectionUI = () => {
+              if (sortMenu) {
+                  sortMenu.querySelectorAll('.sort-item').forEach(item => {
+                      if (item.dataset.type) {
+                          item.classList.toggle('selected', item.dataset.type === currentSortType);
+                      }
+                      if (item.dataset.order) {
+                          item.classList.toggle('selected', item.dataset.order === currentSortOrder);
+                      }
+                  });
+              }
+              if (filterMenu) {
+                  filterMenu.querySelectorAll('.sort-item').forEach(item => {
+                      if (item.dataset.tech) {
+                          item.classList.toggle('selected', item.dataset.tech === currentFilterTech);
+                      }
+                  });
+              }
+          };
 
-        if (sortButton && sortMenu) {
-            sortButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (filterMenu) filterMenu.classList.remove('show');
-                sortMenu.classList.toggle('show');
-            });
+          if (sortButton && sortMenu) {
+              sortButton.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  if (filterMenu) filterMenu.classList.remove('show');
+                  sortMenu.classList.toggle('show');
+              });
 
-            sortMenu.querySelectorAll('.sort-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                   e.stopPropagation(); 
-                   if (item.dataset.type) currentSortType = item.dataset.type;
-                   if (item.dataset.order) currentSortOrder = item.dataset.order;
-                   updateSelectionUI();
-                   renderProjectsGrid();
-                });
-            });
-        }
+              sortMenu.querySelectorAll('.sort-item').forEach(item => {
+                  item.addEventListener('click', (e) => {
+                     e.stopPropagation(); 
+                     if (item.dataset.type) currentSortType = item.dataset.type;
+                     if (item.dataset.order) currentSortOrder = item.dataset.order;
+                     updateSelectionUI();
+                     renderProjectsGrid();
+                  });
+              });
+          }
 
-        if (filterButton && filterMenu) {
-            filterButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (sortMenu) sortMenu.classList.remove('show');
-                filterMenu.classList.toggle('show');
-            });
+          if (filterButton && filterMenu) {
+              filterButton.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  if (sortMenu) sortMenu.classList.remove('show');
+                  filterMenu.classList.toggle('show');
+              });
 
-            filterMenu.querySelectorAll('.sort-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                   e.stopPropagation(); 
-                   if (item.dataset.tech) currentFilterTech = item.dataset.tech;
-                   updateSelectionUI();
-                   renderProjectsGrid();
-                   filterMenu.classList.remove('show'); // Auto-close filter to see results immediately
-                });
-            });
-        }
+              filterMenu.querySelectorAll('.sort-item').forEach(item => {
+                  item.addEventListener('click', (e) => {
+                     e.stopPropagation(); 
+                     if (item.dataset.tech) currentFilterTech = item.dataset.tech;
+                     updateSelectionUI();
+                     renderProjectsGrid();
+                     filterMenu.classList.remove('show'); // Auto-close filter to see results immediately
+                  });
+              });
+          }
 
-        document.addEventListener('click', (e) => {
-            if (sortButton && sortMenu && !sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
-                sortMenu.classList.remove('show');
-            }
-            if (filterButton && filterMenu && !filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
-                filterMenu.classList.remove('show');
-            }
-        });
+          document.addEventListener('click', (e) => {
+              if (sortButton && sortMenu && !sortButton.contains(e.target) && !sortMenu.contains(e.target)) {
+                  sortMenu.classList.remove('show');
+              }
+              if (filterButton && filterMenu && !filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
+                  filterMenu.classList.remove('show');
+              }
+          });
 
-        updateSelectionUI();
-        renderProjectsGrid();
+          // Search input event listener
+          const searchInput = document.getElementById('project-search-input');
+          if (searchInput) {
+              searchInput.addEventListener('input', (e) => {
+                  currentSearchQuery = e.target.value.trim();
+                  renderProjectsGrid();
+              });
+          }
 
-        projectsGrid.addEventListener('click', e => {
-            const card = e.target.closest('[data-project-id]');
-            if (card) navigateTo('project', false, card.dataset.projectId);
-        });
-        projectsGrid.addEventListener('contextmenu', e => {
-            const card = e.target.closest('[data-project-id]');
-            if (card) showContextMenu(e, { type: 'projectDetail', id: card.dataset.projectId });
-        });
-    };
+          updateSelectionUI();
+          renderProjectsGrid();
 
-    const initDeployedPage = () => {
+          projectsGrid.addEventListener('click', e => {
+              const card = e.target.closest('[data-project-id]');
+              if (card) navigateTo('project', false, card.dataset.projectId);
+          });
+          projectsGrid.addEventListener('contextmenu', e => {
+              const card = e.target.closest('[data-project-id]');
+              if (card) showContextMenu(e, { type: 'projectDetail', id: card.dataset.projectId });
+          });
+
+          const featuredGrid = document.getElementById('featured-projects-grid');
+          if (featuredGrid) {
+              featuredGrid.addEventListener('click', e => {
+                  const card = e.target.closest('[data-project-id]');
+                  if (card) navigateTo('project', false, card.dataset.projectId);
+              });
+              featuredGrid.addEventListener('contextmenu', e => {
+                  const card = e.target.closest('[data-project-id]');
+                  if (card) showContextMenu(e, { type: 'projectDetail', id: card.dataset.projectId });
+              });
+          }
+      };
+
+      const initDeployedPage = () => {
         const deployedGrid = document.getElementById('deployed-grid');
         const liveProjects = projectData.filter(project => project.liveUrl);
         deployedGrid.innerHTML = liveProjects.map(project => `
@@ -2226,6 +2325,90 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const certificationsData = [
+        {
+            "name": "AWS Certified Solutions Architect – Associate",
+            "issuer": "Amazon Web Services (AWS)",
+            "logo": "amazonwebservices",
+            "description": "Validation of expertise in designing and deploying secure, robust, and scalable cloud technologies on AWS."
+        },
+        {
+            "name": "AWS Certified Developer – Associate",
+            "issuer": "Amazon Web Services (AWS)",
+            "logo": "amazonwebservices",
+            "description": "Validation of technical expertise in developing, deploying, and maintaining applications on AWS."
+        },
+        {
+            "name": "AWS Certified Cloud Practitioner",
+            "issuer": "Amazon Web Services (AWS)",
+            "logo": "amazonwebservices",
+            "description": "Foundational understanding of AWS cloud platform, services, and security principles."
+        },
+        {
+            "name": "MongoDB Certified Associate Developer",
+            "issuer": "MongoDB",
+            "logo": "mongodb",
+            "description": "Validation of skills in building modern, document-oriented applications with MongoDB."
+        },
+        {
+            "name": "OpenCV Certified Computer Vision Developer",
+            "issuer": "OpenCV.org",
+            "logo": "opencv",
+            "description": "Certification in advanced computer vision techniques, image processing, and deep learning models with OpenCV."
+        },
+        {
+            "name": "Kaggle Machine Learning Certification",
+            "issuer": "Kaggle",
+            "logo": "kaggle",
+            "description": "Advanced verification in implementing machine learning models, feature engineering, and model validation."
+        },
+        {
+            "name": "Kaggle Deep Learning Certification",
+            "issuer": "Kaggle",
+            "logo": "kaggle",
+            "description": "Verification of neural network design, training deep architectures, and computer vision models using PyTorch/TensorFlow."
+        },
+        {
+            "name": "MathWorks MATLAB Associate",
+            "issuer": "MathWorks",
+            "logo": "mathworks",
+            "description": "Certification in statistical analysis, algorithm development, and numerical computing using MATLAB."
+        },
+        {
+            "name": "Edunet AI Foundation Certification",
+            "issuer": "Edunet Foundation",
+            "logo": "education",
+            "description": "Practical training and project certification in AI technologies, data structures, and computational logic."
+        }
+    ];
+
+    const initCertificationsPage = () => {
+        const grid = document.getElementById('certifications-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = certificationsData.map(cert => {
+            let logoHtml = '';
+            if (cert.logo === 'education') {
+                logoHtml = `<div class="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20 text-cyan-400"><i class="fa-solid fa-graduation-cap text-2xl"></i></div>`;
+            } else {
+                const src = `https://cdn.simpleicons.org/${cert.logo}`;
+                logoHtml = `<img src="${src}" alt="${cert.issuer}" class="w-12 h-12 object-contain filter brightness-90 group-hover:brightness-100 transition-all">`;
+            }
+            
+            return `
+            <div class="glass-card p-6 flex flex-col justify-between group hover:border-cyan-400/50 hover:shadow-cyan-950/20 duration-300">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        ${logoHtml}
+                        <span class="text-xs text-gray-500 font-semibold tracking-wider uppercase">${cert.issuer}</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors mb-2">${cert.name}</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light">${cert.description}</p>
+                </div>
+            </div>`;
+        }).join('');
+    };
+
     // --- INITIALIZATION ---
     // Use global portfolioData from data.js
     if (typeof portfolioData !== 'undefined') {
@@ -2236,6 +2419,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pages = {
             home: { id: 'home', title: 'New Tab', url: 'portfolio://home', faIcon: 'fa-solid fa-house' },
             about: { id: 'about', title: 'About Me', url: 'portfolio://about', faIcon: 'fa-solid fa-user' },
+            certifications: { id: 'certifications', title: 'Certifications', url: 'portfolio://certifications', faIcon: 'fa-solid fa-certificate' },
             '404': { id: '404', title: 'Not Found', url: 'portfolio://404', faIcon: 'fa-solid fa-exclamation-triangle' },
             ...Object.fromEntries(allShortcutPages.map(p => [p.id, p]))
         };
@@ -2244,6 +2428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initSkillsPage();
         initProjectsPage();
         initDeployedPage();
+        initCertificationsPage();
         initContextMenu();
 
         // Tooltip Logic
