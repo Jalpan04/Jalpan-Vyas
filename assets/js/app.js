@@ -563,14 +563,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const certificationsData = [
         {
-            id: "aws-cloud-foundations",
-            name: "AWS Academy - Cloud Foundations",
-            issuer: "Amazon Web Services",
-            localLogo: "assets/images/logos/aws.svg",
-            file: "certificates/AWS_Academy_Graduate___Cloud_Foundations___Training_Badge_Badge20251012-30-ygnvuj.pdf",
-            description: "Foundational understanding of AWS cloud platform, core services, and security principles."
-        },
-        {
             id: "aws-cloud-security-foundations",
             name: "AWS Academy - Cloud Security Foundations",
             issuer: "Amazon Web Services",
