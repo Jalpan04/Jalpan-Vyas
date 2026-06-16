@@ -668,28 +668,46 @@ document.addEventListener('DOMContentLoaded', () => {
         newPage.className = 'content-page';
         
         let viewerHtml = '';
-        if (cert.file.toLowerCase().endsWith('.pdf')) {
-            viewerHtml = `<embed src="${cert.file}" width="100%" height="800px" type="application/pdf" class="rounded-lg shadow-lg border border-cyan-900/30">`;
+        const isPdf = cert.file.toLowerCase().endsWith('.pdf');
+        if (isPdf) {
+            viewerHtml = `
+                <div class="hidden md:block w-full bg-black/20 p-4 rounded-xl">
+                    <embed src="${cert.file}" width="100%" height="800px" type="application/pdf" class="rounded-lg shadow-lg border border-cyan-900/30">
+                </div>
+                <div class="block md:hidden text-center p-8 bg-white/5 rounded-xl border border-white/10">
+                    <i class="fa-solid fa-file-pdf text-5xl text-cyan-400 mb-4"></i>
+                    <p class="text-gray-300 mb-4">This PDF document can be viewed directly using your device's native PDF reader.</p>
+                </div>`;
         } else {
-            viewerHtml = `<img src="${cert.file}" alt="${cert.name}" class="max-w-full rounded-lg shadow-lg mx-auto border border-cyan-900/30">`;
+            viewerHtml = `
+                <div class="w-full bg-black/20 p-4 rounded-xl">
+                    <img src="${cert.file}" alt="${cert.name}" class="max-w-full rounded-lg shadow-lg mx-auto border border-cyan-900/30">
+                </div>`;
         }
 
         newPage.innerHTML = `
-            <div class="max-w-5xl mx-auto p-8">
-                <div class="flex items-center gap-4 mb-6">
-                    <img src="${cert.localLogo}" alt="${cert.issuer}" class="w-12 h-12 object-contain bg-white/5 p-2 rounded-lg border border-white/10">
-                    <div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-white">${cert.name}</h1>
-                        <p class="text-lg text-gray-400">${cert.issuer}</p>
+            <div class="max-w-5xl mx-auto p-4 md:p-8">
+                <button class="back-to-certifications text-cyan-400 hover:underline mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Back to all certifications
+                </button>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-4">
+                        <img src="${cert.localLogo}" alt="${cert.issuer}" class="w-12 h-12 object-contain bg-white/5 p-2 rounded-lg border border-white/10">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-white">${cert.name}</h1>
+                            <p class="text-lg text-gray-400">${cert.issuer}</p>
+                        </div>
                     </div>
+                    <a href="${cert.file}" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 rounded-xl text-white font-semibold shadow-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap text-sm w-full sm:w-auto justify-center">
+                        <i class="fa-solid fa-up-right-from-square"></i> Open in New Tab
+                    </a>
                 </div>
                 <p class="text-gray-300 leading-relaxed mb-8">${cert.description}</p>
-                <div class="w-full bg-black/20 p-4 rounded-xl">
-                    ${viewerHtml}
-                </div>
+                ${viewerHtml}
             </div>`;
             
         contentArea.appendChild(newPage);
+        newPage.querySelector('.back-to-certifications').addEventListener('click', () => navigateTo('certifications'));
     };
 
     const initCertificationsPage = () => {
