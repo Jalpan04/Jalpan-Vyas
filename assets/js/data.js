@@ -5,7 +5,7 @@ const portfolioData = {
         "name": "FedMedDx",
         "tagline": "Decentralized, privacy-preserving federated learning platform for multi-modal medical diagnostics.",
         "description": "A decentralized medical imaging platform leveraging Personalized Federated Learning (pFL with FedRep and FedBN) over Chest X-Rays. Hospital nodes collaboratively train shared ResNet-18 backbones while retaining private classification heads, featuring Flower, PyTorch, Grad-CAM visual heatmaps, and an interactive Streamlit console.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/FedMedDx",
+        "image": "assets/images/fedmeddx_1790322559.png",
         "tech": [
             "Python",
             "PyTorch",
@@ -23,7 +23,7 @@ const portfolioData = {
         "name": "OpenBark",
         "tagline": "Native desktop LaTeX editor modeled after Overleaf with GPU-accelerated rendering and offline compilation.",
         "description": "A native desktop LaTeX editor modeled after Overleaf, designed for offline-first speed and reliability. Features GPU-accelerated PDF rendering, synchronized dual-pane source and preview scrolling, cross-platform compilation, and integrated bibliography management.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/openbark",
+        "image": "assets/images/openbark_1790322565.png",
         "tech": [
             "Python",
             "LaTeX",
@@ -40,7 +40,7 @@ const portfolioData = {
         "name": "Gujarat Sultanate Explorer",
         "tagline": "Interactive chronological timeline and historical explorer of the Gujarat Sultanate (1391-1592 CE).",
         "description": "An interactive historical explorer and chronological timeline charting the architectural heritage, military campaigns, and rulers of the Gujarat Sultanate and Muzaffarid Dynasty. Built with vanilla JavaScript, modern CSS, dynamic map views, and archival documentation.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/gujarat-sultanate",
+        "image": "assets/images/gujarat-sultanate_1790322569.png",
         "tech": [
             "JavaScript",
             "HTML",
@@ -57,7 +57,7 @@ const portfolioData = {
         "name": "G-Houl",
         "tagline": "Professional GitHub developer intelligence platform analyzing engineering signals and code quality.",
         "description": "A developer intelligence suite that pulls verifiable signals from GitHub activity and repositories. It grades developer code across four explainable engineering dimensions, producing unembellished telemetry scorecards and actionable architecture feedback.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/G-Houl",
+        "image": "assets/images/g-houl_1790322580.png",
         "tech": [
             "TypeScript",
             "React",
@@ -75,7 +75,7 @@ const portfolioData = {
         "name": "ezcrossplay",
         "tagline": "NYT Crossplay Scrabble Solver backend and frontend web application with optimal move generation.",
         "description": "A full-stack solver and board analyzer for NYT Crossplay Scrabble. Powered by an algorithmic rack solver in Python and an intuitive web interface, it analyzes rack anagrams, tile multipliers, and placement strategies in real time.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/ezcrossplay",
+        "image": "assets/images/ezcrossplay_1790322583.png",
         "tech": [
             "Python",
             "FastAPI",
@@ -93,7 +93,7 @@ const portfolioData = {
         "name": "NewsLens",
         "tagline": "Personalized digital newspaper print-inspired front page with multi-source RSS feeds and NLP.",
         "description": "A print-inspired digital newspaper reader that ingests stories from diverse RSS feeds, filters and ranks them according to user preferences, and applies NLP summarization to distill essential narrative points and background context.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/newslens",
+        "image": "assets/images/newslens_1790322587.png",
         "tech": [
             "Python",
             "NLP",
@@ -111,7 +111,7 @@ const portfolioData = {
         "name": "The Editor's Desk",
         "tagline": "Balatro-like Wordle roguelike deckbuilder with tactical word crafting and relic synergies.",
         "description": "A roguelike deckbuilder combining Wordle deduction mechanics with Balatro-inspired synergies. Players draft letter modifications, trigger linguistic combos, and navigate editorial deadlines across procedurally generated runs.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Editors-desk",
+        "image": "assets/images/editors-desk_1790323663.png",
         "tech": [
             "Lua",
             "Pygame",
@@ -128,7 +128,7 @@ const portfolioData = {
         "name": "Hisaab",
         "tagline": "Secure, offline-first family wealth, investment, and credential tracking application with AES-256.",
         "description": "A secure desktop personal finance suite built with CustomTkinter. Encrypts assets, investment portfolios, and sensitive records using AES-256 (Fernet) and PBKDF2 inside a local SQLite vault, offering interactive wealth distribution charts and PDF reports.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/hisaab",
+        "image": "assets/images/hisaab_1790322846.png",
         "tech": [
             "Python",
             "CustomTkinter",
@@ -267,7 +267,7 @@ const portfolioData = {
         "name": "SpiritThief",
         "tagline": "Top-down dungeon crawler where a ghost possesses enemies and acquires mutant abilities.",
         "description": "A top-down action dungeon crawler built in Pygame. Players inhabit a spectral entity capable of possessing enemies, wielding their distinct attack patterns, and accumulating procedural mutations across labyrinthine dungeon floors.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/SpiritThief",
+        "image": "assets/images/spiritthief_1790323942.png",
         "tech": [
             "Python",
             "Pygame",
@@ -454,7 +454,7 @@ const portfolioData = {
         "name": "WDS-Net",
         "tagline": "A multi-path PyTorch framework for image classification that disentangles Spatial (CNN), Structural ...",
         "description": "A multi-path PyTorch framework for image classification that disentangles Spatial (CNN), Structural (LSTM), and Global (statistical) features, with GPU support, checkpoint resuming, and ROC/confusion matrix evaluation.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/WDS-Net",
+        "image": "assets/images/wds-net_1790321429.png",
         "tech": [
             "Python",
             "PyTorch"
@@ -506,7 +506,7 @@ const portfolioData = {
         "name": "Watermelon Game AI Trainer",
         "tagline": "A Pygame clone of the Watermelon Game (Suika Game) featuring an automated OpenCV and PyAutoGUI-based...",
         "description": "A Pygame clone of the Watermelon Game (Suika Game) featuring an automated OpenCV and PyAutoGUI-based AI player agent.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/watermelon-game-generational-training",
+        "image": "assets/images/watermelon-game-generational-training_1790321419.png",
         "tech": [
             "Python",
             "OpenCV",
@@ -737,7 +737,7 @@ const portfolioData = {
         "name": "LuminaMesh",
         "tagline": "A high-performance, self-healing P2P content delivery mesh.",
         "description": "A high-performance, self-healing P2P content delivery mesh built with WebRTC & Node.js. It turns client browsers into a collaborative swarm to offload server bandwidth costs, featuring SHA-256 chunk integrity, gossip-protocol discovery, and real-time mesh visualization.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/LuminaMesh",
+        "image": "assets/images/luminamesh_1790321337.png",
         "tech": [
             "TypeScript",
             "WebRTC",
@@ -754,7 +754,7 @@ const portfolioData = {
         "name": "VoiceClone XTTS",
         "tagline": "Specialized Hindi XTTS-v2 voice cloning pipeline.",
         "description": "A specialized Hindi XTTS-v2 voice cloning pipeline engineered with custom stability patches and token mismatch fixes for high-fidelity cross-lingual voice synthesis.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/VoiceClone",
+        "image": "assets/images/voiceclone_1790321343.png",
         "tech": [
             "Python",
             "PyTorch",
@@ -771,7 +771,7 @@ const portfolioData = {
         "name": "Subtitle Correction Pipeline",
         "tagline": "Whisper-based pipeline for Romanised Hindi subtitles with ML correction.",
         "description": "A robust pipeline for generating and correcting Romanised Hindi (Hinglish) subtitles using OpenAI's Whisper model paired with a custom machine learning correction module.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/subtitle-pipeline",
+        "image": "assets/images/subtitle-pipeline_1790323640.png",
         "tech": [
             "Python",
             "Whisper",
@@ -787,7 +787,7 @@ const portfolioData = {
         "name": "Zatzy AI",
         "tagline": "Advanced AI research laboratory for Yahtzee.",
         "description": "Zatzy AI is a comprehensive AI research laboratory for the game of Yahtzee, featuring multiple state-of-the-art agents ranging from Evolutionary Algorithms to Deep Reinforcement Learning and Neuro-Expectimax search.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/zatzy-ai",
+        "image": "assets/images/zatzy-ai_1790321328.png",
         "tech": [
             "Python",
             "Reinforcement Learning",
@@ -803,7 +803,7 @@ const portfolioData = {
         "name": "MathAnim",
         "tagline": "Autonomous mathematical visualization engine using Manim.",
         "description": "MathAnim is an autonomous visualization engine that dynamically transforms static mathematical problems into engaging, step-by-step video tutorials using Manim.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/mathanim",
+        "image": "assets/images/mathanim_1790321320.png",
         "tech": [
             "Python",
             "Manim",
@@ -898,7 +898,7 @@ const portfolioData = {
         "name": "smash",
         "tagline": "No description provided.",
         "description": "No description provided.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/smash",
+        "image": "assets/images/smash_1790323988.png",
         "tech": [
             "Rust",
             "Python",
@@ -914,7 +914,7 @@ const portfolioData = {
         "name": "smart-image-analyzer",
         "tagline": "A high-performance, modular Computer Vision pipeline designed for real-time object detection using state-of-the-art Deep Learning models.",
         "description": "A high-performance, modular Computer Vision pipeline designed for real-time object detection using state-of-the-art Deep Learning models.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/smart-image-analyzer",
+        "image": "assets/images/smart-image-analyzer_1790323963.png",
         "tech": [
             "Python"
         ],
@@ -928,7 +928,7 @@ const portfolioData = {
         "name": "TermTube",
         "tagline": "TermTube is a lightweight, terminal-based wrapper for yt-dlp that allows you to search for YouTube videos, select formats interactively, and download them with ease. It combines the power of yt-dlp with the interactivity of fzf.",
         "description": "TermTube is a lightweight, terminal-based wrapper for yt-dlp that allows you to search for YouTube videos, select formats interactively, and download them with ease. It combines the power of yt-dlp with the interactivity of fzf.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/TermTube",
+        "image": "assets/images/termtube_1790323628.png",
         "tech": [
             "Shell"
         ],
@@ -956,7 +956,7 @@ const portfolioData = {
         "name": "Mainbranch",
         "tagline": "MainBranch is a comprehensive social platform and portfolio builder designed specifically for software engineers.",
         "description": "MainBranch is a comprehensive social platform and portfolio builder designed specifically for software engineers.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Mainbranch",
+        "image": "assets/images/mainbranch_1790321364.png",
         "tech": [
             "TypeScript",
             "JavaScript",
@@ -990,7 +990,7 @@ const portfolioData = {
         "name": "Sable Deck",
         "tagline": "S.A.B.L.E. is a custom-built Python/Flask Micro-OS designed to turn an Android device (via Termux) i...",
         "description": "S.A.B.L.E. is a custom-built Python/Flask Micro-OS designed to turn an Android device (via Termux) into a fully functional, air-gapped or remote-controlled Cyberdeck",
-        "image": "https://opengraph.githubassets.com/f0b1ee04c6dded1b321646c348023d8bd790471b62310761e02b8fd50b229939/Jalpan04/SABLE_DECK",
+        "image": "assets/images/sable-deck_1790324231.png",
         "tech": [
             "Python",
             "Shell"
@@ -1046,7 +1046,7 @@ const portfolioData = {
         "name": "Aspis Engine",
         "tagline": "The Lightweight Python Game Engine.",
         "description": "A minimalist Python-based 2D game engine for rapid prototyping.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/aspisengine",
+        "image": "assets/images/aspisengine_1790321470.png",
         "liveUrl": "https://jalpan04.github.io/aspisengine/",
         "sourceUrl": "https://github.com/Jalpan04/aspisengine",
         "tech": [
@@ -1060,7 +1060,7 @@ const portfolioData = {
         "name": "Neui",
         "tagline": "A modern, GPU-accelerated Python UI framework.",
         "description": "A modern, GPU-accelerated Python UI framework with Flexbox-like layouts, reactive events, and beautiful default styling.",
-        "image": "assets/images/neui logo.png",
+        "image": "assets/images/neui_1790321371.png",
         "tech": [
             "Python"
         ],
@@ -1113,7 +1113,7 @@ const portfolioData = {
         "name": "Spoticmd",
         "tagline": "A CLI tool for real-time Spotify visualization in the terminal.",
         "description": "SpotiCMD is a CLI (Command Line Interface) tool that creates a real-time, interactive visualizer for Spotify directly in the terminal. It fetches the currently playing song, converts the album art into high-definition ASCII art with TrueColor support, and provides playback controls via keyboard shortcuts",
-        "image": "assets/images/spoticmd.png",
+        "image": "assets/images/spoticmd_1790321378.png",
         "sourceUrl": "https://github.com/Jalpan04/spoticmd",
         "tech": []
     },
@@ -1131,7 +1131,7 @@ const portfolioData = {
         "name": "Synth Studio",
         "tagline": "A real-time modular synthesizer and sequencer in Python.",
         "description": "Synth-Studio is a real-time modular synthesizer and sequencer implemented entirely in Python ",
-        "image": "assets/images/Synth-Studio.png",
+        "image": "assets/images/Synth-Studio_1790323975.png",
         "sourceUrl": "https://github.com/Jalpan04/Synth-Studio",
         "tech": []
     },
@@ -1151,7 +1151,7 @@ const portfolioData = {
         "name": "vinylogue-project",
         "tagline": "A full-stack MERN application for rating and reviewing music albums.",
         "description": "A full-stack MERN application for rating and reviewing music albums, inspired by Letterboxd. Features a bold, brutalist design, user authentication (JWT), dynamic album search via the Spotify API, and an interactive rating and liking system.",
-        "image": "assets/images/vinylogue-project.png",
+        "image": "assets/images/vinylogue-project_1790321387.png",
         "liveUrl": "https://vinylogue-project.vercel.app/",
         "sourceUrl": "https://github.com/Jalpan04/vinylogue-project",
         "tech": [
@@ -1291,7 +1291,7 @@ const portfolioData = {
         "name": "jax-web-compiler",
         "tagline": "A JAX compiler accessible via a web interface.",
         "description": "A web-based interface for interacting with a JAX compiler.",
-        "image": "assets/images/jax-web-compiler.png",
+        "image": "assets/images/jax-web-compiler_1790323398.png",
         "liveUrl": "https://jax-compiler.onrender.com",
         "sourceUrl": "https://github.com/Jalpan04/jax-web-compiler",
         "tech": [
@@ -1305,7 +1305,7 @@ const portfolioData = {
         "name": "JAXImg",
         "tagline": "A Miniature DALL·E: An exploration into Text-to-Image Generation.",
         "description": "A compact, educational implementation of a text-to-image generative model inspired by OpenAI’s DALL·E 1. It uses a two-stage architecture: a Discrete Variational Autoencoder (dVAE) and an Autoregressive Transformer to synthesize images from textual prompts like class labels, demonstrating how complex generative processes can be deconstructed.",
-        "image": "https://github.com/Jalpan04/JAXImg/raw/main/generated_examples/bird_example.png",
+        "image": "assets/images/jaximg_1790323401.png",
         "sourceUrl": "https://github.com/Jalpan04/JAXImg",
         "tech": [
             "Python"
@@ -1316,7 +1316,7 @@ const portfolioData = {
         "name": "Maze-Solver-Visualizer",
         "tagline": "Dynamic visualizer for pathfinding algorithms.",
         "description": "Maze Pathfinder is a dynamic visualizer that brings maze-solving algorithms (DFS, BFS, A*, Dijkstra's) to life. Watch as they work their way through randomly generated mazes, finding the shortest path. Built with Python and Pygame for an engaging way to understand graph traversal.",
-        "image": "https://github.com/Jalpan04/Maze-Solver-Visualizer/raw/main/assets/solved.png",
+        "image": "assets/images/maze-solver-visualizer_1790323394.png",
         "liveUrl": "https://youtube.com/shorts/-8rkpwiIggs?feature=share",
         "sourceUrl": "https://github.com/Jalpan04/Maze-Solver-Visualizer",
         "tech": [
@@ -1329,7 +1329,7 @@ const portfolioData = {
         "name": "sand-simulation",
         "tagline": "A 2D particle physics sandbox.",
         "description": "A dynamic 2D particle simulation sandbox built with Python and Pygame. This project models the behavior of various elements (Sand, Water, Rock, Fire, Oil, Gas, Plant) and their interactions in a grid-based environment, demonstrating cellular automata and agent-based modeling principles.",
-        "image": "https://github.com/Jalpan04/sand-simulation/raw/main/example.png",
+        "image": "assets/images/sand-simulation_1790323391.png",
         "sourceUrl": "https://github.com/Jalpan04/sand-simulation",
         "tech": [
             "Python",
@@ -1341,7 +1341,7 @@ const portfolioData = {
         "name": "Sign-Lang-Translator",
         "tagline": "Real-Time ASL Alphabet Recognition.",
         "description": "Sign-Interpreter is a real-time American Sign Language (ASL) alphabet recognition system designed to interpret hand gestures through webcam input. It utilizes Google's MediaPipe for robust hand keypoint detection and custom-trained neural networks for gesture classification, featuring an interactive tutorial mode.",
-        "image": "assets/images/sign-lang-translator.png",
+        "image": "assets/images/sign-lang-translator_1790323407.png",
         "sourceUrl": "https://github.com/Jalpan04/Sign-Lang-Translator",
         "tech": [
             "Python",

@@ -7,3 +7,4 @@ full.html
 .idea/
 *.bak
 *.bak2
+__pycache__/

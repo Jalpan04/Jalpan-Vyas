@@ -1,300 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Admin</title>
-    <link rel="stylesheet" href="assets/tailwind.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Project Image Manager | Jalpan Vyas Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background-color: #111827;
-            color: #e5e7eb;
+            background-color: #0b0f19;
+            color: #f3f4f6;
             font-family: 'Inter', sans-serif;
         }
-
-        .card {
-            background-color: #1f2937;
-            border: 1px solid #374151;
-            transition: all 0.2s;
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .project-card {
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(55, 65, 81, 0.6);
+            backdrop-filter: blur(12px);
+            transition: all 0.2s ease-in-out;
         }
-
-        .card:hover {
-            border-color: #4b5563;
+        .project-card:hover {
+            border-color: #06b6d4;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15);
         }
-
-        .drag-handle {
-            cursor: grab;
+        .dropzone.dragover {
+            border-color: #22d3ee !important;
+            background-color: rgba(6, 182, 212, 0.15) !important;
+            transform: scale(1.02);
         }
-
-        .drag-handle:active {
-            cursor: grabbing;
+        .toast {
+            animation: slideIn 0.3s ease-out forwards;
         }
-
-        .sortable-ghost {
-            opacity: 0.5;
-            background: #374151;
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
+<body class="min-h-screen p-4 md:p-8">
 
-<body class="p-8">
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
 
-    <div class="max-w-4xl mx-auto">
-        <header
-            class="mb-10 flex justify-between items-center sticky top-0 bg-[#111827] z-10 py-4 border-b border-gray-800">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-gray-800">
             <div>
-                <h1 class="text-4xl font-bold text-white mb-2">Project Manager</h1>
-                <p class="text-gray-400">Add, reorder, and manage your portfolio projects.</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-images text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Project Image Replacer</h1>
+                        <p class="text-sm text-gray-400">Click any project to choose an image from your files. Changes save automatically.</p>
+                    </div>
+                </div>
             </div>
-            <div class="flex gap-4">
-                <button id="btn-save"
-                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded hidden">
-                    Save Changes
-                </button>
-                <a href="index.html" target="_blank"
-                    class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
-                    View Site <i class="fa-solid fa-external-link-alt ml-2"></i>
+            <div class="flex items-center gap-3">
+                <a href="index.html" target="_blank" class="inline-flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2.5 rounded-lg text-sm font-medium border border-gray-700 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-cyan-400"></i> View Portfolio
                 </a>
             </div>
         </header>
 
-        <!-- Add Project Section -->
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 mb-10">
-            <h2 class="text-xl font-bold text-white mb-4"><i class="fa-brands fa-github mr-2"></i> Add from GitHub</h2>
-            <div class="flex gap-4">
-                <input type="text" id="github-url" placeholder="https://github.com/username/repo"
-                    class="flex-1 bg-gray-900 border border-gray-600 text-white rounded px-4 py-2 focus:outline-none focus:border-cyan-500">
-                <button id="btn-add"
-                    class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded flex items-center">
-                    <span id="add-text">Add Project</span>
-                    <i id="add-spinner" class="fa-solid fa-circle-notch fa-spin ml-2 hidden"></i>
-                </button>
+        <!-- Search and Quick Stats Bar -->
+        <div class="mb-8 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
+            <div class="relative flex-1 max-w-xl">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="search-input" placeholder="Search by project name, ID, or technology (e.g. PyTorch, React, Python)..." 
+                    class="w-full pl-11 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-sm transition">
+                <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white px-2 py-1 text-xs bg-gray-800 rounded">Clear</button>
             </div>
-            <p id="add-msg" class="mt-2 text-sm text-red-400 hidden"></p>
+            <div class="flex items-center gap-4 text-xs text-gray-400 bg-gray-900/80 px-4 py-3 rounded-xl border border-gray-800">
+                <span>Showing: <strong id="showing-count" class="text-cyan-400">0</strong> / <span id="total-count">0</span> projects</span>
+            </div>
         </div>
 
-        <!-- Projects List -->
-        <div id="projects-list" class="space-y-4">
-            <!-- Projects injected here -->
+        <!-- Hidden Global File Input for Dialog Triggering -->
+        <input type="file" id="global-file-input" class="hidden" accept="image/*">
+
+        <!-- Projects Grid -->
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Project Cards Rendered Here -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="empty-state" class="hidden py-16 text-center">
+            <i class="fa-solid fa-box-open text-4xl text-gray-600 mb-3"></i>
+            <h3 class="text-lg font-semibold text-gray-300">No matching projects found</h3>
+            <p class="text-sm text-gray-500">Try searching for a different keyword or repo name.</p>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const listEl = document.getElementById('projects-list');
-            const btnSave = document.getElementById('btn-save');
-            const btnAdd = document.getElementById('btn-add');
-            const inputUrl = document.getElementById('github-url');
-            const addMsg = document.getElementById('add-msg');
+        let allProjects = [];
+        let activeProjectIdForUpload = null;
 
-            let projects = [];
+        const grid = document.getElementById('projects-grid');
+        const searchInput = document.getElementById('search-input');
+        const clearBtn = document.getElementById('clear-search');
+        const showingCountEl = document.getElementById('showing-count');
+        const totalCountEl = document.getElementById('total-count');
+        const emptyState = document.getElementById('empty-state');
+        const fileInput = document.getElementById('global-file-input');
 
-            // Initial state for Save button
-            btnSave.classList.remove('hidden');
-            btnSave.disabled = true;
-            btnSave.classList.add('opacity-50', 'cursor-not-allowed');
+        // Fetch Projects on load
+        async function loadProjects() {
+            try {
+                const res = await fetch('/api/projects');
+                if (!res.ok) throw new Error('Failed to load projects');
+                const data = await res.json();
+                allProjects = data.projectData || [];
+                totalCountEl.textContent = allProjects.length;
+                renderProjects(allProjects);
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = `
+                    <div class="col-span-full p-8 text-center bg-red-950/30 border border-red-800/50 rounded-xl text-red-300">
+                        <i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i>
+                        <p class="font-semibold">Unable to connect to admin server</p>
+                        <p class="text-xs text-red-400 mt-1">Make sure admin_server.py is running on port 8085.</p>
+                    </div>
+                `;
+            }
+        }
 
-            // Fetch initial data
-            fetch('/api/projects')
-                .then(res => res.json())
-                .then(data => {
-                    projects = data.projectData || [];
-                    renderList();
-                });
+        function renderProjects(projectsToRender) {
+            showingCountEl.textContent = projectsToRender.length;
+            if (projectsToRender.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
 
-            // Initialize Sortable
-            new Sortable(listEl, {
-                handle: '.drag-handle',
-                animation: 150,
-                onEnd: () => {
-                    updateProjectsOrder();
-                    enableSave();
-                }
-            });
+            grid.innerHTML = projectsToRender.map(p => {
+                const techBadges = (p.tech || []).slice(0, 3).map(t => 
+                    `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-800 text-gray-300 border border-gray-700/60">${t}</span>`
+                ).join('');
 
-            function renderList() {
-                listEl.innerHTML = '';
-                projects.forEach((p, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'card p-4 rounded-lg flex gap-4 items-center group';
-                    item.dataset.id = p.id;
-                    item.innerHTML = `
-                        <div class="drag-handle text-gray-500 hover:text-white p-2">
-                            <i class="fa-solid fa-grip-vertical text-xl"></i>
-                        </div>
+                const isCustom = p.image && p.image.startsWith('assets/images/');
+                const imgSourceLabel = isCustom ? 
+                    `<span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-1.5 py-0.5 rounded">Custom Local</span>` : 
+                    `<span class="text-[10px] text-gray-400 bg-gray-800/80 px-1.5 py-0.5 rounded">GitHub Preview</span>`;
+
+                return `
+                    <div class="project-card rounded-2xl overflow-hidden flex flex-col p-4 relative dropzone cursor-pointer" 
+                         data-id="${p.id}" onclick="selectFileFor('${p.id}')" title="Click to replace image">
                         
-                        <div class="w-16 h-16 bg-black rounded overflow-hidden flex-shrink-0 relative border border-gray-700">
-                            <img src="${p.image || ''}" class="w-full h-full object-cover" id="img-${p.id}" onerror="this.style.display='none'">
-                            <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-xs text-white text-center p-1"
-                                 onclick="triggerUpload('${p.id}')">
-                                Change Image
+                        <!-- Image Container with Hover Overlay -->
+                        <div class="relative w-full h-44 rounded-xl overflow-hidden bg-gray-950 border border-gray-800 mb-4 group/img">
+                            <img id="img-${p.id}" src="${p.image || ''}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105"
+                                 onerror="this.onerror=null; this.src='assets/images/logos/aws.svg'; this.className='w-16 h-16 m-auto object-contain opacity-30 mt-14';">
+                            
+                            <!-- Overlay CTA -->
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-3 text-center">
+                                <div class="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg border border-cyan-500/50">
+                                    <i class="fa-solid fa-camera"></i>
+                                </div>
+                                <span class="text-xs font-semibold text-white">Click or Drop to Replace Image</span>
+                            </div>
+
+                            <!-- Uploading Spinner Overlay -->
+                            <div id="loader-${p.id}" class="hidden absolute inset-0 bg-gray-950/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+                                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-cyan-400"></i>
+                                <span class="text-xs text-cyan-300 font-medium">Uploading & Saving...</span>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <div class="absolute top-2 right-2">
+                                ${imgSourceLabel}
                             </div>
                         </div>
 
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-bold text-white text-lg truncate">${p.name}</h3>
-                                <span class="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded font-mono">${p.id}</span>
+                        <!-- Project Details -->
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-1">
+                                    <h3 class="font-bold text-white text-base truncate" title="${p.name}">${p.name}</h3>
+                                    <span class="mono text-[11px] text-cyan-400 bg-cyan-950/40 border border-cyan-800/40 px-2 py-0.5 rounded truncate max-w-[120px]">${p.id}</span>
+                                </div>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3" title="${p.tagline}">${p.tagline || 'No description'}</p>
                             </div>
-                            <p class="text-gray-400 text-sm truncate">${p.tagline}</p>
+
+                            <div>
+                                <div class="flex flex-wrap gap-1.5 mb-4">
+                                    ${techBadges}
+                                </div>
+
+                                <!-- Action Button -->
+                                <button type="button" class="w-full py-2.5 px-4 bg-cyan-600/15 hover:bg-cyan-600 text-cyan-300 hover:text-white border border-cyan-500/30 hover:border-cyan-500 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition duration-150"
+                                    onclick="event.stopPropagation(); selectFileFor('${p.id}');">
+                                    <i class="fa-solid fa-upload"></i> Select Image from Computer
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                `;
+            }).join('');
 
-                        <button onclick="deleteProject('${p.id}')" class="text-gray-500 hover:text-red-500 p-2 transition-colors" title="Delete Project">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                        <input type="file" id="file-${p.id}" class="hidden" accept="image/*" onchange="uploadImage('${p.id}', this)">
-                    `;
-                    listEl.appendChild(item);
-                });
-            }
+            attachDragAndDropHandlers();
+        }
 
-            function enableSave() {
-                btnSave.disabled = false;
-                btnSave.classList.remove('opacity-50', 'cursor-not-allowed');
-                btnSave.textContent = 'Save Changes';
-            }
+        // Trigger OS file picker
+        window.selectFileFor = function(projectId) {
+            activeProjectIdForUpload = projectId;
+            fileInput.value = '';
+            fileInput.click();
+        };
 
-            function disableSave() {
-                btnSave.disabled = true;
-                btnSave.classList.add('opacity-50', 'cursor-not-allowed');
-                btnSave.textContent = 'Save Changes';
-            }
-
-            // Add Project
-            btnAdd.addEventListener('click', () => {
-                const url = inputUrl.value.trim();
-                if (!url) {
-                    addMsg.textContent = "Please enter a GitHub URL.";
-                    addMsg.classList.remove('hidden');
-                    return;
-                }
-
-                setLoading(true);
-                fetch('/api/add_project', {
-                    method: 'POST',
-                    body: JSON.stringify({ url })
-                })
-                    .then(res => {
-                        if (!res.ok) throw new Error('Failed to fetch GitHub data');
-                        return res.json();
-                    })
-                    .then(data => {
-
-                        projects.unshift(data.project);
-                        renderList();
-                        enableSave();
-                        inputUrl.value = '';
-                        addMsg.classList.add('hidden');
-                        setLoading(false);
-                    })
-                    .catch(err => {
-                        addMsg.textContent = err.message;
-                        addMsg.classList.remove('hidden');
-                        setLoading(false);
-                    });
-            });
-
-            // Save Order
-            btnSave.addEventListener('click', () => {
-                btnSave.textContent = 'Saving...';
-                fetch('/api/save_projects', {
-                    method: 'POST',
-                    body: JSON.stringify(projects)
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            btnSave.textContent = 'Saved!';
-                            // alert("Success: Projects saved successfully!");
-                            setTimeout(() => {
-                                disableSave();
-                            }, 2000);
-                        } else {
-                            btnSave.textContent = 'Save Failed';
-                            alert("Error saving projects: " + (data.message || "Unknown error"));
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        btnSave.textContent = 'Error';
-                        alert("Network error: " + err.message);
-                    });
-            });
-
-            // Helpers
-            window.updateProjectsOrder = () => {
-                const newOrder = [];
-                listEl.querySelectorAll('.card').forEach(el => {
-                    const id = el.dataset.id;
-                    const project = projects.find(p => p.id === id);
-                    if (project) newOrder.push(project);
-                });
-                projects = newOrder;
-            };
-
-            window.deleteProject = (id) => {
-                if (confirm('Are you sure you want to delete this project?')) {
-                    projects = projects.filter(p => p.id !== id);
-                    renderList();
-                    enableSave(); // Enable save button after delete
-                }
-            };
-
-            window.triggerUpload = (id) => {
-                document.getElementById(`file-${id}`).click();
-            };
-
-            window.uploadImage = (id, input) => {
-                if (input.files && input.files[0]) {
-                    const formData = new FormData();
-                    formData.append('projectId', id);
-                    formData.append('image', input.files[0]);
-
-                    fetch('/api/upload_image', {
-                        method: 'POST',
-                        body: formData
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                const img = document.getElementById(`img-${id}`);
-                                img.src = data.newPath + '?t=' + Date.now();
-                                img.style.display = 'block';
-
-                                // Update local state
-                                const p = projects.find(p => p.id === id);
-                                if (p) {
-                                    p.image = data.newPath;
-                                    enableSave();
-                                }
-                            }
-                        });
-                }
-            };
-
-            function setLoading(isLoading) {
-                const btn = document.getElementById('btn-add');
-                const text = document.getElementById('add-text');
-                const spinner = document.getElementById('add-spinner');
-
-                if (isLoading) {
-                    btn.disabled = true;
-                    btn.classList.add('opacity-50', 'cursor-not-allowed');
-                    text.textContent = 'Adding...';
-                    spinner.classList.remove('hidden');
-                } else {
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    text.textContent = 'Add Project';
-                    spinner.classList.add('hidden');
-                }
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0] && activeProjectIdForUpload) {
+                uploadImageFile(activeProjectIdForUpload, e.target.files[0]);
             }
         });
+
+        // Drag & Drop handlers
+        function attachDragAndDropHandlers() {
+            document.querySelectorAll('.dropzone').forEach(card => {
+                const id = card.dataset.id;
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    card.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        card.classList.add('dragover');
+                    }, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    card.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        card.classList.remove('dragover');
+                    }, false);
+                });
+
+                card.addEventListener('drop', (e) => {
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        uploadImageFile(id, e.dataTransfer.files[0]);
+                    }
+                }, false);
+            });
+        }
+
+        // Upload and Auto-Save
+        async function uploadImageFile(projectId, file) {
+            const loader = document.getElementById(`loader-${projectId}`);
+            const img = document.getElementById(`img-${projectId}`);
+
+            if (loader) loader.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('projectId', projectId);
+            formData.append('image', file);
+
+            try {
+                const res = await fetch('/api/upload_image', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await res.json();
+
+                if (result.status === 'success') {
+                    // Update image source with timestamp to bust browser cache
+                    if (img) {
+                        img.src = `${result.newPath}?t=${Date.now()}`;
+                    }
+
+                    // Update memory state
+                    const proj = allProjects.find(p => p.id === projectId);
+                    if (proj) {
+                        proj.image = result.newPath;
+                    }
+
+                    showToast(`Image replaced & saved for "${proj ? proj.name : projectId}"!`, 'success');
+                } else {
+                    throw new Error(result.message || 'Upload failed');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast(`Failed to upload image: ${err.message}`, 'error');
+            } finally {
+                if (loader) loader.classList.add('hidden');
+            }
+        }
+
+        // Live Search Filter
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            clearBtn.classList.toggle('hidden', query.length === 0);
+
+            if (!query) {
+                renderProjects(allProjects);
+                return;
+            }
+
+            const filtered = allProjects.filter(p => {
+                const name = (p.name || '').toLowerCase();
+                const id = (p.id || '').toLowerCase();
+                const tagline = (p.tagline || '').toLowerCase();
+                const tech = (p.tech || []).map(t => t.toLowerCase()).join(' ');
+                return name.includes(query) || id.includes(query) || tagline.includes(query) || tech.includes(query);
+            });
+
+            renderProjects(filtered);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearBtn.classList.add('hidden');
+            renderProjects(allProjects);
+            searchInput.focus();
+        });
+
+        // Toast feedback
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const isSuccess = type === 'success';
+
+            toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border text-sm font-medium ${
+                isSuccess ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200' : 'bg-red-950/90 border-red-500/50 text-red-200'
+            }`;
+
+            toast.innerHTML = `
+                <i class="fa-solid ${isSuccess ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-red-400'} text-base"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Start
+        loadProjects();
     </script>
 </body>
-
 </html>
