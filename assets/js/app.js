@@ -270,12 +270,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSearchQuery = '';
 
     const getProjectCategory = (project) => {
+        if (project.category && ['AI & Machine Learning', 'Game Dev & Simulation', 'CLI & Systems', 'Web & Fullstack'].includes(project.category)) {
+            return project.category;
+        }
+
         const id = project.id.toLowerCase();
         const tech = (project.tech || []).map(t => t.toLowerCase());
         
         // 1. AI & Machine Learning
         const aiKeywords = ['pytorch', 'ollama', 'langchain', 'langgraph', 'chromadb', 'whisper', 'cvae', 'dqn', 'nlp', 'deep learning', 'machine learning', 'reinforcement learning', 'evolutionary algorithms', 'ai/automation', 'ai/llm'];
-        const aiIds = ['wds-net', 'mlvizard', 'watermelon-game-generational-training', 'ojas', 'mnist-playground-visualizer', 'qwen-researcher', 'docraft', 'kiln', 'voiceclone', 'subtitle-pipeline', 'zatzy-ai', 'mathanim', 'gujarati-dialect-detection', 'gujarati-author-attribution', 'pixelpredict', 'music-genres-prediction', 'mnist-cvae-digit-generator', 'ai-snake-training', 'asteroid-game-ai', 'pixel-diffusion-model', 'monke-mirror', 'smart-image-analyzer'];
+        const aiIds = ['fedmeddx', 'devops-qlora-pipeline', 'isomorphic-amr', 'hindi-number-recognition', 'ml-playground', 'adventureworks22', 'open-cv-experiments-', 'wds-net', 'mlvizard', 'watermelon-game-generational-training', 'ojas', 'mnist-playground-visualizer', 'qwen-researcher', 'docraft', 'kiln', 'voiceclone', 'subtitle-pipeline', 'zatzy-ai', 'mathanim', 'gujarati-dialect-detection', 'gujarati-author-attribution', 'pixelpredict', 'music-genres-prediction', 'mnist-cvae-digit-generator', 'ai-snake-training', 'asteroid-game-ai', 'pixel-diffusion-model', 'monke-mirror', 'smart-image-analyzer'];
         
         if (aiIds.includes(id) || tech.some(t => aiKeywords.includes(t))) {
             return 'AI & Machine Learning';
@@ -283,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 2. Game Dev & Simulation
         const gameKeywords = ['pygame', 'raylib', 'glsl', 'physics simulation', 'pymunk'];
-        const gameIds = ['constraint-ecology', 'brutalist-procedural-generation', 'aspisengine', 'rayrider', 'brutalist-void', 'synth-studio', 'electron_stimulator', 'boid-simulation'];
+        const gameIds = ['editors-desk', 'spiritthief', 'grappling-using-pygame', 'constraint-ecology', 'brutalist-procedural-generation', 'aspisengine', 'rayrider', 'brutalist-void', 'synth-studio', 'electron_stimulator', 'boid-simulation'];
         
         if (gameIds.includes(id) || tech.some(t => gameKeywords.includes(t))) {
             return 'Game Dev & Simulation';
@@ -291,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 3. CLI & Systems
         const sysKeywords = ['ratatui', 'shell', 'docker', 'dockerfile', 'p2p'];
-        const sysIds = ['climart', 'microcyberdeck', 'sable-deck', 'arckage', 'smash', 'termtube', 'spoticmd', 'jaxos', 'rekhta-gazal-scraper', 'blob-tracker', 'pixelmess'];
+        const sysIds = ['openbark', 'hisaab', 'jaxpy', 'sleevenotes', 'jaxify', 'media-manager', 'jaxytdl', 'jax_todo', 'identity', 'investment-tracker', 'climart', 'microcyberdeck', 'sable-deck', 'arckage', 'smash', 'termtube', 'spoticmd', 'jaxos', 'rekhta-gazal-scraper', 'blob-tracker', 'pixelmess'];
         
         if (sysIds.includes(id) || tech.some(t => sysKeywords.includes(t))) {
             return 'CLI & Systems';
@@ -299,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 4. Web & Fullstack
         const webKeywords = ['react', 'next.js', 'node.js', 'node', 'mongodb', 'firebase', 'webrtc', 'fastapi', 'html', 'css', 'javascript', 'typescript', 'playwright'];
-        const webIds = ['gre-vocab-trainer', 'auction', 'finsim-api', 'luminamesh', 'vinylogue-project', 'chatdevs', 'babel-hash-api', 'brat-text-generator'];
+        const webIds = ['gujarat-sultanate', 'g-houl', 'ezcrossplay', 'newslens', 'linkedin-learning-speed-engine', 'camus-website', 'gre-vocab-trainer', 'auction', 'finsim-api', 'luminamesh', 'vinylogue-project', 'chatdevs', 'babel-hash-api', 'brat-text-generator'];
         
         if (webIds.includes(id) || tech.some(t => webKeywords.includes(t))) {
             return 'Web & Fullstack';
@@ -668,46 +672,28 @@ document.addEventListener('DOMContentLoaded', () => {
         newPage.className = 'content-page';
         
         let viewerHtml = '';
-        const isPdf = cert.file.toLowerCase().endsWith('.pdf');
-        if (isPdf) {
-            viewerHtml = `
-                <div class="hidden md:block w-full bg-black/20 p-4 rounded-xl">
-                    <embed src="${cert.file}" width="100%" height="800px" type="application/pdf" class="rounded-lg shadow-lg border border-cyan-900/30">
-                </div>
-                <div class="block md:hidden text-center p-8 bg-white/5 rounded-xl border border-white/10">
-                    <i class="fa-solid fa-file-pdf text-5xl text-cyan-400 mb-4"></i>
-                    <p class="text-gray-300 mb-4">This PDF document can be viewed directly using your device's native PDF reader.</p>
-                </div>`;
+        if (cert.file.toLowerCase().endsWith('.pdf')) {
+            viewerHtml = `<embed src="${cert.file}" width="100%" height="800px" type="application/pdf" class="rounded-lg shadow-lg border border-cyan-900/30">`;
         } else {
-            viewerHtml = `
-                <div class="w-full bg-black/20 p-4 rounded-xl">
-                    <img src="${cert.file}" alt="${cert.name}" class="max-w-full rounded-lg shadow-lg mx-auto border border-cyan-900/30">
-                </div>`;
+            viewerHtml = `<img src="${cert.file}" alt="${cert.name}" class="max-w-full rounded-lg shadow-lg mx-auto border border-cyan-900/30">`;
         }
 
         newPage.innerHTML = `
-            <div class="max-w-5xl mx-auto p-4 md:p-8">
-                <button class="back-to-certifications text-cyan-400 hover:underline mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-left"></i> Back to all certifications
-                </button>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-                    <div class="flex items-center gap-4">
-                        <img src="${cert.localLogo}" alt="${cert.issuer}" class="w-12 h-12 object-contain bg-white/5 p-2 rounded-lg border border-white/10">
-                        <div>
-                            <h1 class="text-2xl md:text-3xl font-bold text-white">${cert.name}</h1>
-                            <p class="text-lg text-gray-400">${cert.issuer}</p>
-                        </div>
+            <div class="max-w-5xl mx-auto p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="${cert.localLogo}" alt="${cert.issuer}" class="w-12 h-12 object-contain bg-white/5 p-2 rounded-lg border border-white/10">
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-bold text-white">${cert.name}</h1>
+                        <p class="text-lg text-gray-400">${cert.issuer}</p>
                     </div>
-                    <a href="${cert.file}" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 rounded-xl text-white font-semibold shadow-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap text-sm w-full sm:w-auto justify-center">
-                        <i class="fa-solid fa-up-right-from-square"></i> Open in New Tab
-                    </a>
                 </div>
                 <p class="text-gray-300 leading-relaxed mb-8">${cert.description}</p>
-                ${viewerHtml}
+                <div class="w-full bg-black/20 p-4 rounded-xl">
+                    ${viewerHtml}
+                </div>
             </div>`;
             
         contentArea.appendChild(newPage);
-        newPage.querySelector('.back-to-certifications').addEventListener('click', () => navigateTo('certifications'));
     };
 
     const initCertificationsPage = () => {
