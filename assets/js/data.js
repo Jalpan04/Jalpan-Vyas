@@ -164,7 +164,7 @@ const portfolioData = {
         "name": "LinkedIn Learning Speed Engine",
         "tagline": "Manifest V3 Chrome extension for high-performance video speed acceleration and event interception.",
         "description": "A Google Chrome extension engineered for responsive video acceleration on LinkedIn Learning. Employs capture-phase event interception to reliably adjust video playback speed without video stutter or player override.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/linkedin-learning-speed-engine",
+        "image": "assets/images/linkedin-learning-speed-engine_1790333988.png",
         "tech": [
             "JavaScript",
             "Chrome Extension",
@@ -181,7 +181,7 @@ const portfolioData = {
         "name": "Isomorphic AMR",
         "tagline": "Geometric deep learning and graph parsing framework for Abstract Meaning Representation.",
         "description": "A research toolkit for Abstract Meaning Representation (AMR) parsing and semantic graph comparison. Incorporates hyperbolic geometry, optimal transport metrics, and graph matching algorithms to evaluate semantic isomorphisms.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/isomorphic-amr",
+        "image": "assets/images/isomorphic-amr_1790334832.png",
         "tech": [
             "Python",
             "PyTorch",
@@ -199,7 +199,7 @@ const portfolioData = {
         "name": "Camus Explorer",
         "tagline": "Themed web landing page exploring the philosophical literature and essays of Albert Camus.",
         "description": "An interactive digital literary portal showcasing the philosophical canon, core concepts, and essays of Albert Camus, featuring minimalist editorial typography, chapter quotes, and responsive layout.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/camus-website",
+        "image": "assets/images/camus-website_1790335960.png",
         "tech": [
             "HTML",
             "CSS",
@@ -215,7 +215,7 @@ const portfolioData = {
         "name": "JaxPY IDE",
         "tagline": "Lightweight Python Integrated Development Environment built with PyQt5 and AI assistance.",
         "description": "A responsive desktop IDE built in Python and PyQt5. Features smart syntax highlighting, code folding, multi-tab editing, package management, an embedded terminal, and a sidecar AI coding assistant.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/JaxPY",
+        "image": "assets/images/jaxpy_1790334045.png",
         "tech": [
             "Python",
             "PyQt5",
@@ -232,7 +232,7 @@ const portfolioData = {
         "name": "SleeveNotes",
         "tagline": "Personal music album logging and review application built with Python and KivyMD.",
         "description": "A personal music diary and album review app created using KivyMD and SQLite. Supports star ratings, tracklist logging, cover artwork caching, and mobile Android APK deployment via Buildozer.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/sleevenotes",
+        "image": "assets/images/sleevenotes_1790332325.png",
         "tech": [
             "Python",
             "KivyMD",
@@ -249,7 +249,7 @@ const portfolioData = {
         "name": "Jaxify Downloader",
         "tagline": "Automated Spotify playlist audio downloader with Flask UI and real-time SSE progress tracking.",
         "description": "A high-performance automated Spotify downloader operating keyless via Playwright web scraping, yt-dlp Opus stream extraction, and Mutagen ID3/Vorbis metadata embedding, managed via a real-time SSE web interface.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/jaxify",
+        "image": "assets/images/jaxify_1790334894.png",
         "tech": [
             "Python",
             "Playwright",
@@ -284,7 +284,7 @@ const portfolioData = {
         "name": "Hindi Numeral Recognition",
         "tagline": "Comparative deep learning benchmarks on the Hindi-MNIST handwritten digits dataset.",
         "description": "A comprehensive deep learning evaluation benchmarking multiple architectures - CNN, CapsNet, LeNet-5, VGG, MLP, RNN, ViT, and DeiT - for handwritten Devanagari Hindi numeral classification with confusion matrix and ROC metrics.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Hindi-Number-Recognition",
+        "image": "assets/images/hindi-number-recognition_1790335778.png",
         "tech": [
             "Jupyter Notebook",
             "Python",
@@ -302,7 +302,7 @@ const portfolioData = {
         "name": "Media Manager",
         "tagline": "Desktop file organization utility with perceptual hashing duplicate detection and soft-delete.",
         "description": "A Python and PyQt5 media curation tool offering fast file tagging, metadata filtering, soft-delete with instantaneous undo, and perceptual hashing algorithms to locate near-identical duplicate photos.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/media-manager",
+        "image": "assets/images/media-manager_1790333774.png",
         "tech": [
             "Python",
             "PyQt5",
@@ -336,7 +336,7 @@ const portfolioData = {
         "name": "ML Playground",
         "tagline": "Streamlit launcher hub managing interactive machine learning and computer vision demos.",
         "description": "A centralized Streamlit launcher and dashboard orchestrating modular machine learning microservices, including cellular automata classifiers, palette extractors, and interactive game-tree search demos.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/ML-playground",
+        "image": "assets/images/ml-playground_1790333573.png",
         "tech": [
             "Python",
             "Streamlit",
@@ -353,7 +353,7 @@ const portfolioData = {
         "name": "JaxYTdl",
         "tagline": "Lightweight YouTube video downloader and MP3 audio extractor built with Flask.",
         "description": "A user-friendly web interface and downloader built with Flask for saving YouTube video streams in varying resolutions or extracting audio directly into high-fidelity MP3 formats.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/JaxYTdl",
+        "image": "assets/images/jaxytdl_1790333994.png",
         "tech": [
             "Python",
             "Flask",
@@ -371,7 +371,7 @@ const portfolioData = {
         "name": "Jax_TODO",
         "tagline": "Minimalist, dark-themed desktop task manager with drag-and-drop reordering.",
         "description": "A focused desktop productivity application featuring drag-and-drop task reordering, completion toggles, due-date scheduling, and persistent local storage wrapped in a sleek dark UI.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Jax_TODO",
+        "image": "assets/images/jax_todo_1790334902.png",
         "tech": [
             "Python",
             "Tkinter",
@@ -387,7 +387,7 @@ const portfolioData = {
         "name": "Identity",
         "tagline": "Windows Forms desktop application for cataloging and managing personal interests.",
         "description": "A C# and .NET WinForms desktop application providing structured cataloging for personal interests, collections, and media libraries with an intuitive desktop layout.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/identity",
+        "image": "assets/images/identity_1790334921.png",
         "tech": [
             "C#",
             ".NET",
@@ -403,7 +403,7 @@ const portfolioData = {
         "name": "AdventureWorks Schema Classifier",
         "tagline": "Machine learning pipeline for database schema extraction and semantic entity classification.",
         "description": "A database inspection pipeline that constructs cognitive relational maps of SQL Server schemas and trains supervised machine learning models to semantically classify database columns and entities.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/AdventureWorks22",
+        "image": "assets/images/adventureworks22_1790335403.png",
         "tech": [
             "Python",
             "Machine Learning",
@@ -421,7 +421,7 @@ const portfolioData = {
         "name": "OpenCV Experiments",
         "tagline": "Suite of interactive computer vision experiments, gesture games, and YOLOv8 tracking.",
         "description": "A collection of interactive computer vision applications and games built using OpenCV and YOLOv8, covering real-time hand gesture games, Kalman Filter multi-object tracking, and automated video annotation.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/open-cv-experiments-",
+        "image": "assets/images/open-cv-experiments-_1790332462.png",
         "tech": [
             "Python",
             "OpenCV",
@@ -438,7 +438,7 @@ const portfolioData = {
         "name": "Investment Tracker",
         "tagline": "Desktop wealth and assets management application with JSON storage and CSV exports.",
         "description": "A desktop GUI application built in Python and Tkinter to organize family wealth, bank accounts, locker inventories, and insurance policies with profile-based asset linking and CSV reporting.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/investment-tracker",
+        "image": "assets/images/investment-tracker_1790334928.png",
         "tech": [
             "Python",
             "Tkinter",
@@ -485,7 +485,7 @@ const portfolioData = {
         "name": "Mlvizard 3D",
         "tagline": "An interactive web platform for real-time 3D neural network visualization and training, with a PyTor...",
         "description": "An interactive web platform for real-time 3D neural network visualization and training, with a PyTorch/FastAPI backend, React/Three.js frontend, gradient analytics, and dynamic hyperparameter control.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/mlvizard",
+        "image": "assets/images/mlvizard_1790333564.png",
         "tech": [
             "JavaScript",
             "Python",
@@ -523,7 +523,7 @@ const portfolioData = {
         "name": "Ojas AI",
         "tagline": "A local-first, fully autonomous AI developer agent powered by LangChain, LangGraph, Ollama, ChromaDB...",
         "description": "A local-first, fully autonomous AI developer agent powered by LangChain, LangGraph, Ollama, ChromaDB, and Docker - with zero cloud dependencies, RAG codebase indexing, and Docker sandbox code execution.",
-        "image": "assets/images/langgraph_custom.png",
+        "image": "assets/images/ojas_1790335277.png",
         "tech": [
             "Python",
             "Ollama",
@@ -542,7 +542,7 @@ const portfolioData = {
         "name": "Brat Text Generator",
         "tagline": "A simple web application that generates text in the style of Charli XCX's \"Brat\" album aesthetic.",
         "description": "A simple web application that generates text in the style of Charli XCX's \"Brat\" album aesthetic.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/brat-text-generator",
+        "image": "assets/images/brat-text-generator_1790335900.png",
         "tech": [
             "HTML"
         ],
@@ -588,7 +588,7 @@ const portfolioData = {
         "name": "MNIST Playground Visualizer",
         "tagline": "A real-time interactive neural network visualizer for MNIST digits built in TypeScript with live ske...",
         "description": "A real-time interactive neural network visualizer for MNIST digits built in TypeScript with live sketch-to-inference, dynamic activation visuals, and 60 FPS canvas rendering via path-batching and weight-culling.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/mnist-playground-visualizer",
+        "image": "assets/images/mnist-playground-visualizer_1790333434.png",
         "tech": [
             "TypeScript",
             "CSS",
@@ -605,7 +605,7 @@ const portfolioData = {
         "name": "Isotron",
         "tagline": "A Git Diff-style neural network architecture visualizer built with Next.js and TypeScript, for compa...",
         "description": "A Git Diff-style neural network architecture visualizer built with Next.js and TypeScript, for comparing model graphs and tracking structural changes from quantization, pruning, and fine-tuning.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/isotron",
+        "image": "assets/images/isotron_1790334910.png",
         "tech": [
             "TypeScript",
             "JavaScript",
@@ -622,7 +622,7 @@ const portfolioData = {
         "name": "Auction",
         "tagline": "A real-time auction web application powered by Firebase, featuring user authentication, live bidding...",
         "description": "A real-time auction web application powered by Firebase, featuring user authentication, live bidding updates, item creation, and automated Playwright E2E tests.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Auction",
+        "image": "assets/images/auction_1790335772.png",
         "tech": [
             "JavaScript",
             "HTML",
@@ -641,7 +641,7 @@ const portfolioData = {
         "name": "Microcyberdeck",
         "tagline": "A MicroPython-based hardware simulation of a mini Cyberdeck interface for Wokwi, featuring on-screen...",
         "description": "A MicroPython-based hardware simulation of a mini Cyberdeck interface for Wokwi, featuring on-screen diagnostic apps, keypad navigation, and device monitors.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/microcyberdeck",
+        "image": "assets/images/microcyberdeck_1790333677.png",
         "tech": [
             "Python"
         ],
@@ -655,7 +655,7 @@ const portfolioData = {
         "name": "Qwen Researcher",
         "tagline": "A complete QLoRA fine-tuning pipeline for Qwen2.5-0.5B-Instruct on arXiv CS papers, with GGUF conver...",
         "description": "A complete QLoRA fine-tuning pipeline for Qwen2.5-0.5B-Instruct on arXiv CS papers, with GGUF conversion and Ollama deployment support.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/qwen-researcher",
+        "image": "assets/images/qwen-researcher_1790332401.png",
         "tech": [
             "Python",
             "Ollama"
@@ -670,7 +670,7 @@ const portfolioData = {
         "name": "Brutalist City Generator",
         "tagline": "An infinite, procedurally generated brutalist city exploration game built in C++ and Raylib, featuri...",
         "description": "An infinite, procedurally generated brutalist city exploration game built in C++ and Raylib, featuring volumetric fog, dynamic lighting modes, and cinematic autopilot camera.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/brutalist-procedural-generation",
+        "image": "assets/images/brutalist-procedural-generation_1790335893.png",
         "tech": [
             "C",
             "C++",
@@ -720,7 +720,7 @@ const portfolioData = {
         "name": "Kiln IDE",
         "tagline": "AI-First, Open-Source IDE for Agentic Workflows.",
         "description": "An AI-first, open-source integrated development environment designed specifically for engineering, debugging, and orchestrating agentic workflows.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/kiln",
+        "image": "assets/images/kiln_1790333842.png",
         "tech": [
             "TypeScript",
             "React",
@@ -819,7 +819,7 @@ const portfolioData = {
         "name": "Rekhta Ghazal Scraper",
         "tagline": "Poetry dataset scraper with anti-ban mechanisms.",
         "description": "A web scraper for collecting Ghazal poetry datasets from Rekhta.org with custom anti-ban mechanisms, session rotation, and clean CSV outputs optimized for Urdu NLP research.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Rekhta-Gazal-Scraper",
+        "image": "assets/images/rekhta-gazal-scraper_1790332352.png",
         "tech": [
             "Python",
             "Selenium",
@@ -835,7 +835,7 @@ const portfolioData = {
         "name": "gujarati-dialect-detection",
         "tagline": "Binary dialect classification: Standard vs Kathiawadi Gujarati.",
         "description": "Binary dialect classification: Standard vs Kathiawadi Gujarati.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/gujarati-dialect-detection",
+        "image": "assets/images/gujarati-dialect-detection_1790336442.png",
         "tech": [
             "Python"
         ],
@@ -849,7 +849,7 @@ const portfolioData = {
         "name": "UrbanSentinel",
         "tagline": "No description provided.",
         "description": "No description provided.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/UrbanSentinel",
+        "image": "assets/images/urbansentinel_1790334165.png",
         "tech": [
             "Python",
             "Dockerfile"
@@ -864,7 +864,7 @@ const portfolioData = {
         "name": "RayRider",
         "tagline": "No description provided.",
         "description": "No description provided.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/RayRider",
+        "image": "assets/images/rayrider_1790332363.png",
         "tech": [
             "C",
             "C++",
@@ -881,7 +881,7 @@ const portfolioData = {
         "name": "Brutalist-Void",
         "tagline": "No description provided.",
         "description": "No description provided.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Brutalist-Void",
+        "image": "assets/images/brutalist-void_1790335888.png",
         "tech": [
             "C",
             "C++",
@@ -942,7 +942,7 @@ const portfolioData = {
         "name": "music-genres-prediction",
         "tagline": "This research implemented a complete Music Genre Classification system using the GTZAN dataset.",
         "description": "This research implemented a complete Music Genre Classification system using the GTZAN dataset.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/music-genres-prediction",
+        "image": "assets/images/music-genres-prediction_1790333369.png",
         "tech": [
             "Python"
         ],
@@ -972,7 +972,7 @@ const portfolioData = {
         "name": "nurag",
         "tagline": "NURAG is a local-first RAG system powered by Python, FastAPI, LangChain, and LangGraph, utilizing Ollama for privacy-focused LLM inference and ChromaDB for semantic vector storage.",
         "description": "NURAG is a local-first RAG system powered by Python, FastAPI, LangChain, and LangGraph, utilizing Ollama for privacy-focused LLM inference and ChromaDB for semantic vector storage.",
-        "image": "assets/images/nurag_1770218285.png",
+        "image": "assets/images/nurag_1790333361.png",
         "tech": [
             "Python",
             "JavaScript",
@@ -1004,7 +1004,7 @@ const portfolioData = {
         "name": "Arckage",
         "tagline": "My custom Linux Arch Rice.",
         "description": "My custom Linux Arch Rice.",
-        "image": "https://opengraph.githubassets.com/d72b71ac33c0adc708f0bf5dd281e7c9e68ebb73e308c024b4d751ce62ceec2f/Jalpan04/Arckage",
+        "image": "assets/images/arckage_1790336319.png",
         "tech": [
             "Shell",
             "CSS",
@@ -1019,7 +1019,7 @@ const portfolioData = {
         "name": "Pixelmess",
         "tagline": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly inte...",
         "description": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly interface lets you pick a video, a color to track, and visual effects, then it generates a new video showing the tracked objects and the distances between them.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Pixelmess",
+        "image": "assets/images/pixelmess_1790332374.png",
         "tech": [
             "Python",
             "Batchfile"
@@ -1033,7 +1033,7 @@ const portfolioData = {
         "name": "Pixel Diffusion Model",
         "tagline": "Generate 16x16 pixel art sprites using AI.",
         "description": "A conditional Denoising Diffusion Probabilistic Model (DDPM) for generating 16x16 pixel art sprites with class-based control and real-time visualization.",
-        "image": "https://opengraph.githubassets.com/1/Jalpan04/Pixel-Diffusion-Model",
+        "image": "assets/images/Pixel-Diffusion-Model_1790332378.png",
         "liveUrl": "https://huggingface.co/spaces/jalpan04/Pixel_Diffusion",
         "sourceUrl": "https://github.com/Jalpan04/Pixel-Diffusion-Model",
         "tech": [
@@ -1097,7 +1097,7 @@ const portfolioData = {
         "name": "PixelPredict",
         "tagline": "Handwritten digit recognition on the web.",
         "description": "A web app for digit recognition using a custom two-layer feedforward neural network trained on the MNIST dataset. Users can draw digits on an interactive canvas, and the app provides predictions with confidence scores in real-time. Built with Flask and NumPy.",
-        "image": "https://github.com/Jalpan04/PixelPredict/raw/main/demo.png",
+        "image": "assets/images/pixelpredict_1790332922.png",
         "liveUrl": "https://number-id.onrender.com/",
         "sourceUrl": "https://github.com/Jalpan04/PixelPredict",
         "tech": [
@@ -1122,7 +1122,7 @@ const portfolioData = {
         "name": "Jaxos",
         "tagline": "An experimental AI-driven operating system simulation.",
         "description": "jaxOS is an experimental operating system simulation that explores the intersection of traditional OS architecture and modern AI. It features a Neural Kernel that uses a Large Language Model (LLM) to interpret user intent.",
-        "image": "assets/images/jaxOS.png",
+        "image": "assets/images/jaxOS_1790334886.png",
         "sourceUrl": "https://github.com/Jalpan04/jaxOS",
         "tech": []
     },
@@ -1179,7 +1179,7 @@ const portfolioData = {
         "name": "BabelHashAPI",
         "tagline": "A computational exploration of Borges's infinite library.",
         "description": "A deterministic API and web portal for exploring a computational version of Jorge Luis Borges's \"The Library of Babel.\" It uses cryptographic hashes (SHA-256) to calculate a fixed address for any text, allowing any book to be generated on demand without storing a single one. Built with Python, FastAPI, and vanilla JavaScript.",
-        "image": "https://github.com/user-attachments/assets/4b93544a-5078-46f5-9956-162aa6b8d88f",
+        "image": "assets/images/babel-hash-api_1790336302.png",
         "liveUrl": "https://jalpan04.github.io/BabelHashAPI/",
         "sourceUrl": "https://github.com/Jalpan04/BabelHashAPI",
         "tech": [
@@ -1207,7 +1207,7 @@ const portfolioData = {
         "name": "Asteroids Genetic Agent",
         "tagline": "Asteroids game with AI agents trained over generations using neural networks.",
         "description": "Asteroids game with AI agents trained over generations using neural networks and a genetic algorithm. Built with Pygame.",
-        "image": "https://github.com/Jalpan04/Asteroid-game-ai/blob/main/screenshot.png?raw=true",
+        "image": "assets/images/Asteroid-game-ai_1790335629.png",
         "liveUrl": "https://youtu.be/bp6xBBQXAF8",
         "sourceUrl": "https://github.com/Jalpan04/Asteroid-game-ai",
         "tech": [
@@ -1220,7 +1220,7 @@ const portfolioData = {
         "name": "Monke Mirror",
         "tagline": "Real-time gesture mirroring using OpenCV and MediaPipe.",
         "description": "A Python application that uses OpenCV and MediaPipe to detect facial expressions and hand gestures in real-time. It mirrors your poses by displaying corresponding images based on detected gestures",
-        "image": "assets/images/monke-mirror.jpg",
+        "image": "assets/images/monke-mirror_1790335002.png",
         "sourceUrl": "https://github.com/Jalpan04/monke-mirror",
         "tech": []
     },
@@ -1229,7 +1229,7 @@ const portfolioData = {
         "name": "blob-tracker",
         "tagline": "Color-based object tracking in videos using Python and OpenCV.",
         "description": "This project uses Python and OpenCV to track moving, colored objects in videos. A user-friendly interface lets you pick a video, a color to track, and visual effects, then it generates a new video with the tracking visualized. It uses motion detection and color masking in HSV space.",
-        "image": "assets/images/blob-tracker.png",
+        "image": "assets/images/blob-tracker_1790336165.png",
         "sourceUrl": "https://github.com/Jalpan04/blob-tracker",
         "tech": [
             "Python",
@@ -1241,7 +1241,7 @@ const portfolioData = {
         "name": "boid-simulation",
         "tagline": "An interactive simulation of flocking behavior.",
         "description": "An interactive simulation of flocking behavior based on Craig Reynolds's \"Boids\" algorithm. This project demonstrates emergent behavior by applying simple alignment, cohesion, and separation rules. Users can control a predator, adjust simulation parameters, and introduce environmental forces like wind.",
-        "image": "https://github.com/Jalpan04/boid-simulation/raw/main/boid.png",
+        "image": "assets/images/boid-simulation_1790336219.png",
         "liveUrl": "https://jalpan04.github.io/boid-simulation/",
         "sourceUrl": "https://github.com/Jalpan04/boid-simulation",
         "tech": [
@@ -1279,7 +1279,7 @@ const portfolioData = {
         "name": "Particle-Life-Simulator",
         "tagline": "A browser-based particle life simulator with emergent behavior.",
         "description": "This is a simple, browser-based particle life simulator where you can observe emergent behavior from simple rules of attraction and repulsion between different groups of particles. It features customizable global settings (Particles, Groups, Radius) and an interactive rule engine.",
-        "image": "assets/images/particle-life-simulator.png",
+        "image": "assets/images/particle-life-simulator_1790332753.png",
         "liveUrl": "https://jalpan04.github.io/Particle-Life-Simulator/",
         "sourceUrl": "https://github.com/Jalpan04/Particle-Life-Simulator",
         "tech": [
